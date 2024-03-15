@@ -1,17 +1,19 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
-import SignIn from './pages/SignIn';
-import SignUp from './pages/SignUp';
-import Profile from './pages/Profile';
+import Login from './pages/Login';
+import Rejestracja from './pages/Rejestracja';
+import Profil from './pages/Profil';
+import Header from './components/Header';
 
 const App = () => {
   return (
     <BrowserRouter>
+      <Header />
       <Routes>
         <Route path='/' element={<Home />} />
-        <Route path='/sing-in' element={<SignIn />} />
-        <Route path='/sign-up' element={<SignUp />} />
-        <Route path='/profile' element={<Profile />} />
+        <Route path='/login' element={<Login />} />
+        <Route path='/rejestracja' element={<Rejestracja />} />
+        <Route path='/profil' element={<Profil />} />
       </Routes>
     </BrowserRouter>
   )
