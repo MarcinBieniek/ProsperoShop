@@ -7,6 +7,8 @@ const Rejestracja = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  console.log('final error is', error)
+
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -34,7 +36,7 @@ const Rejestracja = () => {
 
       if (data.success === false) {
         setLoading(false);
-        setError('Błąd rejestracji. Wybierz inną nazwę użytkownika');
+        setError(data.message);
         return;
       }
 
@@ -89,7 +91,8 @@ const Rejestracja = () => {
           <span className='text-blue-700'>Sign in</span>
         </Link>
       </div>
-      {error && <p className='text-red-500 mt-5'>{error}</p>}
+      {error && error.includes('username') && <p className='text-red-500 mt-5'>Bład rejestracji. Użytkownik o tej nazwie istnieje. Wybierz inną nazwę.</p>}
+      {error && error.includes('email') && <p className='text-red-500 mt-5'>Błąd rejestracji. Adres email jest już zarejestrowany. Wybierz inny adres.</p>}
     </div>
   );
 }
