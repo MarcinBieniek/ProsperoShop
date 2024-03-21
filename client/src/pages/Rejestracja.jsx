@@ -86,12 +86,13 @@ const Rejestracja = () => {
         </button>
       </form>
       <div className='flex gap-2 mt-5'>
-        <p>Have an account?</p>
-        <Link to={'/sign-in'}>
-          <span className='text-blue-700'>Sign in</span>
+        <p>Masz już konto?</p>
+        <Link to={'/login'}>
+          <span className='text-blue-700'>Zaloguj</span>
         </Link>
       </div>
-      {error && error.includes('username') && <p className='text-red-500 mt-5'>Bład rejestracji. Użytkownik o tej nazwie istnieje. Wybierz inną nazwę.</p>}
+      {error && error.includes('required') && <p className='text-red-500 mt-5'>Błąd rejestracji. Uzupełnij wszystkie dane.</p>}
+      {error && error.includes('username') && !error.includes('required') && <p className='text-red-500 mt-5'>Bład rejestracji. Użytkownik o tej nazwie istnieje. Wybierz inną nazwę.</p>}
       {error && error.includes('email') && <p className='text-red-500 mt-5'>Błąd rejestracji. Adres email jest już zarejestrowany. Wybierz inny adres.</p>}
     </div>
   );
