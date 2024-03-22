@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { signInStart, signInSuccess, signInFailure } from '../redux/user/userSlice';
+import OAuth from '../components/OAuth';
 
 const Login = () => {
 
@@ -73,6 +74,7 @@ const Login = () => {
         >
           {loading ? 'Loading...' : 'Zaloguj'}
         </button>
+        <OAuth />
       </form>
       {error && <p className='text-red-500 mt-5'>Bład rejestracji. Wprowadź prawidłowe dane.</p>}
       <div className='flex gap-2 mt-5'>
