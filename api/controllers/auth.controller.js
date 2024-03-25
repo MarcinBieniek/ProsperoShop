@@ -36,6 +36,9 @@ export const signin = async (req, res, next) => {
 }
 
 export const google = async (req, res, next) => {
+
+  console.log('red body photo si', req.body.photo)
+
   try {
     const user = await User.findOne({ email: req.body.email })
 
@@ -52,7 +55,7 @@ export const google = async (req, res, next) => {
       const newUser = new User({
         username: req.body.name.split(" ").join("").toLowerCase() + Math.random().toString(36).slice(-4),
         email: req.body.email,
-        password: hashedPassword ,
+        password: hashedPassword,
         avatar: req.body.photo
       });
       await newUser.save();
