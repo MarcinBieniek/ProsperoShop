@@ -4,6 +4,7 @@ import Login from './pages/Login';
 import Rejestracja from './pages/Rejestracja';
 import Profil from './pages/Profil';
 import Header from './components/Header';
+import PrivateRoute from './components/PrivateRoute';
 
 const App = () => {
   return (
@@ -13,7 +14,9 @@ const App = () => {
         <Route path='/' element={<Home />} />
         <Route path='/login' element={<Login />} />
         <Route path='/rejestracja' element={<Rejestracja />} />
-        <Route path='/profil' element={<Profil />} />
+        <Route element={<PrivateRoute />} >
+          <Route path='/profil' element={<Profil />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   )
