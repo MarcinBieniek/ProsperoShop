@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -5,3 +7,15 @@
 body {
   background-color: rgb(241, 245, 241);
 }
+
+/* Basket dropdown menu */
+
+.basket:hover .description {
+  pointer-events: auto;
+  opacity: 1;
+}
+
+
+
+
+
