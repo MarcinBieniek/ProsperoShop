@@ -17,7 +17,7 @@ const Header = () => {
   const { currentUser } = useSelector(state => state.user)
 
   const [isCart, setIsCart] = useState(false);
-  const [isCartHovered, setIsCartHovered] = useState(true);
+  const [isCartHovered, setIsCartHovered] = useState(false);
 
   return (
 
@@ -62,16 +62,17 @@ const Header = () => {
 
         <div
           className='basket ml-10 mr-20 w-36 flex items-center gap-2 py-2 px-3 relative'
-          /*
+
 
           onMouseEnter={() => setIsCartHovered(true)}
           onMouseLeave={() => setIsCartHovered(false)}
-
+          /*
           do poprawnego wyświetlania:
           - zmienić opacity na 0 w description
           - zmienić state na false
-
           */
+
+
         >
           <div className='flex items-center justify-center relative'>
             <IoCartOutline className='text-lg' />
@@ -82,7 +83,7 @@ const Header = () => {
           <p className='uppercase text-xs'>Twój koszyk</p>
           {isCartHovered ? (
           <>
-            <div className='description absolute top-8 right-12 w-0 h-0 border-l-[20px] border-l-transparent border-b-[25px] border-b-white border-r-[20px] border-r-transparent opacity-1 transition-opacity duration-300'></div>
+            <div className='description absolute top-8 right-12 w-0 h-0 border-l-[20px] border-l-transparent border-b-[25px] border-b-white border-r-[20px] border-r-transparent opacity-0 transition-opacity duration-300'></div>
             <div className='description bg-white absolute top-[57px] right-5 w-80 text-neutral-900 opacity-1 transition-opacity duration-300 p-3 rounded'>
               <div className='font-bold text-white flex justify-center mx-auto bg-orange-600 p-2 rounded'>
                 <p>Koszyk</p>
