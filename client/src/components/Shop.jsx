@@ -40,7 +40,6 @@ const Store = () => {
     <div className='bg-blue-500 p-10'>
       <p className='py-5'>Sklep</p>
       <div className='grid grid-cols-4 gap-2'>
-
         {products.map((product, index) =>
           <div className='bg-yellow-500 p-5 rounded'>
 
