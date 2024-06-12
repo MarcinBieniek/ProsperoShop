@@ -41,7 +41,7 @@ const Store = () => {
       <p className='py-5'>Sklep</p>
       <div className='grid grid-cols-4 gap-2'>
         {products.map((product, index) =>
-          <div className='bg-yellow-500 p-5 rounded'>
+          <div key={product.id} className='bg-yellow-500 p-5 rounded'>
 
             <div className='flex flex-col relative'>
               <div className='absolute left-2 top-2'>
