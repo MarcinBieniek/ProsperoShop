@@ -1,4 +1,8 @@
+import "react-toastify/dist/ReactToastify.css";
+
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { ToastContainer } from "react-toastify";
+
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Rejestracja from './pages/Rejestracja';
@@ -8,9 +12,11 @@ import PrivateRoute from './components/PrivateRoute';
 import CreateListing from './pages/CreateListing';
 import UpdateListing from './pages/UpdateListing';
 
+
 const App = () => {
   return (
     <BrowserRouter>
+    <ToastContainer />
       <Header />
       <Routes>
         <Route path='/' element={<Home />} />
