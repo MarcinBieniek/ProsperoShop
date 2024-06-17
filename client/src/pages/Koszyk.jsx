@@ -3,7 +3,7 @@ import Cart from '../components/Cart'
 
 const Koszyk = () => {
   return (
-    <div className='container bg-red-300'>
+    <div className='container'>
       <Cart />
     </div>
   )
