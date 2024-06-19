@@ -1,11 +1,17 @@
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 
 import { FaLongArrowAltLeft } from "react-icons/fa";
+import { removeFromCart } from "../redux/cart/cartSlice";
 
 const Cart = () => {
 
   const cart = useSelector((state) => state.cart);
+  const dispatch = useDispatch();
+
+  const handleRemoveFromCart = (cartItem) => {
+    dispatch(removeFromCart(cartItem))
+  }
 
   return (
     <div>
@@ -37,7 +43,10 @@ const Cart = () => {
                   <div>
                     <h3 className="uppercase text-lg">{cartItem.name}</h3>
                     <h3 className="py-2">{cartItem.description}</h3>
-                    <button className="bg-gray-300 p-2 rounded pointer hover:bg-gray-200">Remove</button>
+                    <button
+                      className="bg-gray-300 p-2 rounded pointer hover:bg-gray-200"
+                      onClick={() => handleRemoveFromCart(cartItem)}
+                    >Remove</button>
                   </div>
                 </div>
 

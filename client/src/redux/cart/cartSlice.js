@@ -11,6 +11,7 @@ const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
+    // add to cart reducer
     addToCart(state, action) {
       const itemIndex = state.cartItems.findIndex(
         (item) => item._id === action.payload._id
@@ -28,9 +29,21 @@ const cartSlice = createSlice({
         })
       }
     },
+    // remove item reducer
+    removeFromCart(state, action) {
+      const nextCartItems = state.cartItems.filter(
+        (cartItem) => cartItem._id !== action.payload._id
+      );
+
+      state.cartItems = nextCartItems;
+
+      toast.error(`${action.payload.name} removed from cart`, {
+        position: "bottom-left",
+      })
+    }
   },
 });
 
-export const { addToCart } = cartSlice.actions;
+export const { addToCart, removeFromCart } = cartSlice.actions;
 
 export default cartSlice.reducer;
