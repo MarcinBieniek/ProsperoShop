@@ -2,7 +2,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 
 import { FaLongArrowAltLeft } from "react-icons/fa";
-import { addToCart, decreaseCart, removeFromCart } from "../redux/cart/cartSlice";
+import { addToCart, clearCart, decreaseCart, removeFromCart } from "../redux/cart/cartSlice";
 
 const Cart = () => {
 
@@ -19,6 +19,10 @@ const Cart = () => {
 
   const handleIncreaseCart = (cartItem) => {
     dispatch(addToCart(cartItem))
+  };
+
+  const handleClearCart = () => {
+    dispatch(clearCart())
   };
 
   return (
@@ -74,7 +78,12 @@ const Cart = () => {
           </div>
 
           <div className='summary flex justify-between items-start border-t-[2px] border-gray-300 py-5'>
-            <button className='w-[130px] max-w-full h-[40px] rounded bg-gray-300 hover:bg-gray-200 pointer'>Wyczyść koszyk</button>
+            <button
+              className='w-[130px] max-w-full h-[40px] rounded bg-gray-300 hover:bg-gray-200 pointer'
+              onClick={() => handleClearCart()}
+            >
+              Wyczyść koszyk
+            </button>
             <div className='checkout w-[270px] max-w-full'>
               <div className="flex justify-between">
                 <span>Cena całkowita:</span>

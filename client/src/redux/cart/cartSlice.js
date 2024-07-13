@@ -68,9 +68,17 @@ const cartSlice = createSlice({
 
       }
     },
+
+    // clear cart
+    clearCart(state, action){
+      state.cartItems = [];
+      toast.error('Koszyk jest pusty', {
+        position: "bottom-left",
+      })
+    }
   },
 });
 
-export const { addToCart, removeFromCart, decreaseCart } = cartSlice.actions;
+export const { addToCart, removeFromCart, decreaseCart, clearCart } = cartSlice.actions;
 
 export default cartSlice.reducer;

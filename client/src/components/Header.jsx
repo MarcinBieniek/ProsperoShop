@@ -80,7 +80,9 @@ const Header = () => {
               <p className='bg-neutral-900 rounded-full h-5 w-5 flex items-center justify-center text-sm'>4</p>
             </div>
           </div>
-          <p className='uppercase text-xs'>Twój koszyk</p>
+          <Link to="/koszyk">
+            <p className='uppercase text-xs'>Twój koszyk</p>
+          </Link>
           {isCartHovered ? (
           <>
             <div className='description absolute top-8 right-12 w-0 h-0 border-l-[20px] border-l-transparent border-b-[25px] border-b-white border-r-[20px] border-r-transparent opacity-0 transition-opacity duration-300'></div>
