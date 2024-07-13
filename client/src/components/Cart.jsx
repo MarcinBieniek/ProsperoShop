@@ -2,7 +2,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 
 import { FaLongArrowAltLeft } from "react-icons/fa";
-import { removeFromCart } from "../redux/cart/cartSlice";
+import { addToCart, decreaseCart, removeFromCart } from "../redux/cart/cartSlice";
 
 const Cart = () => {
 
@@ -11,7 +11,15 @@ const Cart = () => {
 
   const handleRemoveFromCart = (cartItem) => {
     dispatch(removeFromCart(cartItem))
-  }
+  };
+
+  const handleDecreaseCart = (cartItem) => {
+    dispatch(decreaseCart(cartItem))
+  };
+
+  const handleIncreaseCart = (cartItem) => {
+    dispatch(addToCart(cartItem))
+  };
 
   return (
     <div>
@@ -52,9 +60,13 @@ const Cart = () => {
 
                 <div className="col-span-1">{cartItem.regularPrice} zł</div>
                 <div className="col-span-1 flex items-center justify-center w-[138px] max-w-full border-2 border-gray-400 rounded py-2">
-                  <button>-</button>
+                  <button onClick = {() => handleDecreaseCart(cartItem)}>
+                  -
+                  </button>
                   <div className='count'>{cartItem.cartQuantity}</div>
-                  <button>+</button>
+                  <button onClick={()  => handleIncreaseCart(cartItem)}>
+                  +
+                  </button>
                 </div>
                 <div className="col-span-1 flex justify-end font-bold">{cartItem.regularPrice} zł</div>
               </div>
