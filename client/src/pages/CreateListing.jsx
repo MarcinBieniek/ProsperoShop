@@ -29,10 +29,6 @@ const CreateListing = () => {
   const { currentUser } = useSelector(state => state.user);
   const navigate = useNavigate();
 
-  console.log('files are', files);
-  console.log('formData is', formData);
-  console.log('error is', error)
-
   const handleImageSubmit = (e) => {
     if (files.length > 0 && files.length + formData.imageUrls.length < 7) {
       setUploading(true);

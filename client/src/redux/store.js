@@ -3,7 +3,7 @@ import userReducer from './user/userSlice';
 import storage from 'redux-persist/lib/storage';
 import { persistReducer, persistStore } from 'redux-persist';
 import productsReducer, { productsFetch } from './products/productsSlice';
-import cartReducer from './cart/cartSlice';
+import cartReducer, { getTotals } from './cart/cartSlice';
 
 const rootReducer = combineReducers({
   user: userReducer,
@@ -26,6 +26,7 @@ export const store = configureStore({
   }),
 });
 
-store.dispatch(productsFetch())
+store.dispatch(productsFetch());
+store.dispatch(getTotals());
 
 export const persistor = persistStore(store)

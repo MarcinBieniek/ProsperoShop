@@ -18,13 +18,13 @@ const cartSlice = createSlice({
       );
       if(itemIndex >= 0){
         state.cartItems[itemIndex].cartQuantity += 1;
-        toast.info(`Zwiększono ilość ${action.payload.name}`, {
+        toast.info(`Zwiększono ilość: ${action.payload.name}`, {
           position: "bottom-left",
         })
       } else {
         const tempProduct = { ...action.payload, cartQuantity: 1}
         state.cartItems.push(tempProduct);
-        toast.success(`${action.payload.name} został dodany do koszyka`, {
+        toast.success(`Dodano do koszyka: ${action.payload.name}`, {
           position: "bottom-left",
         })
       }
@@ -37,7 +37,7 @@ const cartSlice = createSlice({
 
       state.cartItems = nextCartItems;
 
-      toast.error(`${action.payload.name} usunięty z koszyka`, {
+      toast.error(`Usunięto z koszyka: ${action.payload.name}`, {
         position: "bottom-left",
       })
     },
@@ -51,7 +51,7 @@ const cartSlice = createSlice({
       if(state.cartItems[itemIndex].cartQuantity > 1){
         state.cartItems[itemIndex].cartQuantity -= 1
 
-        toast.info(`Zwiększono ilość ${action.payload.name} w koszyku`, {
+        toast.info(`Zwiększono ilość: ${action.payload.name}`, {
           position: "bottom-left",
         });
       } else if (state.cartItems[itemIndex].cartQuantity === 1){
@@ -62,7 +62,7 @@ const cartSlice = createSlice({
 
         state.cartItems = nextCartItems;
 
-        toast.error(`${action.payload.name} usunięty z koszyka`, {
+        toast.error(`Usunięto z koszyka: ${action.payload.name}`, {
           position: "bottom-left",
         })
 
@@ -75,10 +75,32 @@ const cartSlice = createSlice({
       toast.error('Koszyk jest pusty', {
         position: "bottom-left",
       })
+    },
+
+    // get total price
+    getTotals(state, action){
+      let {total, quantity} = state.cartItems.reduce(
+        (cartTotal, cartItem) => {
+
+          const { regularPrice, cartQuantity } = cartItem;
+          const itemTotal = regularPrice * cartQuantity;
+
+          cartTotal.total += itemTotal;
+          cartTotal.quantity += cartQuantity;
+
+          return cartTotal;
+        }, {
+          total: 0,
+          quantity: 0
+        }
+      );
+
+      state.cartTotalQuantity = quantity;
+      state.cartTotalAmount = total;
     }
   },
 });
 
-export const { addToCart, removeFromCart, decreaseCart, clearCart } = cartSlice.actions;
+export const { addToCart, removeFromCart, decreaseCart, clearCart, getTotals } = cartSlice.actions;
 
 export default cartSlice.reducer;

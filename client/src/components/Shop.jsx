@@ -1,6 +1,6 @@
 import { FaHeart } from "react-icons/fa";
 import { useSelector, useDispatch } from 'react-redux';
-import { addToCart } from "../redux/cart/cartSlice";
+import { addToCart, getTotals } from "../redux/cart/cartSlice";
 
 const Store = () => {
 
@@ -8,9 +8,6 @@ const Store = () => {
 
   const value = useSelector((state) => state.products.items);
   const status = useSelector((state) => state.products.status);
-
-  console.log(value)
-  console.log('status is', status)
 
   if (status === "pending") {
     return <div>Loading...</div>;
@@ -22,6 +19,7 @@ const Store = () => {
 
   const handleAddToCart = (product) => {
     dispatch(addToCart(product));
+    dispatch(getTotals())
   }
 
   return (

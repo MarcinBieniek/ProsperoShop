@@ -1,13 +1,20 @@
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 
 import { FaLongArrowAltLeft } from "react-icons/fa";
-import { addToCart, clearCart, decreaseCart, removeFromCart } from "../redux/cart/cartSlice";
+import { addToCart, clearCart, decreaseCart, getTotals, removeFromCart } from "../redux/cart/cartSlice";
 
 const Cart = () => {
 
   const cart = useSelector((state) => state.cart);
   const dispatch = useDispatch();
+
+  console.log('cart is', cart)
+
+  useEffect(() => {
+    dispatch(getTotals())
+  }, [cart, dispatch])
 
   const handleRemoveFromCart = (cartItem) => {
     dispatch(removeFromCart(cartItem))
@@ -87,7 +94,7 @@ const Cart = () => {
             <div className='checkout w-[270px] max-w-full'>
               <div className="flex justify-between">
                 <span>Cena całkowita:</span>
-                <span className='amount font-bold'> {cart.cartTotalAmount}  zł</span>
+                <span className='amount font-bold'> ${cart.cartTotalAmount}  zł</span>
               </div>
               <p>Koszty wysyłki zostaną dodane w kolejnym kroku</p>
               <button className="py-2 my-2 bg-blue-500 w-full rounded text-white hover:bg-blue-400">Zamów</button>
