@@ -2,9 +2,13 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import userReducer from './user/userSlice';
 import storage from 'redux-persist/lib/storage';
 import { persistReducer, persistStore } from 'redux-persist';
+import productsReducer, { productsFetch } from './products/productsSlice';
+import cartReducer, { getTotals } from './cart/cartSlice';
 
 const rootReducer = combineReducers({
-  user: userReducer
+  user: userReducer,
+  products: productsReducer,
+  cart: cartReducer,
 })
 
 const persistConfig = {
@@ -21,5 +25,8 @@ export const store = configureStore({
     serializableCheck: false,
   }),
 });
+
+store.dispatch(productsFetch());
+store.dispatch(getTotals());
 
 export const persistor = persistStore(store)

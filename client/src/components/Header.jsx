@@ -14,7 +14,8 @@ import { TiDeleteOutline } from "react-icons/ti";
 
 const Header = () => {
 
-  const { currentUser } = useSelector(state => state.user)
+  const { currentUser } = useSelector(state => state.user);
+  const  { cartTotalQuantity } = useSelector(state => state.cart)
 
   const [isCart, setIsCart] = useState(false);
   const [isCartHovered, setIsCartHovered] = useState(false);
@@ -77,10 +78,12 @@ const Header = () => {
           <div className='flex items-center justify-center relative'>
             <IoCartOutline className='text-lg' />
             <div className='absolute left-2 bottom-3'>
-              <p className='bg-neutral-900 rounded-full h-5 w-5 flex items-center justify-center text-sm'>4</p>
+              <p className='bg-neutral-900 rounded-full h-5 w-5 flex items-center justify-center text-sm'>{cartTotalQuantity}</p>
             </div>
           </div>
-          <p className='uppercase text-xs'>Twój koszyk</p>
+          <Link to="/koszyk">
+            <p className='uppercase text-xs'>Twój koszyk</p>
+          </Link>
           {isCartHovered ? (
           <>
             <div className='description absolute top-8 right-12 w-0 h-0 border-l-[20px] border-l-transparent border-b-[25px] border-b-white border-r-[20px] border-r-transparent opacity-0 transition-opacity duration-300'></div>
