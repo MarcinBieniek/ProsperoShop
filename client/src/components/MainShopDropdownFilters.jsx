@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { IoIosArrowDown } from "react-icons/io";
 
 const Dropdown = ({ onOptionSelect }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,25 +21,17 @@ const Dropdown = ({ onOptionSelect }) => {
   const handleOptionClick = (option) => {
     setSelectedOption(option);
     setIsOpen(false);
-    onOptionSelect(option); // Przekazanie opcji do rodzica
+    onOptionSelect(option);
   };
 
   return (
     <div className='relative inline-block text-left'>
       <button
         onClick={toggleDropdown}
-        className='bg-blue-500 text-white px-4 py-2 rounded focus:outline-none'
+        className='bg-blue-500 text-white px-4 py-2 rounded focus:outline-none flex items-center'
       >
         {selectedOption}
-        <svg
-          className='w-5 h-5 inline ml-2'
-          fill='none'
-          stroke='currentColor'
-          viewBox='0 0 24 24'
-          xmlns='http://www.w3.org/2000/svg'
-        >
-          <path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M19 9l-7 7-7-7'></path>
-        </svg>
+        <IoIosArrowDown className='ml-2' />
       </button>
       {isOpen && (
         <div className='absolute right-0 mt-2 w-48 bg-white border border-gray-300 rounded shadow-lg z-10'>

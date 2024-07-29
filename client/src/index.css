@@ -8,6 +8,12 @@ body {
   background-color: rgb(241, 245, 241);
 }
 
+/* tailwind shorten classes */
+
+.transition-smooth {
+  @apply transition duration-200 ease-in-out;
+}
+
 /* Basket dropdown menu */
 
 .basket:hover .description {
