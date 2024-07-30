@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useState, useEffect } from 'react';
+import { removeFromCart, getTotals } from "../redux/cart/cartSlice";
+import ButtonGray from '../reusable/ButtonGray';
 
 import { PiUserCircleLight } from "react-icons/pi";
 import { IoHelpCircleOutline, IoHeartOutline } from "react-icons/io5";
@@ -13,13 +15,25 @@ import { FaGears } from "react-icons/fa6";
 import { CiDeliveryTruck } from "react-icons/ci";
 import { GoTools } from "react-icons/go";
 import { RiCustomerService2Line } from "react-icons/ri";
+import { IoMdClose } from "react-icons/io";
+import ButtonOrange from '../reusable/ButtonOrange';
+
 
 const Header = () => {
   const { currentUser } = useSelector(state => state.user);
   const { cartTotalQuantity } = useSelector(state => state.cart);
+  const { cartItems } = useSelector(state => state.cart);
+  const cart = useSelector((state) => state.cart);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getTotals())
+  }, [cart, dispatch])
 
   const [isMenuUserOpen, setIsMenuUserOpen] = useState(false);
   const [isMenuHelpOpen, setIsMenuHelpOpen] = useState(false);
+  const [isMenuCartOpen, setIsMenuCartOpen] = useState(false);
 
   const userMenuItems = [
     { to: '/profil', icon: <PiUserCircleLight className='text-xl mr-2' />, label: 'Mój profil' },
@@ -42,8 +56,17 @@ const Header = () => {
     { href: 'tel:+48123456789', label: '+48 123 456 789' },
   ];
 
+  const handleRemoveFromCart = (cartItem) => {
+    dispatch(removeFromCart(cartItem))
+  };
+
+  const handleCloseCart = () => {
+    setIsMenuCartOpen(false)
+  }
+
   return (
     <header className='bg-white'>
+
       <div className='bg-orange-600 h-8 flex justify-center items-center text-white text-sm'>
         PROMOCJA - 20% NA WSZYSTKIE BRAMY GARAŻOWE
       </div>
@@ -99,7 +122,7 @@ const Header = () => {
 
                 {currentUser && isMenuUserOpen && (
                   <div
-                    className='absolute right-0 mt-0 w-48 bg-white border border-gray-200 rounded-md shadow-lg'
+                    className='absolute right-0 mt-0 w-56 p-2 bg-white border border-gray-200 rounded-md shadow-lg'
                     onMouseEnter={() => setIsMenuUserOpen(true)}
                     onMouseLeave={() => setIsMenuUserOpen(false)}
                   >
@@ -107,7 +130,7 @@ const Header = () => {
                       <Link
                         key={index}
                         to={item.to}
-                        className='flex px-2 py-2 text-black hover:bg-gray-100 items-center'
+                        className='flex px-2 py-2 text-black hover:bg-gray-100 items-center rounded'
                       >
                         {item.icon}
                         <p className='text-sm'>{item.label}</p>
@@ -125,7 +148,7 @@ const Header = () => {
               >
                 <Link
                   to='/pomoc'
-                  className={`flex items-center cursor-pointer p-2 py-3 ml-4 rounded-md transition-smooth ${isMenuHelpOpen ? 'bg-gray-100' : 'hover:bg-gray-100'}`}
+                  className={`flex items-center cursor-pointer p-3 ml-4 rounded-md transition-smooth ${isMenuHelpOpen ? 'bg-gray-100' : 'hover:bg-gray-100'}`}
                 >
                   <IoHelpCircleOutline className='text-3xl'/>
                 </Link>
@@ -134,13 +157,13 @@ const Header = () => {
                 <div
                   onMouseEnter={() => setIsMenuHelpOpen(true)}
                   onMouseLeave={() => setIsMenuHelpOpen(false)}
-                  className='absolute right-0 mt-0 w-48 bg-white border border-gray-200 rounded-md shadow-lg'
+                  className='absolute right-0 w-56 p-2 bg-white border border-gray-200 rounded-md shadow-lg'
                 >
                   {helpMenuItems.map((item, index) => (
                     <Link
                       key={index}
                       to={item.to}
-                      className='flex px-2 py-2 text-black hover:bg-gray-100 items-center'
+                      className='flex px-2 py-2 text-black hover:bg-gray-100 items-center rounded'
                     >
                       {item.icon}
                       <p className='text-sm'>{item.label}</p>
@@ -160,21 +183,96 @@ const Header = () => {
               )}
             </div>
 
-            <Link to='/ulubione' className='relative ml-4 cursor-pointer hover:bg-gray-100 p-2 rounded-md transition-smooth'>
+            <Link to='/ulubione' className='relative ml-4 cursor-pointer hover:bg-gray-100 p-2 px-3 rounded-md transition-smooth'>
               <IoHeartOutline className='text-3xl'/>
               <div className='absolute bg-orange-600 h-4 w-4 top-2 right-2 rounded flex justify-center items-center'>
                 <p className='text-[12px] text-white'>1</p>
               </div>
             </Link>
 
-
-
-            <Link to='/koszyk' className='relative ml-4 cursor-pointer hover:bg-gray-100 p-2 rounded-md transition-smooth'>
-              <SlBasket className='text-2xl'/>
-              <div className='absolute bg-orange-600 h-4 w-4 top-1 right-1 rounded flex justify-center items-center'>
-                <p className='text-[12px] text-white'>{cartTotalQuantity}</p>
+            <div className='relative text-gray-700'>
+              <div
+                onMouseEnter={() => setIsMenuCartOpen(true)}
+                onMouseLeave={() => setIsMenuCartOpen(false)}
+              >
+                <Link
+                  to='/koszyk'
+                  className={`flex items-center cursor-pointer p-3 ml-4 rounded-md transition-smooth ${isMenuCartOpen ? 'bg-gray-100' : 'hover:bg-gray-100'}`}
+                >
+                  <SlBasket className='text-2xl'/>
+                  {cartTotalQuantity > 0 && (
+                    <div className='absolute right-1 top-2 bg-orange-600 h-4 w-4 rounded flex items-center justify-center'>
+                      <p className='text-xs text-white font-medium'>{cartTotalQuantity}</p>
+                    </div>
+                  )}
+                </Link>
               </div>
-            </Link>
+              {isMenuCartOpen && (
+                <div
+                  onMouseEnter={() => setIsMenuCartOpen(true)}
+                  onMouseLeave={() => setIsMenuCartOpen(false)}
+                  className='absolute z-10 right-0 p-4 w-[350px] bg-white border border-gray-200 rounded-md shadow-lg'
+                >
+                  <div className='flex justify-between items-center py-3 border-b-[1px] border-gray-300 font-bold'>
+                    <h1 className='text-gray-700'>Mój koszyk</h1>
+                    <IoMdClose
+                      className='cursor-pointer hover:bg-gray-100 p-1 text-2xl transition-smooth rounded'
+                      onClick={handleCloseCart}
+                    />
+                  </div>
+
+                  {cartTotalQuantity < 0 ?
+
+                  (
+                    <div className='py-10 flex justify-center items-center'>
+                      <p>Twój koszyk jest pusty</p>
+                    </div>
+                  )
+
+                  :
+
+                  (
+                    <div>
+
+                      {cartItems.map((item, index) => (
+
+                        <div
+                          key={index}
+                          className='p-4 flex border-b-[1px] border-gray-300'
+                        >
+                          <img
+                            src={item.imageUrls}
+                            className='h-20 w-20 object-cover'
+                          />
+                          <div className='flex flex-col justify-between pl-5 w-full'>
+                            <Link to='/' className='font-bold text-orange-600 hover:text-black transition-smooth'>{item.name}</Link>
+                            <p>Ilość: {item.cartQuantity}</p>
+                            <div className='flex justify-between'>
+                              <p>Cena: {item.regularPrice} zł</p>
+                              <button
+                                onClick={() => handleRemoveFromCart(item)}
+                                className='font-bold text-orange-600 hover:text-black transition-smooth'
+                              >Usuń</button>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  <div className='flex justify-between py-5 border-b-[1px] border-gray-300'>
+                    <p className='text-xl text-gray-700'>Suma:</p>
+                    <p className='text-gray-700 font-bold text-xl'>{cart.cartTotalAmount}  zł</p>
+                  </div>
+
+                  <div className='flex justify-between pt-5 pb-1'>
+                    <ButtonGray text='Zobacz' link="/koszyk" />
+                    <ButtonOrange text='Zamów' />
+                  </div>
+                </div>
+              )}
+            </div>
+
+
           </div>
         </div>
 
