@@ -3,7 +3,7 @@ import { IoIosArrowDown } from "react-icons/io";
 
 const Dropdown = ({ onOptionSelect }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState('Wybierz opcję');
+  const [selectedOption, setSelectedOption] = useState('Sortuj według');
 
   const options = [
     'Najdroższe produkty',
@@ -28,13 +28,13 @@ const Dropdown = ({ onOptionSelect }) => {
     <div className='relative inline-block text-left'>
       <button
         onClick={toggleDropdown}
-        className='bg-blue-500 text-white px-4 py-2 rounded focus:outline-none flex items-center'
+        className=' text-gray-800 bg-white px-4 py-2 rounded-2xl border-2 border-gray-200 focus:outline-none flex items-center'
       >
         {selectedOption}
-        <IoIosArrowDown className='ml-2' />
+        <IoIosArrowDown className='ml-10' />
       </button>
       {isOpen && (
-        <div className='absolute right-0 mt-2 w-48 bg-white border border-gray-300 rounded shadow-lg z-10'>
+        <div className='absolute right-0 w-48 bg-white border border-gray-300 rounded-xl shadow-lg z-10'>
           {options.map((option, index) => (
             <div
               key={index}

@@ -5,21 +5,31 @@
 @tailwind utilities;
 
 body {
-  background-color: rgb(241, 245, 241);
+  background-color: white;
 }
 
-/* tailwind shorten classes */
+/* tailwind global shorten classes */
 
 .transition-smooth {
   @apply transition duration-200 ease-in-out;
 }
 
-/* Basket dropdown menu */
+/* product card - add to basket hover effect */
 
-.basket:hover .description {
-  pointer-events: auto;
-  opacity: 1;
+.basket-container:hover .basket-icon {
+  background-color: #fb923c; /* bg-orange-600 */
 }
+
+/* colors
+
+yellow-300
+red-500
+
+green-500
+sky-400
+
+*/
+
 
 
 

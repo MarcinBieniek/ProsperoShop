@@ -1,5 +1,6 @@
 import { PiGarage } from "react-icons/pi";
 import { IoIosArrowDown } from "react-icons/io";
+import { Link } from "react-router-dom";
 
 const HeaderMenuBottom = () => {
   return (
@@ -10,8 +11,10 @@ const HeaderMenuBottom = () => {
           <p className='px-5 font-bold'>Wyceń bramę Wiśniowski</p>
         </div>
         <div className='flex items-center mr-10 cursor-pointer'>
-          <p className='font-bold'>Sklep online</p>
-          <IoIosArrowDown className='ml-2' />
+          <Link to='/sklep' className='flex items-center'>
+            <p className='font-bold'>Sklep online</p>
+            <IoIosArrowDown className='ml-2' />
+          </Link>
         </div>
         <div className='flex items-center mr-10 cursor-pointer'>
           <p className='font-bold'>Poznaj nas</p>
