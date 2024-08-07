@@ -1,62 +1,39 @@
-import { categoriesData, productsData } from "../../public/temp_data";
+import { productsData } from "../../public/temp_data";
 import { useState } from 'react';
 import MainShopDropdownFilters from '../components/MainShopDropdownFilters';
-import ShopSidebarMenu from "../components/ShopSidebarMenu";
 import { Link } from "react-router-dom";
-
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { BsFillGrid3X3GapFill } from "react-icons/bs";
 import { SlBasket } from "react-icons/sl";
-import { FaHeart } from "react-icons/fa";
 
 const Sklep = () => {
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [selectedProducer, setSelectedProducer] = useState('wszyscy-producenci');
-  const [searchTerm, setSearchTerm] = useState('');
   const [sortOption, setSortOption] = useState('Wybierz opcję');
-
-  const handleCategoryClick = (id) => {
-    setSelectedCategory(id);
-    setSelectedProducer('wszyscy-producenci');
-    setSearchTerm('');
-  };
-
-  const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value.toLowerCase());
-  };
-
-  const handleProducerClick = (id) => {
-    const producerSlug = categoriesData[0].producenci.find(prod => prod.id === id)?.slug;
-    if (producerSlug === 'wszyscy-producenci') {
-      setSelectedProducer('wszyscy-producenci');
-    } else {
-      setSelectedProducer(producerSlug);
-    }
-  };
+  const [activeCategory, setActiveCategory] = useState('Wszystkie produkty');
+  const [activeMainCategory, setActiveMainCategory] = useState(null);
+  const [expandedCategory, setExpandedCategory] = useState(null);
 
   const handleSortOptionSelect = (option) => {
     setSortOption(option);
   };
 
-  const selectedCategorySlug = selectedCategory
-    ? categoriesData[0].automatyka.find(cat => cat.id === selectedCategory)?.slug
-    : 'wszystkie-kategorie';
+  const categories = [
+    {
+      name: 'Wszystkie produkty'
+    },
+    {
+      name: 'Automatyka',
+      subcategories: ['Bramy garażowe', 'Bramy przesuwne', 'Bramy przemysłowe', 'Szyny do napędów'],
+    },
+    {
+      name: 'Akcesoria',
+      subcategories: ['Fotokomórki']
+    }
+  ];
 
   const filteredProducts = productsData
-    .filter((product) => {
-      const matchesSearchTerm =
-        product.name.toLowerCase().includes(searchTerm) ||
-        product.producer.toLowerCase().includes(searchTerm) ||
-        product.description.toLowerCase().includes(searchTerm);
-      const matchesCategory =
-        selectedCategorySlug === 'wszystkie-kategorie' ||
-        product.category === selectedCategorySlug;
-      const matchesProducer =
-        selectedProducer === 'wszyscy-producenci' ||
-        product.producer === selectedProducer ||
-        product.producer.toLowerCase().includes(selectedProducer) ||
-        product.description.toLowerCase().includes(selectedProducer);
-      return matchesSearchTerm && matchesCategory && matchesProducer;
+    .filter(product => {
+      if (activeCategory === 'Wszystkie produkty') return true;
+      return product.category === activeCategory;
     })
     .sort((a, b) => {
       switch (sortOption) {
@@ -77,9 +54,24 @@ const Sklep = () => {
       }
     });
 
+  const toggleCategory = (categoryName) => {
+    if (categoryName === 'Wszystkie produkty' || !categories.find(cat => cat.name === categoryName).subcategories) {
+      setActiveCategory(categoryName);
+      setActiveMainCategory(null);
+      setExpandedCategory(null);
+    } else {
+      setExpandedCategory(expandedCategory === categoryName ? null : categoryName);
+      setActiveMainCategory(categoryName);
+    }
+  };
+
+  const setActiveSubcategory = (subcategoryName) => {
+    setActiveCategory(subcategoryName);
+  };
+
   return (
     <div className='container'>
-      <div className='py-10 flex items-center text-gray-800'>
+      <div className='pt-5 pb-9 flex items-center text-gray-800'>
         <p>Strona główna</p>
         <MdKeyboardArrowRight className='px-1 text-3xl' />
         <p>Sklep</p>
@@ -87,99 +79,95 @@ const Sklep = () => {
 
       <div className='flex'>
         <div className='w-[300px]'>
-          <ShopSidebarMenu />
+
+          <div className="w-64 h-full text-gray-800">
+            <ul className="border-[2px] rounded-xl">
+              <h1 className="border-b-[2px] border-gray-200 p-5 text-xl text-gray-700">Kategorie</h1>
+              {categories.map((category, index) => (
+                <li key={category.name} className="flex flex-col items-center">
+                  <button
+                    className={`flex items-center justify-between w-[80%] text-left py-2 ${index !== categories.length - 1 ? 'border-b-[2px] border-gray-200' : ''} ${activeCategory === category.name ? 'font-bold' : ''}`}
+                    onClick={() => toggleCategory(category.name)}
+                    onMouseEnter={(e) => e.target.classList.add('font-bold')}
+                    onMouseLeave={(e) => {
+                      if (activeCategory !== category.name) {
+                        e.target.classList.remove('font-bold');
+                      }
+                    }}
+                  >
+                    {category.name}
+                    {category.subcategories && <MdKeyboardArrowRight className={`transition-transform duration-300 ${expandedCategory === category.name ? 'rotate-90' : ''}`} />}
+                  </button>
+                  {expandedCategory === category.name && category.subcategories && (
+                    <ul className="w-full">
+                      {category.subcategories.map((subcategory) => (
+                        <li
+                          key={subcategory}
+                          className={`py-1 pl-10 text-left w-full cursor-pointer ${activeCategory === subcategory ? 'font-bold' : ''}`}
+                          onClick={() => setActiveSubcategory(subcategory)}
+                          onMouseEnter={(e) => e.target.classList.add('font-bold')}
+                          onMouseLeave={(e) => {
+                            if (activeCategory !== subcategory) {
+                              e.target.classList.remove('font-bold');
+                            }
+                          }}
+                        >
+                          {subcategory}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+
         </div>
         <div className='w-full pl-10'>
-          <h1 className="text-3xl text-gray-700">Wszystkie produkty</h1>
+          <h1 className="text-3xl text-gray-700">
+            {activeMainCategory ? `${activeMainCategory} / ${activeCategory}` : activeCategory}
+          </h1>
           <div className='bg-gray-100 my-5 rounded-xl'>
             <div className='p-2 pr-4 flex justify-between items-center'>
               <BsFillGrid3X3GapFill className='text-xl ml-2' />
-              <MainShopDropdownFilters />
+              <MainShopDropdownFilters onOptionSelect={handleSortOptionSelect} />
             </div>
           </div>
-          <div className='grid grid-cols-4 gap-4 text-gray-800 py-5'>
-
-            <div className='basket-container border border-gray-100 hover:border-gray-200 transition-smooth rounded-lg p-2'>
-              <p className='text-sm pb-2'>Nazwa producenta</p>
-              <Link to='/' className='font-bold text-sky-400 hover:text-yellow-300 transition-smooth'>
-                <p className='pb-3'>Nazwa produktu</p>
-              </Link>
-              <Link className='relative'>
-                <img
-                  className='object-cover h-60 w-full rounded'
-                  src='https://www.skandoor.co.uk/wp-content/uploads/2023/01/9e449b54-bc56-43fd-9cc3-c075b6bb83c7-1500x1125.jpg'
-                />
-                <div className='absolute top-2 left-2 bg-green-500 p-1 text-white rounded'>Przecena</div>
-                <FaHeart className='absolute top-3 right-2 text-2xl text-red-500 cursor-pointer'/>
-              </Link>
-
-              <div className='pt-3 flex items-center justify-between'>
-                <div className='flex items-center'>
-                  <p className='text-red-600 text-2xl mr-5'>100 zł</p>
-                  <p className='text-sm line-through'>120 zł</p>
+          <div className='grid grid-cols-4 gap-4 text-gray-800 py-2'>
+            {filteredProducts.map((product, index) => (
+              <div key={index} className='basket-container border shadow-md border-gray-200 hover:shadow-xl transition-smooth rounded-lg p-2'>
+                <p className='text-sm pb-2'>{product.producer}</p>
+                <Link to='/' className='font-bold text-sky-400 hover:text-yellow-300 transition-smooth'>
+                  <p className='pb-3'>{product.name}</p>
+                </Link>
+                <Link className='relative'>
+                  <img
+                    className='object-fit w-full rounded h-[200px]'
+                    src='https://www.skandoor.co.uk/wp-content/uploads/2023/01/9e449b54-bc56-43fd-9cc3-c075b6bb83c7-1500x1125.jpg'
+                  />
+                </Link>
+                <div className='pt-3 flex items-center justify-between'>
+                  {product.discountedPrice ? (
+                    <div className='flex items-center'>
+                      <p className='text-red-600 text-2xl mr-5'>{product.discountedPrice} zł</p>
+                      <p className='text-sm line-through'>{product.regularPrice} zł</p>
+                    </div>
+                  ) : (
+                    <div className='flex items-center'>
+                      <p className='text-2xl mr-5'>{product.regularPrice} zł</p>
+                    </div>
+                  )}
+                  <div className='basket-icon cursor-pointer transition-smooth text-sm bg-gray-200 rounded-full w-10 h-10 text-white flex items-center justify-center'>
+                    <SlBasket className='text-2xl' />
+                  </div>
                 </div>
-                <div className='basket-icon cursor-pointer transition-smooth text-sm bg-gray-200 rounded-full w-10 h-10 text-white flex items-center justify-center'>
-                  <SlBasket className='text-2xl' />
-                </div>
+                <p className='text-sm py-2'>{product.description}</p>
               </div>
-              <p className='text-sm py-2'>Skrócony opis produktu, który ma na celu zachęcić do zakupu.</p>
-            </div>
-
+            ))}
           </div>
         </div>
       </div>
-
-      <div className='flex py-5'>
-          <div className='w-1/6 bg-red-400 p-2'>
-            <div>
-              <p className='py-2 font-bold'>Sklep / Automatyka</p>
-              <p className='py-2 font-bold'>Kategorie</p>
-
-              {categoriesData[0].automatyka.map((item) => (
-                <p
-                  key={item.id}
-                  onClick={() => handleCategoryClick(item.id)}
-                  className={`text-sm cursor-pointer ${selectedCategory === item.id ? 'font-bold underline' : ''} hover:font-bold hover:underline`}
-                >{item.title}</p>
-              ))}
-
-              <p className='py-2 font-bold'>Producenci</p>
-
-              {categoriesData[0].producenci.map((item) => (
-                <div key={item.id} className='flex'>
-                  <input
-                    type='checkbox'
-                    checked={selectedProducer === item.slug}
-                    onChange={() => handleProducerClick(item.id)}
-                  />
-                  <p
-                    className='text-sm cursor-pointer'
-                    onClick={() => handleProducerClick(item.id)}
-                  >{item.title}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className='w-5/6 bg-red-300 py-3 p-2'>
-            <div className='flex justify-between pb-5'>
-              <p>Produkty</p>
-              <div>
-                <MainShopDropdownFilters onOptionSelect={handleSortOptionSelect} />
-              </div>
-            </div>
-            <div className='grid grid-cols-4 gap-2'>
-              {filteredProducts.map((product, index) => (
-                <div key={index} className='bg-white rounded'>
-                  <p>{product.name}</p>
-                  <p>{product.category}</p>
-                  <p>{product.regularPrice}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-      </div>
     </div>
-
   )
 }
 

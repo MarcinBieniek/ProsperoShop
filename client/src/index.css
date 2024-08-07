@@ -17,10 +17,10 @@ body {
 /* product card - add to basket hover effect */
 
 .basket-container:hover .basket-icon {
-  background-color: #fb923c; /* bg-orange-600 */
+  background-color: #ea580d; /* bg-orange-600 */
 }
 
-/* colors
+/* colors similar to orange-600
 
 yellow-300
 red-500
@@ -29,6 +29,12 @@ green-500
 sky-400
 
 */
+
+/* rotate for elements in sidemenu */
+
+.rotate-90 {
+  transform: rotate(90deg);
+}
 
 
 
