@@ -1,23 +1,53 @@
+import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { productsData, categories } from "../../public/temp_data";
-import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { addToCart, getTotals } from "../redux/cart/cartSlice";
-
 import PriceFilter from "../components/ShopFilterPriceRange";
 import ShopFilterDropdown from '../components/ShopFilterDropdown';
 import ShopSidebarMenu from '../components/ShopSidebarMenu';
 import ShopFilterProducers from '../components/ShopFilterProducers';
 import ShopProductCard from '../components/ShopProductCard';
-
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { BsFillGrid3X3GapFill } from "react-icons/bs";
 
 const Shop = () => {
-
   const dispatch = useDispatch();
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+
+  const [sortOption, setSortOption] = useState('Wybierz opcję');
+  const [activeCategory, setActiveCategory] = useState('Wszystkie produkty');
+  const [activeMainCategory, setActiveMainCategory] = useState(null);
+  const [expandedCategory, setExpandedCategory] = useState(null);
+  const [activeProducer, setActiveProducer] = useState('Wszyscy producenci');
+  const [priceRange, setPriceRange] = useState([0, 0]);
+
+  useEffect(() => {
+    const category = queryParams.get('category');
+    const subcategory = queryParams.get('subcategory');
+
+    if (category && subcategory) {
+      setActiveMainCategory(category);
+      setActiveCategory(subcategory);
+      setExpandedCategory(category);
+    } else if (category) {
+      setActiveCategory('Wszystkie produkty');
+      setActiveMainCategory(category);
+      setExpandedCategory(category);
+    } else {
+      setExpandedCategory(null);
+    }
+  }, [location.search]);
 
   const value = useSelector((state) => state.products.items);
   const status = useSelector((state) => state.products.status);
+
+  useEffect(() => {
+    if (status === "fulfilled") {
+      dispatch(getTotals());
+    }
+  }, [status, dispatch]);
 
   if (status === "pending") {
     return <div className='flex w-full h-[400px] justify-center items-center'>Loading...</div>;
@@ -27,24 +57,17 @@ const Shop = () => {
     return <div className='flex w-full h-[400px] justify-center items-center'>Nie można załadować produktów. Spróbuj ponownie, później.</div>;
   }
 
-  const [sortOption, setSortOption] = useState('Wybierz opcję');
-  const [activeCategory, setActiveCategory] = useState('Wszystkie produkty');
-  const [activeMainCategory, setActiveMainCategory] = useState(null);
-  const [expandedCategory, setExpandedCategory] = useState(null);
-  const [activeProducer, setActiveProducer] = useState('Wszyscy producenci');
-  const [priceRange, setPriceRange] = useState([0, 0]);
+  const minPrice = Math.min(...productsData.map(product => product.regularPrice));
+  const maxPrice = Math.max(...productsData.map(product => product.regularPrice));
+
+  useEffect(() => {
+    setPriceRange([minPrice, maxPrice]);
+  }, [minPrice, maxPrice]);
 
   const handleAddToCart = (product) => {
     dispatch(addToCart(product));
     dispatch(getTotals());
   };
-
-  const minPrice = Math.min(...productsData.map(product => product.regularPrice));
-  const maxPrice = Math.max(...productsData.map(product => product.regularPrice));
-
-  useState(() => {
-    setPriceRange([minPrice, maxPrice]);
-  }, []);
 
   const handleSortOptionSelect = (option) => {
     setSortOption(option);
@@ -123,7 +146,6 @@ const Shop = () => {
       <div className='flex'>
         <div className='w-[300px]'>
           <div className="w-64 h-full text-gray-800">
-
             <ShopSidebarMenu
               categories={categories}
               activeCategory={activeCategory}
@@ -131,18 +153,15 @@ const Shop = () => {
               toggleCategory={toggleCategory}
               setActiveSubcategory={setActiveSubcategory}
             />
-
             <div className='relative'>
               <h1 className='text-xl mt-10 pb-3 border-b-[1px] border-gray-200'>Filtry</h1>
               <div className='absolute h-[2px] w-[70px] bg-orange-500 bottom-[1px]'></div>
             </div>
-
             <ShopFilterProducers
               activeProducer={activeProducer}
               setActiveProducer={setActiveProducer}
               availableProducers={getAvailableProducers()}
             />
-
             <PriceFilter
               minPrice={minPrice}
               maxPrice={maxPrice}
@@ -150,7 +169,6 @@ const Shop = () => {
               setPriceRange={setPriceRange}
               applyFilters={applyFilters}
             />
-
           </div>
         </div>
 
