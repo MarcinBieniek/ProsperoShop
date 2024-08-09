@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { IoIosArrowDown } from "react-icons/io";
 
-const Dropdown = ({ onOptionSelect }) => {
+const ShopFilterDropdown = ({ onOptionSelect }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState('Sortuj według');
 
@@ -50,4 +50,4 @@ const Dropdown = ({ onOptionSelect }) => {
   );
 };
 
-export default Dropdown;
+export default ShopFilterDropdown;

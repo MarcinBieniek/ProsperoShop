@@ -1,4 +1,24 @@
-
+export const categories = [
+  {
+    name: 'Wszystkie produkty'
+  },
+  {
+    name: 'Bramy',
+    subcategories: ['Bramy segmentowe', 'Bramy rozwierne', 'Bramy uchylne', 'Bramy roletowe', 'Bramy przemysłowe']
+  },
+  {
+    name: 'Automatyka',
+    subcategories: ['Bramy garażowe', 'Siłowniki przemysłowe', 'Bramy przesuwne', 'Bramy 2-skrzydłowe'],
+  },
+  {
+    name: 'Akcesoria',
+    subcategories: ['Piloty', 'Fotokomórki', 'Baterie', 'Radioodbiorniki', 'Szyny do napędów']
+  },
+  {
+    name: 'Ogrodzenia',
+    subcategories: ['Panelowe']
+  }
+]
 
 export const categoriesData = [
   {
