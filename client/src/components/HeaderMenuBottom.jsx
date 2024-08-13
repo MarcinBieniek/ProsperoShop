@@ -3,6 +3,7 @@ import { PiGarage } from 'react-icons/pi';
 import { IoIosArrowDown } from 'react-icons/io';
 
 import HeaderMenuBottomShopButton from './HeaderMenuBottomShopButton';
+import HeaderMenuBottomAboutButton from './HeaderMenuBottomAboutButton';
 
 const HeaderMenuBottom = () => {
   return (
@@ -12,23 +13,16 @@ const HeaderMenuBottom = () => {
           <PiGarage className='text-white text-2xl bg-orange-600 rounded-full p-2 h-8 w-8' />
           <p className='px-5 font-bold'>Wyceń bramę Wiśniowski</p>
         </Link>
-
         <HeaderMenuBottomShopButton />
+        <HeaderMenuBottomAboutButton />
 
-        <div className='flex items-center mr-10 cursor-pointer'>
-          <p className='font-bold'>Poznaj nas</p>
-          <IoIosArrowDown className='ml-2' />
-        </div>
-        <div className='flex items-center mr-10 cursor-pointer'>
-          <p className='font-bold'>Transport i gwarancja</p>
-          <IoIosArrowDown className='ml-2' />
-        </div>
-        <div className='flex items-center mr-10 cursor-pointer'>
-          <p className='font-bold'>Kontakt</p>
-          <IoIosArrowDown className='ml-2' />
-        </div>
       </div>
-      <div className='font-bold'>Partner firmy</div>
+      <div className='flex items-center justify-between'>
+        <p className='font-bold mr-2'>Partner firmy</p>
+        <Link to='https://www.wisniowski.pl/'>
+          <img src='/wisniowski-logo.jpg' alt='logo' className='h-6' />
+        </Link>
+      </div>
     </div>
   );
 };
