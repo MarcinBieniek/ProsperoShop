@@ -13,6 +13,7 @@ import CreateListing from './pages/CreateListing';
 import UpdateListing from './pages/UpdateListing';
 import Koszyk from "./pages/Koszyk";
 import Sklep from "./pages/Sklep";
+import Footer from "./components/Footer";
 
 
 const App = () => {
@@ -32,6 +33,7 @@ const App = () => {
           <Route path='/update-listing/:listingId' element={<UpdateListing />}/>
         </Route>
       </Routes>
+      <Footer />
     </BrowserRouter>
   )
 }

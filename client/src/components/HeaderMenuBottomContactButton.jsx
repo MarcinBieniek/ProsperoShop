@@ -6,7 +6,7 @@ import { MdLocationOn } from "react-icons/md";
 import { RiCustomerService2Line } from "react-icons/ri";
 import { IoIosArrowDown } from 'react-icons/io';
 
-const HeaderMenuBottomAboutButton = () => {
+const HeaderMenuBottomContactButton = () => {
 
   const [isMenuAboutOpen, setIsMenuAboutOpen] = useState(false);
   const [isMenuWisniowskiOpen, setIsMenuWisniowskiOpen] = useState(false);
@@ -115,4 +115,4 @@ const HeaderMenuBottomAboutButton = () => {
   )
 }
 
-export default HeaderMenuBottomAboutButton
+export default HeaderMenuBottomContactButton

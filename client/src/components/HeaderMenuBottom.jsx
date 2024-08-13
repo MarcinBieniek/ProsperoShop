@@ -1,9 +1,8 @@
 import { Link } from 'react-router-dom';
 import { PiGarage } from 'react-icons/pi';
-import { IoIosArrowDown } from 'react-icons/io';
 
 import HeaderMenuBottomShopButton from './HeaderMenuBottomShopButton';
-import HeaderMenuBottomAboutButton from './HeaderMenuBottomAboutButton';
+import HeaderMenuBottomContactButton from './HeaderMenuBottomContactButton';
 
 const HeaderMenuBottom = () => {
   return (
@@ -14,8 +13,7 @@ const HeaderMenuBottom = () => {
           <p className='px-5 font-bold'>Wyceń bramę Wiśniowski</p>
         </Link>
         <HeaderMenuBottomShopButton />
-        <HeaderMenuBottomAboutButton />
-
+        <HeaderMenuBottomContactButton />
       </div>
       <div className='flex items-center justify-between'>
         <p className='font-bold mr-2'>Partner firmy</p>

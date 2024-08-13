@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { IoIosArrowDown } from 'react-icons/io';
 import { categories } from '../../public/temp_data';
 
+import { MdKeyboardArrowRight } from "react-icons/md";
+
 const HeaderMenuBottomShopButton = () => {
   const [isMenuShopOpen, setIsMenuShopOpen] = useState(false);
 
@@ -44,8 +46,10 @@ const HeaderMenuBottomShopButton = () => {
                       <Link
                         to={`/sklep?category=${encodeURIComponent(category.name)}&subcategory=${encodeURIComponent(subcategory)}`}
                         key={subIndex}
+                        className='flex items-center pb-2'
                       >
-                        <p className='pb-2 hover:text-orange-600 whitespace-nowrap transition-smooth'>{subcategory}</p>
+                        <MdKeyboardArrowRight />
+                        <p className='hover:text-orange-600 whitespace-nowrap transition-all duration-300 transform hover:translate-x-1'>{subcategory}</p>
                       </Link>
                     ))}
                   </div>
