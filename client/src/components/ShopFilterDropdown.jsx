@@ -1,8 +1,9 @@
 import { useState } from 'react';
+import { IoIosArrowDown } from "react-icons/io";
 
-const Dropdown = ({ onOptionSelect }) => {
+const ShopFilterDropdown = ({ onOptionSelect }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState('Wybierz opcję');
+  const [selectedOption, setSelectedOption] = useState('Sortuj według');
 
   const options = [
     'Najdroższe produkty',
@@ -20,28 +21,20 @@ const Dropdown = ({ onOptionSelect }) => {
   const handleOptionClick = (option) => {
     setSelectedOption(option);
     setIsOpen(false);
-    onOptionSelect(option); // Przekazanie opcji do rodzica
+    onOptionSelect(option);
   };
 
   return (
     <div className='relative inline-block text-left'>
       <button
         onClick={toggleDropdown}
-        className='bg-blue-500 text-white px-4 py-2 rounded focus:outline-none'
+        className=' text-gray-800 bg-white px-4 py-2 rounded-2xl border-2 border-gray-200 focus:outline-none flex items-center'
       >
         {selectedOption}
-        <svg
-          className='w-5 h-5 inline ml-2'
-          fill='none'
-          stroke='currentColor'
-          viewBox='0 0 24 24'
-          xmlns='http://www.w3.org/2000/svg'
-        >
-          <path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M19 9l-7 7-7-7'></path>
-        </svg>
+        <IoIosArrowDown className='ml-10' />
       </button>
       {isOpen && (
-        <div className='absolute right-0 mt-2 w-48 bg-white border border-gray-300 rounded shadow-lg z-10'>
+        <div className='absolute right-0 w-48 bg-white border border-gray-300 rounded-xl shadow-lg z-10'>
           {options.map((option, index) => (
             <div
               key={index}
@@ -57,4 +50,4 @@ const Dropdown = ({ onOptionSelect }) => {
   );
 };
 
-export default Dropdown;
+export default ShopFilterDropdown;

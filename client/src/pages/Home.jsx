@@ -1,11 +1,15 @@
-import MainShop from '../components/MainShop';
-import Shop from '../components/Shop';
+import ShopPreview from '../components/ShopPreview';
+import Configurator from '../components/Configurator';
+import HelpSection from '../components/HelpSection';
+import CompaniesLogos from '../components/CompaniesLogos';
 
 const Home = () => {
   return (
-    <div>
-      <MainShop />
-      <Shop />
+    <div className='bg-white'>
+      <Configurator />
+      <HelpSection />
+      <ShopPreview />
+      <CompaniesLogos />
     </div>
   )
 }

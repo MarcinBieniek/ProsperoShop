@@ -1,3 +1,25 @@
+export const categories = [
+  {
+    name: 'Wszystkie produkty'
+  },
+  {
+    name: 'Bramy',
+    subcategories: ['Bramy segmentowe', 'Bramy rozwierne', 'Bramy uchylne', 'Bramy roletowe', 'Bramy przemysłowe']
+  },
+  {
+    name: 'Automatyka',
+    subcategories: ['Bramy garażowe', 'Siłowniki przemysłowe', 'Bramy przesuwne', 'Bramy 2-skrzydłowe'],
+  },
+  {
+    name: 'Akcesoria',
+    subcategories: ['Piloty', 'Fotokomórki', 'Baterie', 'Radioodbiorniki', 'Szyny do napędów']
+  },
+  {
+    name: 'Ogrodzenia',
+    subcategories: ['Panelowe']
+  }
+]
+
 export const categoriesData = [
   {
     automatyka: [
@@ -51,11 +73,10 @@ export const categoriesData = [
 export const productsData = [
   {
     name: "BFT Deimos AC A800 MAG KIT",
-    category: "silowniki-do-bramy-przesuwnej",
+    category: "Bramy przesuwne",
     producer: "BFT",
     description: "Najlepszy napęd do bramy przesuwnej",
     regularPrice: 1799,
-    discountedPrice: 1699,
     imageUrls: '',
     delivery: 2,
     promotion: false,
@@ -66,7 +87,7 @@ export const productsData = [
   },
   {
     name: "Hato Slide 10",
-    category: "silowniki-do-bramy-przesuwnej",
+    category: "Bramy przesuwne",
     producer: "Hato",
     description: "Najlepszy napęd do bramy przesuwnej",
     regularPrice: 1350,
@@ -81,11 +102,10 @@ export const productsData = [
   },
   {
     name: "NAVI 600",
-    category: "silowniki-do-bramy-przesuwnej",
+    category: "Bramy przesuwne",
     producer: "Navi",
     description: "Najlepszy napęd do bramy przesuwnej",
     regularPrice: 911,
-    discountedPrice: 850,
     imageUrls: '',
     delivery: 5,
     promotion: false,
@@ -96,11 +116,10 @@ export const productsData = [
   },
   {
     name: "BFT Boticelli",
-    category: "silowniki-do-bramy-garazowej",
+    category: "Bramy garażowe",
     producer: "BFT",
     description: "Najlepszy napęd do bramy garazowej",
     regularPrice: 950,
-    discountedPrice: 850,
     imageUrls: '',
     delivery: 3,
     promotion: false,
@@ -111,7 +130,7 @@ export const productsData = [
   },
   {
     name: "ARC 600N",
-    category: "silowniki-do-bramy-garazowej",
+    category: "Bramy garażowe",
     producer: "ARC",
     description: "Najlepszy napęd do bramy garazowej",
     regularPrice: 500,
@@ -126,11 +145,10 @@ export const productsData = [
   },
   {
     name: "Moto 600 RTS",
-    category: "silowniki-do-bramy-garazowej",
+    category: "Bramy garażowe",
     producer: "Somfy",
     description: "Najlepszy napęd do bramy garazowej",
     regularPrice: 1100,
-    discountedPrice: 1000,
     imageUrls: '',
     delivery: 3,
     promotion: false,
@@ -141,7 +159,7 @@ export const productsData = [
   },
   {
     name: "BFT AKTA A30",
-    category: "fotokomorki",
+    category: "Fotokomórki",
     producer: "BFT",
     description: "Fotokomórki najlepszej klasy",
     regularPrice: 100,
@@ -156,11 +174,10 @@ export const productsData = [
   },
   {
     name: "CAME DIR 10",
-    category: "fotokomorki",
+    category: "Fotokomorki",
     producer: "Came",
     description: "Fotokomórki najlepszej klasy",
     regularPrice: 120,
-    discountedPrice: 100,
     imageUrls: '',
     delivery: 3,
     promotion: false,
@@ -171,7 +188,7 @@ export const productsData = [
   },
   {
     name: "NICE BF",
-    category: "fotokomorki",
+    category: "Fotokomorki",
     producer: "Nice",
     description: "Fotokomórki najlepszej klasy",
     regularPrice: 100,
