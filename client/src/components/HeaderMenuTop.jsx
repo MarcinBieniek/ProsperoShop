@@ -77,7 +77,7 @@ const HeaderMenuTop = () => {
             className="w-full pl-4 pr-3 py-2 border-2 border-orange-600 rounded-3xl focus:outline-none"
             placeholder="Szukaj..."
           />
-          <span className="absolute inset-y-0 right-[4px] flex items-center p-2 my-1 bg-orange-600 text-2xl rounded-3xl cursor-pointer">
+          <span className="absolute inset-y-0 right-[4px] flex items-center p-2 my-1 bg-orange-600 text-2xl rounded-3xl cursor-pointer hover:bg-gray-800 transition-smooth">
             <CiSearch className="text-white" />
           </span>
         </div>

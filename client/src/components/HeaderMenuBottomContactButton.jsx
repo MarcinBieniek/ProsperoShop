@@ -79,11 +79,11 @@ const HeaderMenuBottomContactButton = () => {
               </Link>
 
               <div className='flex flex-col justify-center items-center'>
-                <Link to='/' className='flex items-center justify-center bg-sky-400 text-white rounded-3xl w-[200px] px-10 py-2 mb-4 hover:bg-sky-600 transition-smooth'>
+                <Link to='/' className='flex items-center justify-center bg-gray-200 text-white rounded-3xl w-[200px] px-10 py-2 mb-4 hover:bg-orange-600 transition-smooth'>
                   <RiCustomerService2Line className='pr-2 text-2xl'/>
                   <p>Zadzwoń</p>
                 </Link>
-                <Link to='/' className='bg-green-500 text-white rounded-3xl px-10 py-2 hover:bg-green-600 transition-smooth flex items-center'>
+                <Link to='/' className='bg-orange-600 text-white rounded-3xl px-10 py-2 hover:bg-gray-800 transition-smooth flex items-center'>
                   <MdLocationOn className='pr-2 text-2xl' />
                   <p>Jak dojechać?</p>
                 </Link>
