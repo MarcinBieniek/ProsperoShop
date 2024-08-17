@@ -14,6 +14,10 @@ body {
   @apply transition duration-200 ease-in-out;
 }
 
+.box-shadow {
+  @apply shadow-md hover:shadow-xl transition-smooth
+}
+
 /* product card - add to basket hover effect */
 
 .basket-container:hover .basket-icon {

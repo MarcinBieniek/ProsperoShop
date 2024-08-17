@@ -3,6 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { signInStart, signInSuccess, signInFailure } from '../redux/user/userSlice';
 import OAuth from '../components/OAuth';
+import { MdKeyboardArrowRight } from "react-icons/md";
+import { FaCheck } from "react-icons/fa";
 
 const Login = () => {
 
@@ -50,45 +52,92 @@ const Login = () => {
 
 
   return (
-    <div className='p-3 max-w-lg mx-auto'>
-      <h1 className='text-3xl text-center font-semibold my-7'>Logowanie</h1>
-      <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
-        <input
-          type='email'
-          placeholder='email'
-          className='border p-3 rounded-lg'
-          id='email'
-          onChange={handleChange}
-        />
-        <input
-          type='password'
-          placeholder='password'
-          className='border p-3 rounded-lg'
-          id='password'
-          onChange={handleChange}
-        />
+    <div className='container text-gray-800'>
+      <div className='pt-5 pb-9 flex items-center text-gray-800'>
+        <p>Strona główna</p>
+        <MdKeyboardArrowRight className='px-1 text-3xl' />
+        <p>Logowanie</p>
+      </div>
 
-        <button
-          disabled={loading}
-          className='bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80'
-        >
-          {loading ? 'Loading...' : 'Zaloguj'}
-        </button>
-        <OAuth />
-      </form>
-      {error && <p className='text-red-500 mt-5'>Bład rejestracji. Wprowadź prawidłowe dane.</p>}
-      <div className='flex gap-2 mt-5'>
-        <p>Nie masz konta?</p>
-        <Link to={'/rejestracja'}>
-          <span className='text-blue-700'>Zarejestruj się</span>
-        </Link>
+      <div className='flex mb-32'>
+
+        <div className='w-1/2 p-5 px-10'>
+          <div className='relative '>
+            <h1 className='text-3xl pb-4 border-b-[1px] border-gray-300'>Logowanie</h1>
+            <div className='absolute h-[2px] w-[150px] bg-orange-500 bottom-[1px]'></div>
+          </div>
+          <p className='pt-3'>Witamy w naszym sklepie.</p>
+          <form onSubmit={handleSubmit} className='flex flex-col gap-4 pt-4'>
+            <input
+              type='email'
+              placeholder='Adres email'
+              className='border border-gray-300 p-3 rounded-3xl focus:outline-none'
+              id='email'
+              onChange={handleChange}
+            />
+            <input
+              type='password'
+              placeholder='Hasło'
+              className='border border-gray-300 p-3 rounded-3xl focus:outline-none'
+              id='password'
+              onChange={handleChange}
+            />
+
+            <button
+              disabled={loading}
+              className='bg-orange-600 hover:bg-gray-800 text-white p-3 rounded-3xl uppercase hover:opacity-95 disabled:opacity-80 transition-smooth'
+            >
+              {loading ? 'Loading...' : 'Zaloguj'}
+            </button>
+            <OAuth />
+          </form>
+          {error && <p className='text-red-500 mt-5'>Błąd rejestracji. Wprowadź prawidłowe dane.</p>}
+          <div className='flex justify-between mt-5'>
+            <Link to='/' className='hover:text-orange-600 transition-smooth'>
+              Powrót do sklepu
+            </Link>
+            <div className=''>
+              <Link to={'/sign-in'}>
+                <span className='hover:text-orange-600 transition-smooth'>Zresetuj hasło</span>
+              </Link>
+            </div>
+
+          </div>
+
+        </div>
+
+        <div className='w-1/2 p-5 px-10 border-l-[1px] border-gray-300'>
+          <div className='relative '>
+            <h1 className='text-3xl pb-4 border-b-[1px] border-gray-300'>Rejestracja</h1>
+            <div className='absolute h-[2px] w-[150px] bg-orange-500 bottom-[1px]'></div>
+          </div>
+          <p className='pt-3'>Zachęcamy do rejestracji!</p>
+          <p className='pt-3 text-xl'>Posiadając konto w naszym sklepie:</p>
+
+          <div className='flex items-center mt-3'>
+            <FaCheck className='text-sm text-green-500 mr-3' />
+            <p>Sprawniej przejdziesz proces zamówienia.</p>
+          </div>
+          <div className='flex items-center mt-2'>
+            <FaCheck className='text-sm text-green-500 mr-3' />
+            <p>Zapiszesz interesujące cię produkty na liście ulubionych.</p>
+          </div>
+          <div className='flex items-center mt-2'>
+            <FaCheck className='text-sm text-green-500 mr-3' />
+            <p>Będziesz mógł śledzić status zamówienia.</p>
+          </div>
+          <div className='flex items-center mt-2'>
+            <FaCheck className='text-sm text-green-500 mr-3' />
+            <p>Z łatwością przejrzysz historię zamówień.</p>
+          </div>
+
+          <Link to='/rejestracja' >
+            <p className='w-full text-center bg-orange-600 hover:bg-gray-800 text-white p-3 mt-5 rounded-3xl uppercase hover:opacity-95 disabled:opacity-80 transition-smooth'>Zarejestruj</p>
+          </Link>
+        </div>
+
       </div>
-      <div className='flex gap-2 mt-5'>
-        <p>Nie pamiętasz hasła?</p>
-        <Link to={'/sign-in'}>
-          <span className='text-blue-700'>Zresetuj hasło</span>
-        </Link>
-      </div>
+
     </div>
   );
 }
