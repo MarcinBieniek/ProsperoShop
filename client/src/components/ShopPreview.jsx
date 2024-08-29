@@ -47,7 +47,7 @@ const tempProducts = [
 
 const ShopPreview = () => {
   return (
-    <div className='py-20 pb-5 text-gray-800'>
+    <div className='py-10 pb-5 text-gray-800'>
       <div className='container flex'>
         <div className='w-2/6 bg-orange-600 h-[460px] flex items-center justify-center rounded-xl'>
           Kontener na grafikę

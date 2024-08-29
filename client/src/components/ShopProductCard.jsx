@@ -4,7 +4,7 @@ import { SlBasket } from "react-icons/sl";
 
 const ShopProductCard= ({ product, handleAddToCart }) => {
   return (
-    <div className='basket-container border shadow-md border-gray-200 hover:shadow-xl transition-smooth rounded-lg p-2'>
+    <div className='basket-container border border-gray-200 rounded-lg p-2 box-shadow'>
       <p className='text-sm pb-2'>{product.producer}</p>
       <Link to='/' className='font-bold text-sky-400 hover:text-yellow-300 transition-smooth'>
         <p className='pb-3'>{product.name}</p>
