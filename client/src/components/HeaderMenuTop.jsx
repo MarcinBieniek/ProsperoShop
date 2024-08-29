@@ -116,7 +116,7 @@ const HeaderMenuTop = () => {
 
             {currentUser && isMenuUserOpen && (
               <div
-                className='absolute right-0 mt-0 w-56 p-2 bg-white border border-gray-200 rounded-md shadow-lg'
+                className='absolute right-0 mt-0 w-64 bg-white border border-gray-200 rounded-md shadow-lg'
                 onMouseEnter={() => setIsMenuUserOpen(true)}
                 onMouseLeave={() => setIsMenuUserOpen(false)}
               >
@@ -124,10 +124,12 @@ const HeaderMenuTop = () => {
                   <Link
                     key={index}
                     to={item.to}
-                    className='flex px-2 py-2 text-black hover:bg-gray-100 items-center rounded'
+                    className='flex text-black hover:bg-gray-100 items-center rounded'
                   >
-                    {item.icon}
-                    <p className='text'>{item.label}</p>
+                    <div className='flex text-black hover:bg-gray-100 items-center rounded p-3'>
+                      {item.icon}
+                      <p className='ml-1'>{item.label}</p>
+                    </div>
                   </Link>
                 ))}
               </div>
@@ -135,7 +137,7 @@ const HeaderMenuTop = () => {
           </div>
         </div>
 
-        <div className='relative'>
+        <div className='relative z-10'>
           <div
             onMouseEnter={() => setIsMenuHelpOpen(true)}
             onMouseLeave={() => setIsMenuHelpOpen(false)}
@@ -151,16 +153,18 @@ const HeaderMenuTop = () => {
             <div
               onMouseEnter={() => setIsMenuHelpOpen(true)}
               onMouseLeave={() => setIsMenuHelpOpen(false)}
-              className='absolute right-0 w-56 p-2 bg-white border border-gray-200 rounded-md shadow-lg'
+              className='absolute right-0 w-64 bg-white border border-gray-200 rounded-md shadow-lg'
             >
               {helpMenuItems.map((item, index) => (
                 <Link
                   key={index}
                   to={item.to}
-                  className='flex px-2 py-2 text-black hover:bg-gray-100 items-center rounded'
+                  className='flex text-black hover:bg-gray-100 items-center rounded'
                 >
-                  {item.icon}
-                  <p>{item.label}</p>
+                  <div className='flex text-black hover:bg-gray-100 items-center rounded p-3'>
+                    {item.icon}
+                    <p className='ml-1'>{item.label}</p>
+                  </div>
                 </Link>
               ))}
 

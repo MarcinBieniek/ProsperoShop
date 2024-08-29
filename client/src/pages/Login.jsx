@@ -66,8 +66,8 @@ const Login = () => {
             <h1 className='text-3xl pb-4 border-b-[1px] border-gray-300'>Logowanie</h1>
             <div className='absolute h-[2px] w-[150px] bg-orange-500 bottom-[1px]'></div>
           </div>
-          <p className='pt-3'>Witamy w naszym sklepie.</p>
-          <form onSubmit={handleSubmit} className='flex flex-col gap-4 pt-4'>
+          <p className='py-3 pt-5'>Witamy w naszym sklepie.</p>
+          <form onSubmit={handleSubmit} className='flex flex-col gap-5 pt-4'>
             <input
               type='email'
               placeholder='Adres email'
@@ -111,28 +111,28 @@ const Login = () => {
             <h1 className='text-3xl pb-4 border-b-[1px] border-gray-300'>Rejestracja</h1>
             <div className='absolute h-[2px] w-[150px] bg-orange-500 bottom-[1px]'></div>
           </div>
-          <p className='pt-3'>Zachęcamy do rejestracji!</p>
-          <p className='pt-3 text-xl'>Posiadając konto w naszym sklepie:</p>
+          <p className='pt-5'>Zachęcamy do rejestracji!</p>
+          <p className='pt-5 text-xl'>Posiadając konto w naszym sklepie:</p>
 
-          <div className='flex items-center mt-3'>
+          <div className='flex items-center mt-5'>
             <FaCheck className='text-sm text-green-500 mr-3' />
             <p>Sprawniej przejdziesz proces zamówienia.</p>
           </div>
-          <div className='flex items-center mt-2'>
+          <div className='flex items-center mt-5'>
             <FaCheck className='text-sm text-green-500 mr-3' />
             <p>Zapiszesz interesujące cię produkty na liście ulubionych.</p>
           </div>
-          <div className='flex items-center mt-2'>
+          <div className='flex items-center mt-5'>
             <FaCheck className='text-sm text-green-500 mr-3' />
             <p>Będziesz mógł śledzić status zamówienia.</p>
           </div>
-          <div className='flex items-center mt-2'>
+          <div className='flex items-center mt-5'>
             <FaCheck className='text-sm text-green-500 mr-3' />
             <p>Z łatwością przejrzysz historię zamówień.</p>
           </div>
 
           <Link to='/rejestracja' >
-            <p className='w-full text-center bg-orange-600 hover:bg-gray-800 text-white p-3 mt-5 rounded-3xl uppercase hover:opacity-95 disabled:opacity-80 transition-smooth'>Zarejestruj</p>
+            <p className='w-full text-center bg-orange-600 hover:bg-gray-800 text-white p-3 mt-7 rounded-3xl uppercase hover:opacity-95 disabled:opacity-80 transition-smooth'>Zarejestruj</p>
           </Link>
         </div>
 

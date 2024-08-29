@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import OAuth from '../components/OAuth';
+import { MdKeyboardArrowRight } from "react-icons/md";
+import { FaCheck } from "react-icons/fa";
 
 const Rejestracja = () => {
 
@@ -54,49 +56,85 @@ const Rejestracja = () => {
 
 
   return (
-    <div className='p-3 max-w-lg mx-auto'>
-      <h1 className='text-3xl text-center font-semibold my-7'>Sign Up</h1>
-      <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
-        <input
-          type='text'
-          placeholder='username'
-          className='border p-3 rounded-lg'
-          id='username'
-          onChange={handleChange}
-        />
-        <input
-          type='email'
-          placeholder='email'
-          className='border p-3 rounded-lg'
-          id='email'
-          onChange={handleChange}
-        />
-        <input
-          type='password'
-          placeholder='password'
-          className='border p-3 rounded-lg'
-          id='password'
-          onChange={handleChange}
-        />
+    <>
 
-        <button
-          disabled={loading}
-          className='bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80'
-        >
-          {loading ? 'Loading...' : 'Sign Up'}
-        </button>
-        <OAuth />
-      </form>
-      <div className='flex gap-2 mt-5'>
-        <p>Masz już konto?</p>
-        <Link to={'/login'}>
-          <span className='text-blue-700'>Zaloguj</span>
-        </Link>
+      <div className='container text-gray-800'>
+        <div className='pt-5 pb-9 flex items-center text-gray-800'>
+          <p>Strona główna</p>
+          <MdKeyboardArrowRight className='px-1 text-3xl' />
+          <p>Rejestracja</p>
+        </div>
+
+        <div className='flex mb-32'>
+
+          <div className='w-1/2 p-5 px-10'>
+            <div className='relative '>
+              <h1 className='text-3xl pb-4 border-b-[1px] border-gray-300'>Utwórz nowe konto</h1>
+              <div className='absolute h-[2px] w-[150px] bg-orange-500 bottom-[1px]'></div>
+            </div>
+            <p className='py-3 pt-5'>Witamy w naszym sklepie.</p>
+
+            <div className='py-3 w-full mx-auto'>
+              <form onSubmit={handleSubmit} className='flex flex-col gap-6'>
+                <input
+                  type='text'
+                  placeholder='Nazwa użytkownika'
+                  className='border border-gray-300 p-3 rounded-3xl focus:outline-none'
+                  id='username'
+                  onChange={handleChange}
+                />
+                <input
+                  type='email'
+                  placeholder='Adres email'
+                  className='border border-gray-300 p-3 rounded-3xl focus:outline-none'
+                  id='email'
+                  onChange={handleChange}
+                />
+                <input
+                  type='password'
+                  placeholder='Hasło'
+                  className='border border-gray-300 p-3 rounded-3xl focus:outline-none'
+                  id='password'
+                  onChange={handleChange}
+                />
+
+                <button
+                  disabled={loading}
+                  className='bg-orange-600 hover:bg-gray-800 text-white p-3 rounded-3xl uppercase hover:opacity-95 disabled:opacity-80 transition-smooth'
+                >
+                  {loading ? 'Loading...' : 'Zarejestruj'}
+                </button>
+
+              </form>
+              {error && error.includes('required') && <p className='text-red-500 mt-5'>Błąd rejestracji. Uzupełnij wszystkie dane.</p>}
+              {error && error.includes('username') && !error.includes('required') && <p className='text-red-500 mt-5'>Bład rejestracji. Użytkownik o tej nazwie istnieje. Wybierz inną nazwę.</p>}
+              {error && error.includes('email') && <p className='text-red-500 mt-5'>Błąd rejestracji. Adres email jest już zarejestrowany. Wybierz inny adres.</p>}
+            </div>
+          </div>
+
+          <div className='w-1/2 p-5 px-10 border-l-[1px] border-gray-300'>
+            <div className='relative '>
+              <h1 className='text-3xl pb-4 border-b-[1px] border-gray-300'>Zaloguj się</h1>
+              <div className='absolute h-[2px] w-[150px] bg-orange-500 bottom-[1px]'></div>
+            </div>
+            <p className='py-5'>Posiadasz już konto w naszym sklepie?</p>
+
+            <Link to='/login' className='mb-5'>
+              <p className='w-full text-center bg-orange-600 hover:bg-gray-800 text-white py-3 mt-1 rounded-3xl uppercase hover:opacity-95 disabled:opacity-80 transition-smooth'>Zaloguj</p>
+            </Link>
+
+            <div className='w-full mt-6'>
+              <OAuth  />
+            </div>
+          </div>
+
+        </div>
+
       </div>
-      {error && error.includes('required') && <p className='text-red-500 mt-5'>Błąd rejestracji. Uzupełnij wszystkie dane.</p>}
-      {error && error.includes('username') && !error.includes('required') && <p className='text-red-500 mt-5'>Bład rejestracji. Użytkownik o tej nazwie istnieje. Wybierz inną nazwę.</p>}
-      {error && error.includes('email') && <p className='text-red-500 mt-5'>Błąd rejestracji. Adres email jest już zarejestrowany. Wybierz inny adres.</p>}
-    </div>
+
+
+
+    </>
   );
 }
 
