@@ -5,6 +5,14 @@ import { BiCartDownload } from "react-icons/bi";
 import { CiHeart } from "react-icons/ci";
 
 const Produkt = () => {
+
+  const images = [
+    'https://a.allegroimg.com/s512/1160bc/2df9cfc6427f9b023496e2561a48/NAPED-DO-BRAMY-PRZESUWNEJ-AB1000-VIDOS',
+    'https://a.allegroimg.com/s512/1160bc/2df9cfc6427f9b023496e2561a48/NAPED-DO-BRAMY-PRZESUWNEJ-AB1000-VIDOS',
+    'https://napedykey.pl/userdata/public/gfx/273.png',
+  ];
+
+  const [mainImage, setMainImage] = useState(0);
   const [selectedTab, setSelectedTab] = useState('opis');
 
   return (
@@ -16,9 +24,26 @@ const Produkt = () => {
       </div>
 
       <div className='flex'>
-        <div className='w-2/6 bg-yellow-200'>
-          Column 1
+        <div className='slider w-2/6'>
+
+          <div className="mb-4 flex item-center justify-center">
+            <img src={images[mainImage]} alt="Główne zdjęcie" className="h-[300px]" />
+          </div>
+
+          <div className="flex justify-between">
+            {images.map((img, index) => (
+              <img
+                key={index}
+                src={img}
+                alt={`Miniaturka ${index + 1}`}
+                className={`w-1/3 mr-3 h-[120px] object-fit p-2 cursor-pointer transition-smooth ${mainImage === index ? 'border-[1px] border-b-2 border-b-orange-600 ' : 'border-[1px] border-gray-200'}`}
+                onClick={() => setMainImage(index)}
+              />
+            ))}
+          </div>
         </div>
+
+        {/* Informacje o produkcie */}
         <div className='w-3/6 p-5 px-10'>
           <p className='text-sm text-gray-600 hover:text-orange-600 cursor-pointer transition-smooth'>Producent</p>
           <p className='text-2xl pb-2'>Nazwa produktu</p>
