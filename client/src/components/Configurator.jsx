@@ -13,7 +13,7 @@ const Configurator = () => {
         <div className='flex'>
           <button
             onClick={() => setSelected('garazowe')}
-            className={`px-4 py-2 rounded rounded-bl-none ${
+            className={`px-4 py-2 rounded rounded-bl-none rounded-br-none ${
               selected === 'garazowe' ? 'bg-white text-black' : 'bg-orange-600 text-white'
             }`}
           >
@@ -21,7 +21,7 @@ const Configurator = () => {
           </button>
           <button
             onClick={() => setSelected('segmentowe')}
-            className={`px-4 py-2 rounded rounded-br-none ${
+            className={`px-4 py-2 rounded rounded-br-none rounded-bl-none ${
               selected === 'segmentowe' ? 'bg-white text-black' : 'bg-orange-600 text-white'
             }`}
           >
