@@ -43,7 +43,6 @@ const Produkt = () => {
           </div>
         </div>
 
-        {/* Informacje o produkcie */}
         <div className='w-3/6 p-5 px-10'>
           <p className='text-sm text-gray-600 hover:text-orange-600 cursor-pointer transition-smooth'>Producent</p>
           <p className='text-2xl pb-2'>Nazwa produktu</p>
@@ -68,16 +67,16 @@ const Produkt = () => {
             <div className='border-[1px] rounded-full flex justify-between items-center px-4 py-2 mt-4 w-[50%]'>
               <p>1</p>
               <div className='flex'>
-                <HiPlusSm className='bg-gray-200 rounded-full text-xl mr-2' />
-                <HiMinusSm className='bg-gray-200 rounded-full text-xl' />
+                <HiPlusSm className='bg-gray-200 cursor-pointer rounded-full text-xl mr-2' />
+                <HiMinusSm className='bg-gray-200 cursor-pointer rounded-full text-xl' />
               </div>
             </div>
           </div>
-          <div className='bg-gray-200 flex justify-center my-5 p-3 rounded-3xl hover:bg-orange-600 hover:text-white transition-smooth' >
+          <div className='bg-gray-200 cursor-pointer flex justify-center my-5 p-3 rounded-3xl hover:bg-orange-600 hover:text-white transition-smooth' >
             <BiCartDownload className='text-2xl mr-2' />
             <p>Dodaj do koszyka</p>
           </div>
-          <div className='bg-orange-600 text-white flex justify-center my-5 p-3 rounded-3xl hover:bg-gray-800 transition-smooth'>Kup teraz</div>
+          <div className='bg-orange-600 text-white flex justify-center my-5 p-3 rounded-3xl hover:bg-gray-800 transition-smooth cursor-pointer'>Kup teraz</div>
           <div className='flex items-center text-gray-800 hover:text-orange-600 transition-smooth cursor-pointer'>
             <CiHeart className='text-xl mr-3' />
             <p>Dodaj do ulubionych</p>

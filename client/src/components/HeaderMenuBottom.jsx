@@ -16,9 +16,9 @@ const HeaderMenuBottom = () => {
         <HeaderMenuBottomContactButton />
       </div>
       <div className='flex items-center justify-between'>
-        <p className='font-bold mr-2'>Partner firmy</p>
+        <p className='font-bold'>Partner firmy</p>
         <Link to='https://www.wisniowski.pl/'>
-          <img src='/wisniowski-logo.jpg' alt='logo' className='h-6' />
+          <img src='/logo/wisniowski2.jpg' alt='logo' className='h-16' />
         </Link>
       </div>
     </div>

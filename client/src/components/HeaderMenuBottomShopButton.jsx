@@ -26,7 +26,7 @@ const HeaderMenuBottomShopButton = () => {
         <div
           onMouseEnter={() => setIsMenuShopOpen(true)}
           onMouseLeave={() => setIsMenuShopOpen(false)}
-          className='absolute top-11 left-[-1px] p-6 bg-white rounded-md shadow-lg flex w-auto border-t-2 border-l-1 border-b-1 border-r-1 border-gray-200 border-t-orange-600 transition-smooth'
+          className='absolute top-11 left-[-1px] p-6 bg-white rounded-md shadow-lg flex w-auto border-[1px] border-gray-200 transition-smooth'
         >
           <div className='flex'>
             <Link to='/wycena' className='relative flex-grow font-bold pb-2 hover:text-orange-600 whitespace-nowrap'>
