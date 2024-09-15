@@ -151,7 +151,7 @@ const UpdateListing = () => {
       if (data.success === false){
         setError(data.message);
       };
-      navigate(`/listing/${data._id}`);
+      navigate(`/produkt/${data._id}`);
 
     } catch (error) {
       setError(error.message);

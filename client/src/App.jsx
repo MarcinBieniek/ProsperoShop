@@ -14,6 +14,7 @@ import UpdateListing from './pages/UpdateListing';
 import Koszyk from "./pages/Koszyk";
 import Sklep from "./pages/Sklep";
 import Footer from "./components/Footer";
+import Produkt from "./pages/Produkt";
 
 
 const App = () => {
@@ -27,6 +28,7 @@ const App = () => {
         <Route path='/rejestracja' element={<Rejestracja />} />
         <Route path='/koszyk' element={<Koszyk /> } />
         <Route path='/sklep' element={<Sklep /> } />
+        <Route path='/produkt/:produktId' element={<Produkt /> } />
         <Route element={<PrivateRoute />} >
           <Route path='/profil' element={<Profil />} />
           <Route path='/create-listing' element={<CreateListing />}/>

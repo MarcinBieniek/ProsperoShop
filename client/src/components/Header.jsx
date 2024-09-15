@@ -7,7 +7,7 @@ const Header = () => {
       <div className='bg-orange-600 h-8 flex justify-center items-center text-white text-sm'>
         PROMOCJA - 20% NA WSZYSTKIE BRAMY GARAŻOWE
       </div>
-      <div className='container text-black h-36'>
+      <div className='container text-black h-36 '>
         <HeaderMenuTop />
         <HeaderMenuBottom />
       </div>
