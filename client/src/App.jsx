@@ -16,7 +16,9 @@ import Sklep from "./pages/Sklep";
 import Footer from "./components/Footer";
 import Produkt from "./pages/Produkt";
 import User from "./pages/User";
-
+import PrivateRouteAdmin from "./components/PrivateRouteAdmin";
+import Admin from "./pages/Admin";
+import Blokada from "./pages/Blokada";
 
 const App = () => {
   return (
@@ -36,6 +38,10 @@ const App = () => {
           <Route path='/create-listing' element={<CreateListing />}/>
           <Route path='/update-listing/:listingId' element={<UpdateListing />}/>
         </Route>
+        <Route element={<PrivateRouteAdmin />}>
+          <Route path='/admin' element={<Admin /> } />
+        </Route>
+        <Route path='/blokada' element={<Blokada />} />
       </Routes>
       <Footer />
     </BrowserRouter>
