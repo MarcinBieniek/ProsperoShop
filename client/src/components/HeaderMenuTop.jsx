@@ -17,6 +17,7 @@ import { CiDeliveryTruck } from "react-icons/ci";
 import { GoTools } from "react-icons/go";
 import { RiCustomerService2Line } from "react-icons/ri";
 import { IoMdClose } from "react-icons/io";
+import { RiLogoutCircleRLine } from "react-icons/ri";
 
 const HeaderMenuTop = () => {
 
@@ -40,7 +41,7 @@ const HeaderMenuTop = () => {
     { to: '/profil', icon: <IoListCircleOutline className='text-xl mr-2' />, label: 'Zamówienia' },
     { to: '/profil', icon: <IoHeartOutline className='text-xl mr-2' />, label: 'Ulubione produkty' },
     { to: '/profil', icon: <TbTruckReturn className='text-xl mr-2' />, label: 'Reklamacje i zwroty' },
-    { to: '/profil', icon: <PiUserCircleLight className='text-xl mr-2' />, label: 'Wyloguj' },
+    { to: '/profil', icon: <RiLogoutCircleRLine className='text-xl mr-2' />, label: 'Wyloguj' },
   ];
 
   const helpMenuItems = [
