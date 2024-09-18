@@ -15,6 +15,7 @@ import Koszyk from "./pages/Koszyk";
 import Sklep from "./pages/Sklep";
 import Footer from "./components/Footer";
 import Produkt from "./pages/Produkt";
+import User from "./pages/User";
 
 
 const App = () => {
@@ -29,6 +30,7 @@ const App = () => {
         <Route path='/koszyk' element={<Koszyk /> } />
         <Route path='/sklep' element={<Sklep /> } />
         <Route path='/produkt/:produktId' element={<Produkt /> } />
+        <Route path='/user' element={<User />} />
         <Route element={<PrivateRoute />} >
           <Route path='/profil' element={<Profil />} />
           <Route path='/create-listing' element={<CreateListing />}/>
