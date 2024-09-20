@@ -44,6 +44,14 @@ const HeaderMenuTop = () => {
     { to: '/profil', icon: <RiLogoutCircleRLine className='text-xl mr-2' />, label: 'Wyloguj' },
   ];
 
+  const adminMenuItems = [
+    { to: '/admin', icon: <PiUserCircleLight className='text-xl mr-2' />, label: 'Panel admina' },
+    { to: '/admin', icon: <IoListCircleOutline className='text-xl mr-2' />, label: 'Zamówienia' },
+    { to: '/admin', icon: <IoHeartOutline className='text-xl mr-2' />, label: 'Ulubione produkty' },
+    { to: '/admin', icon: <TbTruckReturn className='text-xl mr-2' />, label: 'Reklamacje i zwroty' },
+    { to: '/admin', icon: <RiLogoutCircleRLine className='text-xl mr-2' />, label: 'Wyloguj' },
+  ];
+
   const helpMenuItems = [
     { to: '/profil', icon: <PiGarageLight className='text-xl mr-2' />, label: 'Nasza firma' },
     { to: '/profil', icon: <FaGears className='text-xl mr-2' />, label: 'Ile trwa produkcja?' },
@@ -115,7 +123,7 @@ const HeaderMenuTop = () => {
               )}
             </Link>
 
-            {currentUser && isMenuUserOpen && (
+            {currentUser?.status === 'user' && isMenuUserOpen && (
               <div
                 className='absolute right-0 mt-0 w-64 bg-white border border-gray-200 rounded-md shadow-lg'
                 onMouseEnter={() => setIsMenuUserOpen(true)}
@@ -135,6 +143,29 @@ const HeaderMenuTop = () => {
                 ))}
               </div>
             )}
+
+            {currentUser?.status === 'admin' && isMenuUserOpen && (
+              <div
+                className='absolute right-0 mt-0 w-64 bg-white border border-gray-200 rounded-md shadow-lg'
+                onMouseEnter={() => setIsMenuUserOpen(true)}
+                onMouseLeave={() => setIsMenuUserOpen(false)}
+              >
+                {adminMenuItems.map((item, index) => (
+                  <Link
+                    key={index}
+                    to={item.to}
+                    className='flex text-black hover:bg-gray-100 items-center rounded'
+                  >
+                    <div className='flex text-black hover:bg-gray-100 items-center rounded p-3'>
+                      {item.icon}
+                      <p className='ml-1'>{item.label}</p>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            )}
+
+
           </div>
         </div>
 

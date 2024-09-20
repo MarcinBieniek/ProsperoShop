@@ -33,15 +33,19 @@ const App = () => {
         <Route path='/sklep' element={<Sklep /> } />
         <Route path='/produkt/:produktId' element={<Produkt /> } />
         <Route path='/user' element={<User />} />
+        <Route path='/blokada' element={<Blokada />} />
+
         <Route element={<PrivateRoute />} >
           <Route path='/profil' element={<Profil />} />
           <Route path='/create-listing' element={<CreateListing />}/>
           <Route path='/update-listing/:listingId' element={<UpdateListing />}/>
         </Route>
+
         <Route element={<PrivateRouteAdmin />}>
           <Route path='/admin' element={<Admin /> } />
         </Route>
-        <Route path='/blokada' element={<Blokada />} />
+
+
       </Routes>
       <Footer />
     </BrowserRouter>

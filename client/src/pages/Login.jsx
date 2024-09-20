@@ -43,7 +43,7 @@ const Login = () => {
       }
 
       dispatch(signInSuccess(data))
-      navigate('/')
+      navigate('/admin')
 
     } catch (error) {
       dispatch(signInFailure('Błąd logowania.'))

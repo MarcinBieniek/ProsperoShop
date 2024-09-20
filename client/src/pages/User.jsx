@@ -7,7 +7,7 @@ import { IoHeartOutline } from "react-icons/io5";
 import { TbTruckReturn } from "react-icons/tb";
 import { RiLogoutCircleRLine } from "react-icons/ri";
 
-const App = () => {
+const User = () => {
   const { currentUser } = useSelector((state) => state.user);
 
   const [activeTab, setActiveTab] = useState('editProfile');
@@ -35,7 +35,7 @@ const App = () => {
       <div className='flex'>
         <div className='w-1/4 p-3'>
           <div className='bg-sky-600 rounded p-5 text-white'>
-            <p className='text-lg font-bold mb-3 cursor-pointer hover:text-gray-800 transition-smooth'>Panel klienta</p>
+            <p className='text-lg font-bold mb-3'>Panel klienta</p>
             <div
               className={`flex items-center mb-3 hover:text-gray-800 cursor-pointer transition-smooth ${activeTab === 'editProfile' ? 'text-gray-800' : ''}`}
               onClick={() => setActiveTab('editProfile')}
@@ -73,47 +73,49 @@ const App = () => {
 
         <div className='w-3/4 p-3'>
           <div className='bg-gray-100 rounded p-5'>
-            <p className='text-lg font-bold mb-5'>Panel klienta</p>
 
             {activeTab === 'editProfile' && (
-              <div className='flex mb-5'>
-                <div className='bg-white border-[1px] border-gray-200 p-5 rounded flex w-full
-                '>
-                  <div className='w-1/3 flex flex-col items-center py-5 border-r-[1px] border-gray-200'>
-                    <img
-                      src={currentUser.avatar}
-                      alt='profile'
-                      className='rounded-full h-24 w-24 object-cover cursor-pointer mb-5'
-                    />
-                    <p>{currentUser.username}</p>
-                  </div>
-                  <div className='w-2/3 px-5'>
-                    <p className='mb-3'>
-                      <span className='font-bold'>Adres email: </span>
-                      {currentUser.email}
-                    </p>
-                    <p className='mb-3'>
-                      <span className='font-bold'>Nr tel: </span>
-                      123456789
-                    </p>
-                    <p className='mb-3'>
-                      <span className='font-bold'>Adres dostawy: </span>
-                      Ul. Mickiewicza 8, 12-345 Bytom
-                    </p>
-                    <p className='mb-3'>
-                      <span className='font-bold'>Dane do faktury: </span>
-                      Ul. Mickiewicza 8, 12-345 Bytom, NIP 123456789
-                    </p>
-                    <p className='mb-3'>
-                      <span className='font-bold'>Data dołączenia: </span>
-                      01/02/34
-                    </p>
-                    <div className='flex justify-end mt-5'>
-                      <button className='bg-orange-600 text-white px-3 py-2 rounded-3xl hover:bg-gray-800 transition-smooth'>Edytuj dane</button>
+              <>
+                <p className='text-lg font-bold mb-5'>Edytuj dane</p>
+                <div className='flex mb-5'>
+                  <div className='bg-white border-[1px] border-gray-200 p-5 rounded flex w-full
+                  '>
+                    <div className='w-1/3 flex flex-col items-center py-5 border-r-[1px] border-gray-200'>
+                      <img
+                        src={currentUser.avatar}
+                        alt='profile'
+                        className='rounded-full h-24 w-24 object-cover cursor-pointer mb-5'
+                      />
+                      <p>{currentUser.username}</p>
+                    </div>
+                    <div className='w-2/3 px-5'>
+                      <p className='mb-3'>
+                        <span className='font-bold'>Adres email: </span>
+                        {currentUser.email}
+                      </p>
+                      <p className='mb-3'>
+                        <span className='font-bold'>Nr tel: </span>
+                        123456789
+                      </p>
+                      <p className='mb-3'>
+                        <span className='font-bold'>Adres dostawy: </span>
+                        Ul. Mickiewicza 8, 12-345 Bytom
+                      </p>
+                      <p className='mb-3'>
+                        <span className='font-bold'>Dane do faktury: </span>
+                        Ul. Mickiewicza 8, 12-345 Bytom, NIP 123456789
+                      </p>
+                      <p className='mb-3'>
+                        <span className='font-bold'>Data dołączenia: </span>
+                        01/02/34
+                      </p>
+                      <div className='flex justify-end mt-5'>
+                        <button className='bg-orange-600 text-white px-3 py-2 rounded-3xl hover:bg-gray-800 transition-smooth'>Edytuj dane</button>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              </>
             )}
 
             {activeTab === 'orders' && (
@@ -157,10 +159,11 @@ const App = () => {
             )}
 
             {activeTab === 'favorites' && (
-              <p>Ulubione produkty</p>
+              <p className='text-lg font-bold'>Ulubione produkty</p>
             )}
+
             {activeTab === 'returns' && (
-              <p>Zwroty i reklamacje</p>
+              <p className='text-lg font-bold'>Zwroty i reklamacje</p>
             )}
           </div>
         </div>
@@ -169,4 +172,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default User;
