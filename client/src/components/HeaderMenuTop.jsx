@@ -92,14 +92,14 @@ const HeaderMenuTop = () => {
         </div>
       </div>
 
-      <div className='flex items-center'>
+      <div className='login flex items-center'>
         <div className='relative'>
           <div
             onMouseEnter={() => setIsMenuUserOpen(true)}
             onMouseLeave={() => setIsMenuUserOpen(false)}
           >
             <Link
-              to='/profil'
+              to={currentUser ? (currentUser.status === 'admin' ? '/admin' : '/profil') : '/login'}
               className={`flex items-center cursor-pointer p-2 rounded-md transition-smooth ${isMenuUserOpen ? 'bg-gray-100' : 'hover:bg-gray-100'}`}
             >
               {currentUser ? (

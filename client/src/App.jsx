@@ -1,6 +1,6 @@
 import "react-toastify/dist/ReactToastify.css";
 
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ToastContainer } from "react-toastify";
 
 import Home from './pages/Home';
@@ -17,8 +17,10 @@ import Footer from "./components/Footer";
 import Produkt from "./pages/Produkt";
 import User from "./pages/User";
 import PrivateRouteAdmin from "./components/PrivateRouteAdmin";
-import Admin from "./pages/Admin";
+import AdminLayout from "./pages/Admin/AdminLayout";
 import Blokada from "./pages/Blokada";
+import Dashboard from "./pages/Admin/Dashboard";
+import Users from "./pages/Admin/Users";
 
 const App = () => {
   return (
@@ -42,9 +44,12 @@ const App = () => {
         </Route>
 
         <Route element={<PrivateRouteAdmin />}>
-          <Route path='/admin' element={<Admin /> } />
+          <Route path='/admin' element={<AdminLayout /> }>
+            <Route index element={<Navigate to="panel-glowny" />} />
+            <Route path='panel-glowny' element={<Dashboard />} />
+            <Route path='uzytkownicy' element={<Users />} />
+          </Route>
         </Route>
-
 
       </Routes>
       <Footer />
