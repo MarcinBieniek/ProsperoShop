@@ -45,9 +45,9 @@ const App = () => {
 
         <Route element={<PrivateRouteAdmin />}>
           <Route path='/admin' element={<AdminLayout /> }>
-            <Route index element={<Navigate to="panel-glowny" />} />
-            <Route path='panel-glowny' element={<Dashboard />} />
-            <Route path='uzytkownicy' element={<Users />} />
+            <Route index element={<Navigate to="dashboard" />} />
+            <Route path='dashboard' element={<Dashboard />} />
+            <Route path='users' element={<Users />} />
           </Route>
         </Route>
 

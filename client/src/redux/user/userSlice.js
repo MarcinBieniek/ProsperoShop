@@ -1,10 +1,21 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import axios from "axios";
 
 const initialState = {
+  allUsers: [],
   currentUser: null,
   error: null,
   loading: false
 }
+
+export const usersFetch = createAsyncThunk(
+  "user/usersFetch",
+  async () => {
+    const response = await axios.get("http://localhost:3000/api/user/all");
+    return response?.data;
+  }
+);
+
 
 const userSlice = createSlice({
   name: ' user', // 1st step is to set a name
@@ -62,7 +73,20 @@ const userSlice = createSlice({
       state.error = action.payload;
       state.loading = false;
     },
-  }
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(usersFetch.pending, (state) => {
+        state.status = "pending";
+      })
+      .addCase(usersFetch.fulfilled, (state, action) => {
+        state.status = "success";
+        state.allUsers = action.payload;
+      })
+      .addCase(usersFetch.rejected, (state) => {
+        state.status = "rejected";
+      });
+  },
 })
 
 export const {

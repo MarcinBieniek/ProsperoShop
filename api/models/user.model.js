@@ -17,7 +17,7 @@ const userSchema = new mongoose.Schema({
   },
   avatar: {
     type: String,
-    default: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
+    default: '/user-icon.png',
     required: false,
   },
   status: {
@@ -40,6 +40,18 @@ const userSchema = new mongoose.Schema({
     default: [],
     required: false
   },
+  address: {
+    type: 'String',
+    required: false,
+  },
+  companyAddress: {
+    type: 'String',
+    required: false,
+  },
+  telephone: {
+    type:'String',
+    required: false,
+  }
 }, { timestamps: true });
 
 const User = mongoose.model('User', userSchema);

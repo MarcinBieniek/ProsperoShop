@@ -1,5 +1,5 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import userReducer from './user/userSlice';
+import userReducer, { usersFetch } from './user/userSlice';
 import storage from 'redux-persist/lib/storage';
 import { persistReducer, persistStore } from 'redux-persist';
 import productsReducer, { productsFetch } from './products/productsSlice';
@@ -28,5 +28,6 @@ export const store = configureStore({
 
 store.dispatch(productsFetch());
 store.dispatch(getTotals());
+store.dispatch(usersFetch());
 
 export const persistor = persistStore(store)

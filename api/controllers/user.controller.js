@@ -62,3 +62,14 @@ export const getUserListings = async (req, res, next) => {
     return next(errorHandler(401, 'You can only view your own listing'));
   }
 }
+
+// Get all users
+
+export const getAllUsers = async (req, res, next) => {
+  try {
+    const users = await User.find({}, { password: 0 }); // znajdź wszystkich użytkowników i nie pokazuj pola hasło
+    res.status(200).json(users);
+  } catch (error) {
+    next(error);
+  }
+}
