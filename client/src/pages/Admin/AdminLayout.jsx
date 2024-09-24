@@ -3,7 +3,7 @@ import { Outlet, Link } from 'react-router-dom';
 
 import { PiUserCircleLight } from "react-icons/pi";
 import { IoListCircleOutline } from "react-icons/io5";
-import { IoHeartOutline } from "react-icons/io5";
+import { RiProductHuntLine } from "react-icons/ri";
 import { TbTruckReturn } from "react-icons/tb";
 import { RiLogoutCircleRLine } from "react-icons/ri";
 import { LuLayoutPanelLeft } from "react-icons/lu";
@@ -18,14 +18,14 @@ const AdminLayout = () => {
           <div className='bg-sky-600 rounded p-5 text-white'>
             <p className='text-lg font-bold mb-3'>Panel admina</p>
 
-            <Link to='/admin/panel-glowny'
+            <Link to='/admin/dashboard'
               className='flex items-center mb-3 hover:text-gray-800 cursor-pointer transition-smooth'
             >
               <LuLayoutPanelLeft className='text-2xl mr-3' />
               <p className='font-bold'>Panel główny</p>
             </Link>
 
-            <Link to='/admin/uzytkownicy'
+            <Link to='/admin/users'
               className='flex items-center mb-3 hover:text-gray-800 cursor-pointer transition-smooth'
             >
               <PiUserCircleLight className='text-2xl mr-3' />
@@ -41,7 +41,7 @@ const AdminLayout = () => {
             <div
               className='flex items-center mb-3 hover:text-gray-800 cursor-pointer transition-smooth'
             >
-              <IoHeartOutline className='text-2xl mr-3' />
+              <RiProductHuntLine className='text-2xl mr-3' />
               <p className='font-bold'>Produkty</p>
             </div>
             <div

@@ -21,6 +21,7 @@ import AdminLayout from "./pages/Admin/AdminLayout";
 import Blokada from "./pages/Blokada";
 import Dashboard from "./pages/Admin/Dashboard";
 import Users from "./pages/Admin/Users";
+import AddUser from "./pages/Admin/AddUser";
 
 const App = () => {
   return (
@@ -48,6 +49,7 @@ const App = () => {
             <Route index element={<Navigate to="dashboard" />} />
             <Route path='dashboard' element={<Dashboard />} />
             <Route path='users' element={<Users />} />
+            <Route path='users/add-user' element={<AddUser />} />
           </Route>
         </Route>
 

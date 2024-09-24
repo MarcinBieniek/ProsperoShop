@@ -1,4 +1,5 @@
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 import { GoPlusCircle } from "react-icons/go";
 import { CiEdit } from "react-icons/ci";
@@ -8,6 +9,8 @@ const Users = () => {
 
   const { allUsers } = useSelector((state) => state.user);
   console.log('users are', allUsers)
+
+  const sortedUsers = [...allUsers].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
   return (
     <div className='bg-gray-100 rounded p-5'>
@@ -22,10 +25,12 @@ const Users = () => {
               class="w-full p-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:border-gray-400 focus:border-transparent"
             />
           </div>
-          <button className='bg-orange-600 text-white rounded-lg p-2 hover:bg-gray-800 transition-smooth flex items-center'>
+          <Link
+            to='/admin/users/add-user'
+            className='bg-orange-600 text-white rounded-lg p-2 hover:bg-gray-800 transition-smooth flex items-center'>
             <GoPlusCircle className='mr-2 text-xl' />
             <p>Dodaj użytkownika</p>
-          </button>
+          </Link>
         </div>
       </div>
 
@@ -34,7 +39,7 @@ const Users = () => {
 
           <div className='p-2 pb-0'>
 
-            {allUsers.map((user, index) => (
+            {sortedUsers.map((user, index) => (
               <div key={user._id} className='bg-white border-[1px] border-gray-200 p-5 rounded flex w-full mb-5'>
                 <div className='w-1/3 flex flex-col items-center py-5 border-r-[1px] border-gray-200'>
                   <img
