@@ -21,6 +21,7 @@ const userSlice = createSlice({
   name: ' user', // 1st step is to set a name
   initialState, // 2nd step we pass initial state
   reducers: { // 3rd step we pass functions
+
     // Sign in
     signInStart: (state) => {
       state.loading = true

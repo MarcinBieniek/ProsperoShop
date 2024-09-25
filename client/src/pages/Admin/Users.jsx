@@ -69,11 +69,11 @@ const Users = () => {
                   </p>
                   <p className='mb-3'>
                     <span className='font-bold'>Adres dostawy: </span>
-                    {user.address || 'Brak adresu'}
+                    {'Brak adresu'}
                   </p>
                   <p className='mb-3'>
                     <span className='font-bold'>Dane do faktury: </span>
-                    {user.invoiceDetails || 'Brak danych'}
+                    {'Brak danych'}
                   </p>
                   <span className='mb-3 flex'>
                     <span className='font-bold'>Zamówienia: </span>

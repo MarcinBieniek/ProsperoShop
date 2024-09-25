@@ -23,34 +23,75 @@ const userSchema = new mongoose.Schema({
   status: {
     type: String,
     default: 'user',
-    reguired: false
+    required: false
+  },
+  telephone: {
+    type: String,
+    required: false,
+  },
+  // Adres korespondencyjny
+  address: {
+    type: Object,
+    required: false,
+
+    street: {
+      type: String,
+      required: false
+    },
+    streetNumber: {
+      type: String,
+      required: false
+    },
+    postalCode: {
+      type: String,
+      required: false
+    },
+    city: {
+      type: String,
+      required: false
+    },
+  },
+  // Dane firmy
+  company: {
+    type: Object,
+    required: false,
+
+    name: {
+      type: String,
+      required: false
+    },
+    street: {
+      type: String,
+      required: false
+    },
+    streetNumber: {
+      type: String,
+      required: false
+    },
+    postalCode: {
+      type: String,
+      required: false
+    },
+    city: {
+      type: String,
+      required: false
+    },
+    NIP: {
+      type: String,
+      required: false
+    }
   },
   orders: {
-    type: Object,
-    default: [],
+    type: Array,
     required: false
   },
   favourite: {
-    type: Object,
-    default: [],
+    type: Array,
     required: false
   },
   service: {
-    type: Object,
-    default: [],
+    type: Array,
     required: false
-  },
-  address: {
-    type: 'String',
-    required: false,
-  },
-  companyAddress: {
-    type: 'String',
-    required: false,
-  },
-  telephone: {
-    type:'String',
-    required: false,
   }
 }, { timestamps: true });
 
