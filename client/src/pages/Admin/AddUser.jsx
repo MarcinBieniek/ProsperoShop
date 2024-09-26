@@ -22,6 +22,11 @@ const AddUser = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  // Dodane stany walidacji
+  const [formErrors, setFormErrors] = useState({});
+
+  console.log('error is', error)
+
   // image upload
 
   useEffect(() => {
@@ -85,8 +90,44 @@ const AddUser = () => {
     }
   };
 
+  // Funkcja walidująca formularz
+  const validateForm = () => {
+    const errors = {};
+
+    // Walidacja nazwy użytkownika
+    if (!formData.username) {
+      errors.username = 'Nazwa użytkownika jest wymagana';
+    } else if (formData.username.length < 3) {
+      errors.username = 'Nazwa użytkownika musi mieć co najmniej 3 znaki';
+    }
+
+    // Walidacja hasła
+    if (!formData.password) {
+      errors.password = 'Hasło jest wymagane';
+    } else if (formData.password.length < 3) {
+      errors.password = 'Hasło musi mieć co najmniej 3 znaki';
+    }
+
+    // Walidacja e-mail
+    if (!formData.email) {
+      errors.email = 'E-mail jest wymagany';
+    } else if (!formData.email.includes('@')) {
+      errors.email = 'E-mail musi zawierać znak "@"';
+    } else if (formData.email.length < 3) {
+      errors.email = 'E-mail musi mieć co najmniej 3 znaki';
+    }
+
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0; // Zwraca true, jeśli nie ma błędów
+  };
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!validateForm()) {
+      return; // Nie wysyłaj formularza, jeśli są błędy walidacji
+    }
 
     try {
       setLoading(true)
@@ -140,6 +181,9 @@ const AddUser = () => {
               placeholder='Podaj imię i nazwisko'
               className='w-full p-2 py-3 bg-gray-100 rounded-lg focus:outline-none focus:ring-1 focus:ring-orange-600'
             />
+            {formErrors.username && (
+              <p className='text-red-700 text-sm mt-1'>{formErrors.username}</p>
+            )}
           </div>
 
           <div>
@@ -153,6 +197,9 @@ const AddUser = () => {
               placeholder='Podaj hasło'
               className='w-full p-2 py-3 bg-gray-100 rounded-lg focus:outline-none focus:ring-1 focus:ring-orange-600'
             />
+            {formErrors.password && (
+              <p className='text-red-700 text-sm mt-1'>{formErrors.password}</p>
+            )}
           </div>
 
           <div>
@@ -166,6 +213,9 @@ const AddUser = () => {
               placeholder='Podaj adres email'
               className='w-full p-2 py-3 bg-gray-100 rounded-lg focus:outline-none focus:ring-1 focus:ring-orange-600'
             />
+            {formErrors.email && (
+              <p className='text-red-700 text-sm mt-1'>{formErrors.email}</p>
+            )}
           </div>
 
           <div>
@@ -371,7 +421,6 @@ const AddUser = () => {
             <p>Dodaj</p>
           </button>
         </div>
-
       </form>
     </div>
   );

@@ -91,7 +91,7 @@ const Login = () => {
             </button>
             <OAuth />
           </form>
-          {error && <p className='text-red-500 mt-5'>Błąd rejestracji. Wprowadź prawidłowe dane.</p>}
+          {error && <p className='text-red-500 mt-5'>Błąd logowania. Wprowadź prawidłowe dane.</p>}
           <div className='flex justify-between mt-5'>
             <Link to='/' className='hover:text-orange-600 transition-smooth'>
               Powrót do sklepu
