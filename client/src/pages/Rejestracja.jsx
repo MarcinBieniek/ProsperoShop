@@ -112,7 +112,7 @@ const Rejestracja = () => {
             <p className='py-3 pt-5'>Witamy w naszym sklepie.</p>
 
             <div className='py-3 w-full mx-auto'>
-              <form onSubmit={handleSubmit} className='flex flex-col gap-6'>
+              <form onSubmit={handleSubmit} className='flex flex-col'>
                 <input
                   type='text'
                   placeholder='Nazwa użytkownika'
@@ -121,7 +121,7 @@ const Rejestracja = () => {
                   onChange={handleChange}
                 />
                 {formErrors.username && (
-                  <p className='text-red-700 text-sm mt-1'>{formErrors.username}</p>
+                  <p className='text-red-700 text-sm mt-2 mb-5'>{formErrors.username}</p>
                 )}
                 <input
                   type='email'
@@ -131,7 +131,7 @@ const Rejestracja = () => {
                   onChange={handleChange}
                 />
                 {formErrors.email && (
-                  <p className='text-red-700 text-sm mt-1'>{formErrors.email}</p>
+                  <p className='text-red-700 text-sm mt-2 mb-5'>{formErrors.email}</p>
                 )}
                 <input
                   type='password'
@@ -141,7 +141,7 @@ const Rejestracja = () => {
                   onChange={handleChange}
                 />
                 {formErrors.password && (
-                  <p className='text-red-700 text-sm mt-1'>{formErrors.password}</p>
+                  <p className='text-red-700 text-sm mt-2 mb-5'>{formErrors.password}</p>
                 )}
 
                 <button

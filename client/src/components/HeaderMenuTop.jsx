@@ -17,7 +17,16 @@ import { CiDeliveryTruck } from "react-icons/ci";
 import { GoTools } from "react-icons/go";
 import { RiCustomerService2Line } from "react-icons/ri";
 import { IoMdClose } from "react-icons/io";
+
+import { RiProductHuntLine } from "react-icons/ri";
 import { RiLogoutCircleRLine } from "react-icons/ri";
+import { LuLayoutPanelLeft } from "react-icons/lu";
+
+import {
+  signOutUserStart,
+  signOutUserFailure,
+  signOutUserSuccess }
+  from '../redux/user/userSlice';
 
 const HeaderMenuTop = () => {
 
@@ -40,16 +49,15 @@ const HeaderMenuTop = () => {
     { to: '/profil', icon: <PiUserCircleLight className='text-xl mr-2' />, label: 'Mój profil' },
     { to: '/profil', icon: <IoListCircleOutline className='text-xl mr-2' />, label: 'Zamówienia' },
     { to: '/profil', icon: <IoHeartOutline className='text-xl mr-2' />, label: 'Ulubione produkty' },
-    { to: '/profil', icon: <TbTruckReturn className='text-xl mr-2' />, label: 'Reklamacje i zwroty' },
-    { to: '/profil', icon: <RiLogoutCircleRLine className='text-xl mr-2' />, label: 'Wyloguj' },
+    { to: '/profil', icon: <TbTruckReturn className='text-xl mr-2' />, label: 'Reklamacje i zwroty' }
   ];
 
   const adminMenuItems = [
-    { to: '/admin', icon: <PiUserCircleLight className='text-xl mr-2' />, label: 'Panel admina' },
-    { to: '/admin', icon: <IoListCircleOutline className='text-xl mr-2' />, label: 'Zamówienia' },
-    { to: '/admin', icon: <IoHeartOutline className='text-xl mr-2' />, label: 'Ulubione produkty' },
-    { to: '/admin', icon: <TbTruckReturn className='text-xl mr-2' />, label: 'Reklamacje i zwroty' },
-    { to: '/admin', icon: <RiLogoutCircleRLine className='text-xl mr-2' />, label: 'Wyloguj' },
+    { to: '/admin/dashboard', icon: <LuLayoutPanelLeft className='text-xl mr-2' />, label: 'Panel admina' },
+    { to: '/admin/users', icon: <PiUserCircleLight className='text-xl mr-2' />, label: 'Użytkownicy' },
+    { to: '/admin/products', icon: <RiProductHuntLine className='text-xl mr-2' />, label: 'Produkty' },
+    { to: '/admin/orders', icon: <IoListCircleOutline className='text-xl mr-2' />, label: 'Zamówienia' },
+    { to: '/admin/orders', icon: <TbTruckReturn className='text-xl mr-2' />, label: 'Zwroty i reklamacje' }
   ];
 
   const helpMenuItems = [
@@ -73,6 +81,20 @@ const HeaderMenuTop = () => {
     setIsMenuCartOpen(false)
   }
 
+  const handleSignOut = async () => {
+    try {
+      dispatch(signOutUserStart())
+      const res = await fetch('/api/auth/signout');
+      const data = await res.json();
+      if (data.success === false) {
+        dispatch(signOutUserFailure(data.message))
+        return;
+      }
+      dispatch(signOutUserSuccess(data));
+    } catch (error) {
+      dispatch(signOutUserFailure(error.message))
+    }
+  }
 
   return (
     <div className='flex h-16 my-2 items-center justify-between'>
@@ -141,6 +163,14 @@ const HeaderMenuTop = () => {
                     </div>
                   </Link>
                 ))}
+
+                <button
+                  onClick={handleSignOut}
+                  className='flex text-black hover:bg-gray-100 items-center rounded p-3 w-full'
+                >
+                  <RiLogoutCircleRLine className='text-xl mr-2' />
+                  <p className='ml-1'>Wyloguj</p>
+                </button>
               </div>
             )}
 
@@ -162,10 +192,16 @@ const HeaderMenuTop = () => {
                     </div>
                   </Link>
                 ))}
+
+                <button
+                  onClick={handleSignOut}
+                  className='flex text-black hover:bg-gray-100 items-center rounded p-3 w-full'
+                >
+                  <RiLogoutCircleRLine className='text-xl mr-2' />
+                  <p className='ml-1'>Wyloguj</p>
+                </button>
               </div>
             )}
-
-
           </div>
         </div>
 

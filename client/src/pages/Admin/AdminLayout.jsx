@@ -31,18 +31,17 @@ const AdminLayout = () => {
               <PiUserCircleLight className='text-2xl mr-3' />
               <p className='font-bold'>Użytkownicy</p>
             </Link>
-
-            <div
-              className='flex items-center mb-3 hover:text-gray-800 cursor-pointer transition-smooth'
-            >
-              <IoListCircleOutline className='text-2xl mr-3' />
-              <p className='font-bold'>Zamówienia</p>
-            </div>
             <div
               className='flex items-center mb-3 hover:text-gray-800 cursor-pointer transition-smooth'
             >
               <RiProductHuntLine className='text-2xl mr-3' />
               <p className='font-bold'>Produkty</p>
+            </div>
+            <div
+              className='flex items-center mb-3 hover:text-gray-800 cursor-pointer transition-smooth'
+            >
+              <IoListCircleOutline className='text-2xl mr-3' />
+              <p className='font-bold'>Zamówienia</p>
             </div>
             <div
               className='flex items-center mb-3 hover:text-gray-800 cursor-pointer transition-smooth'

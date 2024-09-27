@@ -18,10 +18,10 @@ import Produkt from "./pages/Produkt";
 import User from "./pages/User";
 import PrivateRouteAdmin from "./components/PrivateRouteAdmin";
 import AdminLayout from "./pages/Admin/AdminLayout";
-import Blokada from "./pages/Blokada";
 import Dashboard from "./pages/Admin/Dashboard";
 import Users from "./pages/Admin/Users";
 import AddUser from "./pages/Admin/AddUser";
+import Error from "./pages/Error";
 
 const App = () => {
   return (
@@ -36,7 +36,7 @@ const App = () => {
         <Route path='/sklep' element={<Sklep /> } />
         <Route path='/produkt/:produktId' element={<Produkt /> } />
         <Route path='/user' element={<User />} />
-        <Route path='/blokada' element={<Blokada />} />
+        <Route path='/error' element={<Error />} />
 
         <Route element={<PrivateRoute />} >
           <Route path='/profil' element={<Profil />} />
