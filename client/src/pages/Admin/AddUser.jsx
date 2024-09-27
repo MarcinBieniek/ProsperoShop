@@ -25,8 +25,6 @@ const AddUser = () => {
   // Dodane stany walidacji
   const [formErrors, setFormErrors] = useState({});
 
-  console.log('error is', error)
-
   // image upload
 
   useEffect(() => {

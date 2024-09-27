@@ -3,12 +3,6 @@ import { errorHandler } from '../utils/error.js';
 import User from '../models/user.model.js';
 import Listing from '../models/listing.model.js';
 
-export const test = (req, res) => {
-  res.json({
-    message: "User api route is working",
-  })
-}
-
 // Update user data
 
 export const updateUser = async (req, res, next) => {
@@ -36,7 +30,9 @@ export const updateUser = async (req, res, next) => {
   }
 }
 
-export const deleteUser = async (req, res, next) => {
+// delete user - for user panel
+
+export const deleteMyAccount = async (req, res, next) => {
   if(req.user.id !== req.params.id) return next(errorHandler(401, 'You can only delete your own account!'));
 
   try {
@@ -47,6 +43,23 @@ export const deleteUser = async (req, res, next) => {
     next(error)
   }
 }
+
+// delete user - for admin panel
+
+export const deleteUser = async (req, res, next) => {
+
+  try {
+    await User.findByIdAndDelete(req.params.id);
+    // succes dla usera wyzej?
+    res.status(200).json({ success: true, message: 'User has been deleted!' });
+  } catch (error) {
+    next(error)
+  }
+}
+
+// test delete
+
+
 
 // Get user listings
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Outlet, Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 import { PiUserCircleLight } from "react-icons/pi";
 import { IoListCircleOutline } from "react-icons/io5";
@@ -8,7 +9,30 @@ import { TbTruckReturn } from "react-icons/tb";
 import { RiLogoutCircleRLine } from "react-icons/ri";
 import { LuLayoutPanelLeft } from "react-icons/lu";
 
+import {
+  signOutUserStart,
+  signOutUserFailure,
+  signOutUserSuccess }
+  from '../../redux/user/userSlice';
+
 const AdminLayout = () => {
+
+  const dispatch = useDispatch();
+
+  const handleSignOut = async () => {
+    try {
+      dispatch(signOutUserStart())
+      const res = await fetch('/api/auth/signout');
+      const data = await res.json();
+      if (data.success === false) {
+        dispatch(signOutUserFailure(data.message))
+        return;
+      }
+      dispatch(signOutUserSuccess(data));
+    } catch (error) {
+      dispatch(signOutUserFailure(error.message))
+    }
+  }
 
   return (
     <div className='container my-10'>
@@ -49,10 +73,14 @@ const AdminLayout = () => {
               <TbTruckReturn className='text-2xl mr-3' />
               <p className='font-bold'>Zwroty i reklamacje</p>
             </div>
-            <div className='flex items-center hover:text-gray-800 cursor-pointer transition-smooth'>
+
+            <div
+              onClick={handleSignOut}
+              className='flex items-center hover:text-gray-800 cursor-pointer transition-smooth'>
               <RiLogoutCircleRLine className='text-2xl mr-3' />
               <p className='font-bold'>Wyloguj</p>
             </div>
+
           </div>
         </div>
 

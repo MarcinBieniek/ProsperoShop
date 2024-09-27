@@ -30,9 +30,6 @@ const Profil = () => {
   const [showListingsError, setShowListingsError] = useState(false);
   const [userListings, setUserListings] = useState([]);
 
-  console.log('perc', filePerc)
-  console.log('formData', formData)
-
   useEffect(() => {
     if(file) {
       handleFileUpload(file);

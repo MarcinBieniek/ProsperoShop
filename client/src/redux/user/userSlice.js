@@ -16,12 +16,10 @@ export const usersFetch = createAsyncThunk(
   }
 );
 
-
 const userSlice = createSlice({
-  name: ' user', // 1st step is to set a name
-  initialState, // 2nd step we pass initial state
-  reducers: { // 3rd step we pass functions
-
+  name: 'user',
+  initialState,
+  reducers: {
     // Sign in
     signInStart: (state) => {
       state.loading = true
@@ -35,6 +33,7 @@ const userSlice = createSlice({
       state.error = action.payload;
       state.loading = false;
     },
+
     // Update
     updateUserStart: (state) => {
       state.loading = true;
@@ -48,12 +47,14 @@ const userSlice = createSlice({
       state.error = action.payload;
       state.loading = false;
     },
+
     // Delete
     deleteUserStart: (state) => {
       state.loading = true;
     },
-    deleteUserSuccess: (state) => {
-      state.currentUser = null;
+    deleteUserSuccess: (state, action) => {
+      const userId = action.payload; // ID usuniętego użytkownika jest teraz w payload
+      state.allUsers = state.allUsers.filter(user => user._id !== userId); // Usuwamy użytkownika po ID
       state.loading = false;
       state.error = null;
     },
@@ -61,6 +62,7 @@ const userSlice = createSlice({
       state.error = action.payload;
       state.loading = false;
     },
+
     // Logout
     signOutUserStart: (state) => {
       state.loading = true;

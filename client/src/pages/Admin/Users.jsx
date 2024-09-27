@@ -1,28 +1,69 @@
-import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
-
+import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+import {
+  deleteUserStart,
+  deleteUserSuccess,
+  deleteUserFailure
+} from '../../redux/user/userSlice';
 import { GoPlusCircle } from "react-icons/go";
 import { CiEdit } from "react-icons/ci";
 import { MdDeleteForever } from "react-icons/md";
+import Modal from '../../common/Modal';
 
 const Users = () => {
+  const [showModal, setShowModal] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
 
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { allUsers } = useSelector((state) => state.user);
-  console.log('users are', allUsers)
 
   const sortedUsers = [...allUsers].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+  const handleDeleteUser = async () => {
+    try {
+      dispatch(deleteUserStart());
+      const res = await fetch(`/api/user/delete/${selectedUser._id}`, {
+        method: 'DELETE',
+      });
+      const data = await res.json();
+      if (data.success === false) {
+        dispatch(deleteUserFailure(data.message));
+        return;
+      }
+      dispatch(deleteUserSuccess(selectedUser._id));
+      setShowModal(false);
+    } catch (error) {
+      dispatch(deleteUserFailure(error.message));
+    }
+  };
+
+  const openModal = (user) => {
+    setSelectedUser(user);
+    setShowModal(true);
+  };
 
   return (
     <div className='bg-gray-100 rounded p-5'>
 
+      {showModal && (
+        <Modal
+          message="Czy na pewno chcesz usunąć użytkownika?"
+          username={selectedUser.username}
+          onConfirm={handleDeleteUser}
+          onCancel={() => setShowModal(false)}
+        />
+      )}
+
       <div className='flex justify-between items-center border-b-[1px] pb-5'>
         <p className='text-lg font-bold'>Użytkownicy ({allUsers.length})</p>
         <div className='flex'>
-          <div class="bg-white rounded-lg shadow-md w-46 mr-4">
+          <div className="bg-white rounded-lg shadow-md w-46 mr-4">
             <input
               type="text"
               placeholder="Szukaj..."
-              class="w-full p-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:border-gray-400 focus:border-transparent"
+              className="w-full p-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:border-gray-400 focus:border-transparent"
             />
           </div>
           <Link
@@ -34,11 +75,9 @@ const Users = () => {
         </div>
       </div>
 
-      <div className=' mt-5'>
+      <div className='mt-5'>
         <div className='bg-white border-[1px] rounded-lg p-2 pb-0'>
-
           <div className='p-2 pb-0'>
-
             {sortedUsers.map((user, index) => (
               <div key={user._id} className='bg-white border-[1px] border-gray-200 p-5 rounded flex w-full mb-5'>
                 <div className='w-1/3 flex flex-col items-center py-5 border-r-[1px] border-gray-200'>
@@ -51,7 +90,10 @@ const Users = () => {
                   <p>Nr: {index + 1}</p>
                   <div className='flex mt-5'>
                     <CiEdit className='text-2xl border-[1px] h-10 w-10 p-2 text-green-500 cursor-pointer hover:text-green-600 transition-smooth rounded-tl-lg rounded-bl-lg' />
-                    <MdDeleteForever  className='text-2xl border-[1px] border-l-white h-10 w-10 p-2 text-red-500 cursor-pointer hover:text-red-600 rounded-tr-lg rounded-br-lg transition-smooth' />
+                    <MdDeleteForever
+                      onClick={() => openModal(user)} // Otwórz popup przed usunięciem
+                      className='text-2xl border-[1px] border-l-white h-10 w-10 p-2 text-red-500 cursor-pointer hover:text-red-600 rounded-tr-lg rounded-br-lg transition-smooth'
+                    />
                   </div>
                 </div>
                 <div className='w-2/3 px-5'>
@@ -90,15 +132,11 @@ const Users = () => {
                 </div>
               </div>
             ))}
-
-
-
           </div>
-
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Users
+export default Users;
