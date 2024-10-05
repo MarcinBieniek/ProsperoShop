@@ -22,11 +22,13 @@ import Dashboard from "./pages/Admin/Dashboard";
 import Users from "./pages/Admin/Users";
 import AddUser from "./pages/Admin/AddUser";
 import Error from "./pages/Error";
+import ScrollToTop from "./components/ScrollToTop";
 
 const App = () => {
   return (
     <BrowserRouter>
     <ToastContainer />
+      <ScrollToTop />
       <Header />
       <Routes>
         <Route path='/' element={<Home />} />
