@@ -89,9 +89,11 @@ const Users = () => {
                   <p>{user.username}</p>
                   <p>Nr: {index + 1}</p>
                   <div className='flex mt-5'>
-                    <CiEdit className='text-2xl border-[1px] h-10 w-10 p-2 text-green-500 cursor-pointer hover:text-green-600 transition-smooth rounded-tl-lg rounded-bl-lg' />
+                    <Link to={`/admin/users/edit-user/${user._id}`} state={user}>
+                      <CiEdit className='text-2xl border-[1px] h-10 w-10 p-2 text-green-500 cursor-pointer hover:text-green-600 transition-smooth rounded-tl-lg rounded-bl-lg' />
+                    </Link>
                     <MdDeleteForever
-                      onClick={() => openModal(user)} // Otwórz popup przed usunięciem
+                      onClick={() => openModal(user)}
                       className='text-2xl border-[1px] border-l-white h-10 w-10 p-2 text-red-500 cursor-pointer hover:text-red-600 rounded-tr-lg rounded-br-lg transition-smooth'
                     />
                   </div>

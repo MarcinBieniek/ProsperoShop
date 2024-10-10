@@ -76,7 +76,7 @@ const userSchema = new mongoose.Schema({
       type: String,
       required: false
     },
-    NIP: {
+    nip: {
       type: String,
       required: false
     }

@@ -40,35 +40,35 @@ const AdminLayout = () => {
 
         <div className='w-1/4 p-3'>
           <div className='bg-sky-600 rounded p-5 text-white'>
-            <p className='text-lg font-bold mb-3'>Panel admina</p>
+            <p className='text-lg font-bold mb-5'>Panel admina</p>
 
             <Link to='/admin/dashboard'
-              className='flex items-center mb-3 hover:text-gray-800 cursor-pointer transition-smooth'
+              className='flex items-center mb-5 hover:text-gray-800 cursor-pointer transition-smooth'
             >
               <LuLayoutPanelLeft className='text-2xl mr-3' />
               <p className='font-bold'>Panel główny</p>
             </Link>
 
             <Link to='/admin/users'
-              className='flex items-center mb-3 hover:text-gray-800 cursor-pointer transition-smooth'
+              className='flex items-center mb-5 hover:text-gray-800 cursor-pointer transition-smooth'
             >
               <PiUserCircleLight className='text-2xl mr-3' />
               <p className='font-bold'>Użytkownicy</p>
             </Link>
             <div
-              className='flex items-center mb-3 hover:text-gray-800 cursor-pointer transition-smooth'
+              className='flex items-center mb-5 hover:text-gray-800 cursor-pointer transition-smooth'
             >
               <RiProductHuntLine className='text-2xl mr-3' />
               <p className='font-bold'>Produkty</p>
             </div>
             <div
-              className='flex items-center mb-3 hover:text-gray-800 cursor-pointer transition-smooth'
+              className='flex items-center mb-5 hover:text-gray-800 cursor-pointer transition-smooth'
             >
               <IoListCircleOutline className='text-2xl mr-3' />
               <p className='font-bold'>Zamówienia</p>
             </div>
             <div
-              className='flex items-center mb-3 hover:text-gray-800 cursor-pointer transition-smooth'
+              className='flex items-center mb-5 hover:text-gray-800 cursor-pointer transition-smooth'
             >
               <TbTruckReturn className='text-2xl mr-3' />
               <p className='font-bold'>Zwroty i reklamacje</p>

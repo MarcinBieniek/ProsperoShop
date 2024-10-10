@@ -3,28 +3,74 @@ import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/
 import { app } from '../../firebase';
 import { usersFetch } from './../../redux/user/userSlice';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { GoPlusCircle } from "react-icons/go";
 
-const AddUser = () => {
+const EditUser = () => {
 
   const fileRef = useRef(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { id } = useParams();
 
   const [file, setFile] = useState(undefined);
   const [filePerc, setFilePerc] = useState(0);
   const [fileUploadError, setFileUploadError] = useState(false);
   const [formData, setFormData] = useState({});
+  const [userData, setUserData] = useState(null);
+
+  console.log('userData', userData)
+
+  console.log('formData', formData)
 
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [formErrors, setFormErrors] = useState({});
 
-  const toCamelCase = (str) => str.charAt(0).toLowerCase() + str.slice(1);
+  const fetchUser = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(`/api/user/${id}`);
+      const data = await response.json();
 
-  // image upload
+      if (response.ok) {
+        setUserData(data);
+
+        setFormData({
+          username: data.username || '',
+          email: data.email || '',
+          telephone: data.telephone || '',
+          status: data.status || 'user',
+          avatar: data.avatar || '/user-icon.png',
+          address: {
+            street: data.address?.street || '',
+            streetNumber: data.address?.streetNumber || '',
+            postalCode: data.address?.postalCode || '',
+            city: data.address?.city || '',
+          },
+          company: {
+            name: data.company?.name || '',
+            street: data.company?.street || '',
+            streetNumber: data.company?.streetNumber || '',
+            postalCode: data.company?.postalCode || '',
+            city: data.company?.city || '',
+            nip: data.company?.nip || '',
+          },
+        });
+      } else {
+        throw new Error(data.message || 'Nie udało się pobrać danych użytkownika');
+      }
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchUser();
+  }, [id]);
 
   useEffect(() => {
     if(file) {
@@ -55,8 +101,6 @@ const AddUser = () => {
     )
   }
 
-  //
-
   const handleChange = (e) => {
     const { id, value } = e.target;
 
@@ -68,12 +112,52 @@ const AddUser = () => {
           [id]: value
         }
       }));
-    } else if (['companyName', 'companyStreet', 'companyStreetNumber', 'companyPostalCode', 'companyCity', 'companynip'].includes(id)) {
+    } else if (id === 'companyName') {
       setFormData((prevState) => ({
         ...prevState,
         company: {
           ...prevState.company,
-          [toCamelCase(id.replace('company', ''))]: value
+          name: value
+        }
+      }));
+    } else if (id === 'companyStreet') {
+      setFormData((prevState) => ({
+        ...prevState,
+        company: {
+          ...prevState.company,
+          street: value
+        }
+      }));
+    } else if (id === 'companyStreetNumber') {
+      setFormData((prevState) => ({
+        ...prevState,
+        company: {
+          ...prevState.company,
+          streetNumber: value
+        }
+      }));
+    } else if (id === 'companyPostalCode') {
+      setFormData((prevState) => ({
+        ...prevState,
+        company: {
+          ...prevState.company,
+          postalCode: value
+        }
+      }));
+    } else if (id === 'companyCity') {
+      setFormData((prevState) => ({
+        ...prevState,
+        company: {
+          ...prevState.company,
+          city: value
+        }
+      }));
+    } else if (id === 'companyNIP') {
+      setFormData((prevState) => ({
+        ...prevState,
+        company: {
+          ...prevState.company,
+          nip: value
         }
       }));
     } else {
@@ -84,8 +168,6 @@ const AddUser = () => {
     }
   };
 
-  // Walidacja formularza
-
   const validateForm = () => {
     const errors = {};
 
@@ -93,12 +175,6 @@ const AddUser = () => {
       errors.username = 'Nazwa użytkownika jest wymagana';
     } else if (formData.username.length < 3) {
       errors.username = 'Nazwa użytkownika musi mieć co najmniej 3 znaki';
-    }
-
-    if (!formData.password) {
-      errors.password = 'Hasło jest wymagane';
-    } else if (formData.password.length < 3) {
-      errors.password = 'Hasło musi mieć co najmniej 3 znaki';
     }
 
     if (!formData.email) {
@@ -113,7 +189,6 @@ const AddUser = () => {
     return Object.keys(errors).length === 0;
   };
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -122,14 +197,17 @@ const AddUser = () => {
     }
 
     try {
-      setLoading(true)
+      setLoading(true);
 
-      const res = await fetch('/api/auth/signup', {
-        method: 'POST',
+      const dataToUpdate = { ...formData };
+      delete dataToUpdate.password;
+
+      const res = await fetch(`/api/user/${userData._id}`, {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(dataToUpdate)
       });
 
       const data = await res.json();
@@ -147,10 +225,15 @@ const AddUser = () => {
 
     } catch (error) {
       setLoading(false);
-      setError('Błąd rejestracji. Wybierz inną nazwę użytkownika');
-      console.log('inner error is', error);
+      setError('Błąd aktualizacji użytkownika');
+      console.log('Błąd aktualizacji: ', error);
     }
   }
+
+  const handleDeleteAvatar = () => {
+    setFormData({ ...formData, avatar: '/user-icon.png' });
+    setFile(undefined)
+  };
 
   return (
     <div className='bg-gray-100 rounded p-5'>
@@ -167,6 +250,7 @@ const AddUser = () => {
               Nazwa użytkownika
             </label>
             <input
+              value={formData.username || ''}
               onChange={handleChange}
               type='text'
               id='username'
@@ -179,26 +263,11 @@ const AddUser = () => {
           </div>
 
           <div>
-            <label className='block text-gray-600 mb-2' htmlFor='password'>
-              Hasło
-            </label>
-            <input
-              onChange={handleChange}
-              type='text'
-              id='password'
-              placeholder='Podaj hasło'
-              className='w-full p-2 py-3 bg-gray-100 rounded-lg focus:outline-none focus:ring-1 focus:ring-orange-600'
-            />
-            {formErrors.password && (
-              <p className='text-red-700 text-sm mt-1'>{formErrors.password}</p>
-            )}
-          </div>
-
-          <div>
             <label className='block text-gray-600 mb-2' htmlFor='email'>
               E-mail
             </label>
             <input
+              value={formData.email || ''}
               onChange={handleChange}
               type='text'
               id='email'
@@ -215,6 +284,7 @@ const AddUser = () => {
               Telefon
             </label>
             <input
+              value={formData.telephone || ''}
               onChange={handleChange}
               type='text'
               id='telephone'
@@ -228,6 +298,7 @@ const AddUser = () => {
               Status
             </label>
             <select
+              value={formData.status || ''}
               onChange={handleChange}
               id='status'
               className='w-full p-2 py-3 bg-gray-100 rounded-lg focus:outline-none focus:ring-1 focus:ring-orange-600'
@@ -236,7 +307,6 @@ const AddUser = () => {
               <option value='admin'>Admin</option>
             </select>
           </div>
-
 
           <div>
             <label className='block text-gray-600 mb-2' htmlFor='avatar'>
@@ -263,6 +333,26 @@ const AddUser = () => {
             </p>
           </div>
 
+          <div>
+            <label className='block text-gray-600 mb-2'>Podgląd</label>
+            <div className='flex justify-center items-center'>
+              <img
+                src={formData.avatar || '/user-icon.png'}
+                className='w-40 h-40 object-cover'
+                alt='Avatar preview'
+              />
+              {formData.avatar && formData.avatar !== '/user-icon.png' && (
+                <button
+                  type='button'
+                  onClick={handleDeleteAvatar}
+                  className='ml-4 p-2 bg-red-600 text-white rounded-lg hover:bg-red-800 transition'
+                >
+                  Usuń zdjęcie
+                </button>
+              )}
+            </div>
+          </div>
+
           <div className='col-span-2'>
             <p className='text-md font-bold mb-2 mt-4'>Adres korespondencyjny</p>
 
@@ -272,6 +362,7 @@ const AddUser = () => {
                   Ulica
                 </label>
                 <input
+                  value={formData.address?.street || ''}
                   onChange={handleChange}
                   type='text'
                   id='street'
@@ -285,6 +376,7 @@ const AddUser = () => {
                   Nr
                 </label>
                 <input
+                  value={formData.address?.streetNumber || ''}
                   onChange={handleChange}
                   type='text'
                   id='streetNumber'
@@ -298,6 +390,7 @@ const AddUser = () => {
                   Kod pocztowy
                 </label>
                 <input
+                  value={formData.address?.postalCode || ''}
                   onChange={handleChange}
                   type='text'
                   id='postalCode'
@@ -311,6 +404,7 @@ const AddUser = () => {
                   Miasto
                 </label>
                 <input
+                  value={formData.address?.city || ''}
                   onChange={handleChange}
                   type='text'
                   id='city'
@@ -330,6 +424,7 @@ const AddUser = () => {
                   Nazwa firmy
                 </label>
                 <input
+                  value={formData.company?.name || ''}
                   onChange={handleChange}
                   type='text'
                   id='companyName'
@@ -343,6 +438,7 @@ const AddUser = () => {
                   Ulica
                 </label>
                 <input
+                  value={formData.company?.street || ''}
                   onChange={handleChange}
                   type='text'
                   id='companyStreet'
@@ -356,6 +452,7 @@ const AddUser = () => {
                   Nr
                 </label>
                 <input
+                  value={formData.company?.streetNumber || ''}
                   onChange={handleChange}
                   type='text'
                   id='companyStreetNumber'
@@ -369,6 +466,7 @@ const AddUser = () => {
                   Kod pocztowy
                 </label>
                 <input
+                  value={formData.company?.postalCode || ''}
                   onChange={handleChange}
                   type='text'
                   id='companyPostalCode'
@@ -382,6 +480,7 @@ const AddUser = () => {
                   Miasto
                 </label>
                 <input
+                  value={formData.company?.city || ''}
                   onChange={handleChange}
                   type='text'
                   id='companyCity'
@@ -391,13 +490,14 @@ const AddUser = () => {
               </div>
 
               <div>
-                <label className='block text-gray-600 mb-2' htmlFor='companynip'>
+                <label className='block text-gray-600 mb-2' htmlFor='companyNIP'>
                   NIP
                 </label>
                 <input
+                  value={formData.company?.nip || ''}
                   onChange={handleChange}
                   type='text'
-                  id='companynip'
+                  id='companyNIP'
                   placeholder='Podaj NIP'
                   className='w-full p-2 py-3 bg-gray-100 rounded-lg focus:outline-none focus:ring-1 focus:ring-orange-600'
                 />
@@ -418,4 +518,4 @@ const AddUser = () => {
   );
 };
 
-export default AddUser;
+export default EditUser;

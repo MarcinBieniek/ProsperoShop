@@ -21,6 +21,7 @@ import AdminLayout from "./pages/Admin/AdminLayout";
 import Dashboard from "./pages/Admin/Dashboard";
 import Users from "./pages/Admin/Users";
 import AddUser from "./pages/Admin/AddUser";
+import EditUser from "./pages/Admin/EditUser";
 import Error from "./pages/Error";
 import ScrollToTop from "./components/ScrollToTop";
 
@@ -52,6 +53,7 @@ const App = () => {
             <Route path='dashboard' element={<Dashboard />} />
             <Route path='users' element={<Users />} />
             <Route path='users/add-user' element={<AddUser />} />
+            <Route path='users/edit-user/:id' element={<EditUser />} />
           </Route>
         </Route>
 
