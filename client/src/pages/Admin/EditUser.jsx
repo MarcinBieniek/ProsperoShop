@@ -510,7 +510,7 @@ const EditUser = () => {
           <button
             className='bg-orange-600 text-white rounded-lg p-2 py-3 hover:bg-gray-800 transition-smooth flex items-center'>
             <GoPlusCircle className='mr-2 text-xl' />
-            <p>Dodaj</p>
+            <p>Edytuj</p>
           </button>
         </div>
       </form>
