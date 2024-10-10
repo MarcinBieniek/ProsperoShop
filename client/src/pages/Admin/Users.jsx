@@ -87,7 +87,7 @@ const Users = () => {
                     className='rounded-full h-28 w-28 object-cover mb-5'
                   />
                   <p>{user.username}</p>
-                  <p>Nr: {index + 1}</p>
+                  <p>Nr: {allUsers.length - index}</p>
                   <div className='flex mt-5'>
                     <Link to={`/admin/users/edit-user/${user._id}`} state={user}>
                       <CiEdit className='text-2xl border-[1px] h-10 w-10 p-2 text-green-500 cursor-pointer hover:text-green-600 transition-smooth rounded-tl-lg rounded-bl-lg' />
@@ -109,15 +109,31 @@ const Users = () => {
                   </p>
                   <p className='mb-3'>
                     <span className='font-bold'>Nr tel: </span>
-                    {user.phone || 'Brak danych'}
+                    {user.telephone || 'Brak danych'}
                   </p>
                   <p className='mb-3'>
                     <span className='font-bold'>Adres dostawy: </span>
-                    {'Brak adresu'}
+                    {user.address ?
+                      `Ul. ${user.address.street || ''}
+                      ${user.address.streetNumber || ''},
+                      ${user.address.postalCode || ''}
+                      ${user.address.city || ''}`
+                      .trim()
+                      : 'Brak adresu'
+                    }
                   </p>
                   <p className='mb-3'>
                     <span className='font-bold'>Dane do faktury: </span>
-                    {'Brak danych'}
+                    {user.company ?
+                      `${user.company.name || ''},
+                      Ul. ${user.company.street || ''}
+                      ${user.company.streetNumber || ''},
+                      ${user.company.postalCode || ''}
+                      ${user.company.city || ''},
+                      NIP ${user.company.nip || ''}`
+                      .trim()
+                      : 'Brak adresu'
+                    }
                   </p>
                   <span className='mb-3 flex'>
                     <span className='font-bold'>Zamówienia: </span>
