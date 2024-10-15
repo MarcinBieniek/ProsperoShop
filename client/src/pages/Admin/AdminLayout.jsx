@@ -55,12 +55,14 @@ const AdminLayout = () => {
               <PiUserCircleLight className='text-2xl mr-3' />
               <p className='font-bold'>Użytkownicy</p>
             </Link>
-            <div
+
+            <Link to='/admin/products'
               className='flex items-center mb-5 hover:text-gray-800 cursor-pointer transition-smooth'
             >
               <RiProductHuntLine className='text-2xl mr-3' />
               <p className='font-bold'>Produkty</p>
-            </div>
+            </Link>
+
             <div
               className='flex items-center mb-5 hover:text-gray-800 cursor-pointer transition-smooth'
             >

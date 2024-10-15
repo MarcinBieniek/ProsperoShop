@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import {
@@ -72,7 +72,7 @@ const Users = () => {
               type="text"
               placeholder="Szukaj użytkownika..."
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)} // Aktualizuj zapytanie wyszukiwania
+              onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full p-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:border-gray-400 focus:border-transparent"
             />
           </div>

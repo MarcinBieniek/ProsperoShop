@@ -24,6 +24,7 @@ import AddUser from "./pages/Admin/AddUser";
 import EditUser from "./pages/Admin/EditUser";
 import Error from "./pages/Error";
 import ScrollToTop from "./components/ScrollToTop";
+import Products from "./pages/Admin/Products";
 
 const App = () => {
   return (
@@ -54,6 +55,7 @@ const App = () => {
             <Route path='users' element={<Users />} />
             <Route path='users/add-user' element={<AddUser />} />
             <Route path='users/edit-user/:id' element={<EditUser />} />
+            <Route path='products' element={<Products />} />
           </Route>
         </Route>
 
