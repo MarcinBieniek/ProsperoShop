@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
   deleteUserStart,
   deleteUserSuccess,
@@ -17,7 +17,6 @@ const Users = () => {
   const [searchQuery, setSearchQuery] = useState('');
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const { allUsers } = useSelector((state) => state.user);
 
   // Sortowanie użytkowników po dacie utworzenia

@@ -63,18 +63,19 @@ const AdminLayout = () => {
               <p className='font-bold'>Produkty</p>
             </Link>
 
-            <div
+            <Link to='/admin/orders'
               className='flex items-center mb-5 hover:text-gray-800 cursor-pointer transition-smooth'
             >
               <IoListCircleOutline className='text-2xl mr-3' />
               <p className='font-bold'>Zamówienia</p>
-            </div>
-            <div
+            </Link>
+
+            <Link to='/admin/service'
               className='flex items-center mb-5 hover:text-gray-800 cursor-pointer transition-smooth'
             >
               <TbTruckReturn className='text-2xl mr-3' />
               <p className='font-bold'>Zwroty i reklamacje</p>
-            </div>
+            </Link>
 
             <div
               onClick={handleSignOut}
