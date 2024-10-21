@@ -10,6 +10,8 @@ const Products = () => {
 
   const [searchQuery, setSearchQuery] = useState('');
 
+  // wip quill
+
   return (
     <div className='bg-gray-100 rounded p-5'>
       <div className='flex justify-between items-center border-b-[1px] pb-5'>
@@ -25,7 +27,7 @@ const Products = () => {
             />
           </div>
           <Link
-            to='/admin/users/add-user'
+            to='/admin/products/add-product'
             className='bg-orange-600 text-white rounded-lg p-2 hover:bg-gray-800 transition-smooth flex items-center'>
             <GoPlusCircle className='mr-2 text-xl' />
             <p>Dodaj produkt</p>

@@ -27,8 +27,10 @@ import ScrollToTop from "./components/ScrollToTop";
 import Products from "./pages/Admin/Products";
 import Orders from "./pages/Admin/Orders";
 import Service from "./pages/Admin/Service";
+import AddProduct from "./pages/Admin/AddProduct";
 
 const App = () => {
+
   return (
     <BrowserRouter>
     <ToastContainer />
@@ -58,6 +60,7 @@ const App = () => {
             <Route path='users/add-user' element={<AddUser />} />
             <Route path='users/edit-user/:id' element={<EditUser />} />
             <Route path='products' element={<Products />} />
+            <Route path='products/add-product' element={<AddProduct />} />
             <Route path='orders' element={<Orders />} />
             <Route path='service' element={<Service />} />
           </Route>
