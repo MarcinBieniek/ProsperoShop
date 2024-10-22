@@ -19,6 +19,8 @@ const AddProduct = () => {
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const navigate = useNavigate();
+
   console.log('formData', formData);
 
   const handleChange = (e) => {
@@ -66,8 +68,6 @@ const AddProduct = () => {
         return '';
     }
   };
-
-  // img wip
 
   const handleImageSubmit = (e) => {
     if (files.length > 0 && files.length + formData.imageUrls.length < 4) {
@@ -128,13 +128,43 @@ const AddProduct = () => {
     })
   };
 
-
-  //
+  // wip handlesubmit
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    try {
+      if(formData.imageUrls.length < 1) return setError('Musisz dodać min 1 zdjęcie.');
+      if(+formData.price < +formData.discountPrice) return setError('Cena po rabacie musi być niższa od ceny podstawowej');
 
-  };
+      setLoading(true);
+      setError(false);
+
+      const res = await fetch('/api/product/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...formData,
+        })
+      });
+      const data = await res.json();
+
+      console.log('uploaded final data is', data)
+
+      setLoading(false);
+      if (data.success === false){
+        setError(data.message);
+      };
+      navigate(`/admin/products`);
+
+    } catch (error) {
+      setError(error.message);
+      setLoading(false);
+    }
+  }
+
+  //
 
   return (
     <div className='bg-gray-100 rounded p-5'>
@@ -361,8 +391,6 @@ const AddProduct = () => {
             }}
           />
         </div>
-
-        {/* IMG wip*/}
 
         <div className='flex flex-col flex-1 '>
           <p className='block text-gray-600 mb-2 mt-5' htmlFor='details'>Zdjęcia</p>

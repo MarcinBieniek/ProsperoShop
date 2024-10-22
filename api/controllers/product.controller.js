@@ -12,9 +12,12 @@ export const getAllProducts = async (req, res, next) => {
 
 // Create new product
 export const createProduct = async (req, res, next) => {
+
+  console.log('product body is', req.body)
+
   try {
-    const prodyuct = await Listing.create(req.body);
-    return res.status(201).json(listing)
+    const product = await Product.create(req.body);
+    return res.status(201).json(product)
   } catch (error) {
     next(error)
   }
