@@ -1,17 +1,23 @@
 import { useEffect, useState, useRef } from 'react';
 import SunEditor from 'suneditor-react';
 import 'suneditor/dist/css/suneditor.min.css';
+import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
+import { app } from '../../firebase';
+import {useNavigate} from 'react-router-dom';
 
 const AddProduct = () => {
-  const [file, setFile] = useState(undefined);
-  const [filePerc, setFilePerc] = useState(0);
-  const [fileUploadError, setFileUploadError] = useState(false);
+  const [files, setFiles] = useState([]);
   const [formData, setFormData] = useState({
     category: 'Bramy',
     subcategory: 'Bramy segmentowe',
     description: '',
-    details: ''
+    details: '',
+    imageUrls: []
   });
+  const [imageUploadError, setImageUploadError] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   console.log('formData', formData);
 
@@ -60,6 +66,70 @@ const AddProduct = () => {
         return '';
     }
   };
+
+  // img wip
+
+  const handleImageSubmit = (e) => {
+    if (files.length > 0 && files.length + formData.imageUrls.length < 4) {
+      setUploading(true);
+      setImageUploadError(false);
+      const promises = [];
+
+      for (let i = 0; i < files.length; i++) {
+        promises.push(storeImage(files[i]))
+      }
+      Promise.all(promises).then((urls) => {
+        setFormData({
+          ...formData,
+          imageUrls: formData.imageUrls.concat(urls),
+        });
+        setImageUploadError(false);
+        setUploading(false);
+      }).catch((err) => {
+        setImageUploadError('Maksymalny rozmiar zdjęcia, to 2 MB');
+        setUploading(false);
+        console.log('image error is', err)
+      })
+    } else {
+      setImageUploadError('Możesz załadować max. 6 zdjęć');
+      setUploading(false);
+    }
+  };
+
+  const storeImage = async (file) => {
+    return new Promise((resolve, reject) => {
+      const storage = getStorage(app);
+      const fileName = new Date().getTime() + file.name;
+      const storageRef = ref(storage, fileName);
+      const uploadTask = uploadBytesResumable(storageRef, file);
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log(`Upload is ${progress}% done`);
+        },
+        (error) => {
+          reject(error);
+        },
+        ()=>{
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            resolve(downloadURL);
+          })
+        }
+      )
+    })
+  }
+
+  const handleRemoveImage = (index) => {
+    setFormData({
+      ...formData,
+      imageUrls: formData.imageUrls.filter((_, i) => i !== index),
+    })
+  };
+
+
+  //
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -274,7 +344,6 @@ const AddProduct = () => {
                 ['list', 'link', 'image'],
               ],
             }}
-            defaultValue="<p>Wprowadź opis...</p>"
           />
         </div>
 
@@ -290,9 +359,54 @@ const AddProduct = () => {
                 ['list', 'link', 'image'],
               ],
             }}
-            defaultValue="<p>Podaj specyfikację...</p>"
           />
         </div>
+
+        {/* IMG wip*/}
+
+        <div className='flex flex-col flex-1 '>
+          <p className='block text-gray-600 mb-2 mt-5' htmlFor='details'>Zdjęcia</p>
+          <p className='block text-gray-600 mb-2 text-sm'>Załaduj max. 3 obrazy. Pierwsze zdjęcie będzie główne.</p>
+
+          <div className='flex gap-4 mb-4'>
+            <input
+              onChange={(e)=>setFiles(e.target.files)}
+              type='file'
+              id='images'
+              accept='image/*'
+              multiple
+              className='p-3 border border-gray-300 rounded-xl bg-gray-100'
+            />
+            <button
+              type='button'
+              onClick={handleImageSubmit}
+              disabled={uploading}
+              className='p-3 bg-green-500 rounded-xl  text-white hover:bg-gray-800 disabled:opacity-80 transition-smooth'
+            >{uploading ? 'Uploading...' : 'Upload'}</button>
+          </div>
+          <p className='text-red-700 text-sm'>{imageUploadError && imageUploadError}</p>
+          <div className='grid grid-cols-3 gap-4 mb-6'>
+          {
+            formData.imageUrls.length > 0 && formData.imageUrls.map((url, index) => (
+              <div key={url} className='flex justify-between p-3 border items-center rounded-xl'>
+                <img src={url} alt='listing image' className='w-20 h-20 object-contain rounded-lg' />
+                <button
+                  type='button'
+                  className='p-3 bg-red-600 text-white rounded-lg hover:bg-gray-800 transition-smooth'
+                  onClick={() => handleRemoveImage(index)}
+                >Usuń</button>
+              </div>
+            ))
+          }
+          </div>
+          <div className='w-full text-center'>
+            <button disabled={loading || uploading} className='p-3 bg-orange-600 text-white rounded-lg hover:bg-gray-800 transition-smooth dispabled:opacity-80'>
+              {loading ? 'Dodawanie...' : '+ Dodaj produkt'}
+            </button>
+            {error && <p className='text-red-700 text-sm'>{error}</p>}
+          </div>
+        </div>
+
       </form>
     </div>
   );

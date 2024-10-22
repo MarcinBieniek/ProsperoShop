@@ -10,8 +10,6 @@ const Products = () => {
 
   const [searchQuery, setSearchQuery] = useState('');
 
-  // wip quill
-
   return (
     <div className='bg-gray-100 rounded p-5'>
       <div className='flex justify-between items-center border-b-[1px] pb-5'>
