@@ -24,8 +24,6 @@ const AddUser = () => {
 
   const toCamelCase = (str) => str.charAt(0).toLowerCase() + str.slice(1);
 
-  // image upload
-
   useEffect(() => {
     if(file) {
       handleFileUpload(file);
@@ -54,8 +52,6 @@ const AddUser = () => {
       }
     )
   }
-
-  //
 
   const handleChange = (e) => {
     const { id, value } = e.target;

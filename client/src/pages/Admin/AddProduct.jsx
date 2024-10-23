@@ -1,27 +1,35 @@
-import { useEffect, useState, useRef } from 'react';
+import { useState } from 'react';
 import SunEditor from 'suneditor-react';
 import 'suneditor/dist/css/suneditor.min.css';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
 import { app } from '../../firebase';
 import {useNavigate} from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { productsFetch } from '../../redux/products/productsSlice'
 
 const AddProduct = () => {
   const [files, setFiles] = useState([]);
   const [formData, setFormData] = useState({
     category: 'Bramy',
     subcategory: 'Bramy segmentowe',
+    shortDescription: '',
     description: '',
     details: '',
-    imageUrls: []
+    imageUrls: [],
+    promotion: false,
+    sale: false
   });
   const [imageUploadError, setImageUploadError] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [formErrors, setFormErrors] = useState({});
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   console.log('formData', formData);
+  console.log('formErrors', formErrors)
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -47,7 +55,7 @@ const AddProduct = () => {
     }));
   };
 
-    const handleDetailsChange = (content) => {
+  const handleDetailsChange = (content) => {
     setFormData((prevData) => ({
       ...prevData,
       details: content,
@@ -83,6 +91,10 @@ const AddProduct = () => {
           ...formData,
           imageUrls: formData.imageUrls.concat(urls),
         });
+        setFormErrors((prevErrors) => ({
+          ...prevErrors,
+          imageUrls: undefined,
+        }));
         setImageUploadError(false);
         setUploading(false);
       }).catch((err) => {
@@ -91,7 +103,7 @@ const AddProduct = () => {
         console.log('image error is', err)
       })
     } else {
-      setImageUploadError('Możesz załadować max. 6 zdjęć');
+      setImageUploadError('Możesz załadować max. 3 zdjęcia');
       setUploading(false);
     }
   };
@@ -128,14 +140,67 @@ const AddProduct = () => {
     })
   };
 
-  // wip handlesubmit
+  const validateForm = () => {
+    const errors = {};
+
+    if (!formData.name) {
+      errors.name = 'Nazwa produktu jest wymagana';
+    } else if (formData.name.length < 3) {
+      errors.name = 'Nazwa produktu musi mieć co najmniej 3 znaki';
+    }
+
+    if (!formData.producer) {
+      errors.producer = 'Nazwa producenta jest wymagana';
+    } else if (formData.producer.length < 3) {
+      errors.name = 'Nazwa producenta musi mieć co najmniej 3 znaki';
+    }
+
+    if (!formData.price) {
+      errors.price = 'Cena podstawowa jest wymagana';
+    } else if (isNaN(formData.price) || formData.price <= 0) {
+      errors.price = 'Cena musi być liczbą większą od zera';
+    }
+
+    if (!formData.discountedPrice) {
+      errors.discountedPrice = 'Cena po rabacie jest wymagana';
+    } else if (isNaN(formData.discountedPrice) || formData.discountedPrice <= 0) {
+      errors.discountedPrice = 'Cena musi być liczbą większą od zera';
+    } else if (parseFloat(formData.price) <= parseFloat(formData.discountedPrice)) {
+      errors.discountedPrice = 'Cena po rabacie musi być niższa od podstawowej';
+    }
+
+    if (!formData.shortDescription) {
+      errors.shortDescription = 'Opis produktu jest wymagany';
+    } else if (formData.shortDescription.length < 3) {
+      errors.shortDescription = 'Opis produktu musi mieć co najmniej 3 znaki';
+    }
+
+    if (!formData.description) {
+      errors.description = 'Opis produktu jest wymagany';
+    } else if (formData.description.length < 10) {
+      errors.description = 'Opis produktu musi mieć co najmniej 3 znaki';
+    }
+
+    if (formData.imageUrls.length < 1) {
+      errors.imageUrls = 'Musisz dodać przynajmniej 1 zdjęcie';
+    }
+
+    if (!formData.delivery) {
+      errors.delivery = 'Czas dostawy jest wymagany';
+    }
+
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      if(formData.imageUrls.length < 1) return setError('Musisz dodać min 1 zdjęcie.');
-      if(+formData.price < +formData.discountPrice) return setError('Cena po rabacie musi być niższa od ceny podstawowej');
 
+    if (!validateForm()) {
+      return;
+    }
+
+    try {
       setLoading(true);
       setError(false);
 
@@ -156,6 +221,8 @@ const AddProduct = () => {
       if (data.success === false){
         setError(data.message);
       };
+
+      dispatch(productsFetch())
       navigate(`/admin/products`);
 
     } catch (error) {
@@ -163,8 +230,6 @@ const AddProduct = () => {
       setLoading(false);
     }
   }
-
-  //
 
   return (
     <div className='bg-gray-100 rounded p-5'>
@@ -188,6 +253,9 @@ const AddProduct = () => {
               placeholder='Wpisz nazwę produktu'
               className='w-full p-2 py-3 bg-gray-100 rounded-lg focus:outline-none focus:ring-1 focus:ring-orange-600'
             />
+            {formErrors.name && (
+              <p className='text-red-700 text-sm mt-1'>{formErrors.name}</p>
+            )}
           </div>
 
           <div>
@@ -277,6 +345,9 @@ const AddProduct = () => {
               placeholder='Wpisz nazwę producenta'
               className='w-full p-2 py-3 bg-gray-100 rounded-lg focus:outline-none focus:ring-1 focus:ring-orange-600'
             />
+            {formErrors.producer && (
+              <p className='text-red-700 text-sm mt-1'>{formErrors.producer}</p>
+            )}
           </div>
 
           <div>
@@ -290,6 +361,9 @@ const AddProduct = () => {
               placeholder='Wpisz cenę'
               className='w-full p-2 py-3 bg-gray-100 rounded-lg focus:outline-none focus:ring-1 focus:ring-orange-600'
             />
+            {formErrors.price && (
+              <p className='text-red-700 text-sm mt-1'>{formErrors.price}</p>
+            )}
           </div>
 
           <div>
@@ -303,6 +377,9 @@ const AddProduct = () => {
               placeholder='Wpisz cenę'
               className='w-full p-2 py-3 bg-gray-100 rounded-lg focus:outline-none focus:ring-1 focus:ring-orange-600'
             />
+            {formErrors.discountedPrice && (
+              <p className='text-red-700 text-sm mt-1'>{formErrors.discountedPrice}</p>
+            )}
           </div>
 
           <div>
@@ -316,6 +393,9 @@ const AddProduct = () => {
               placeholder='Podaj czas dostawy'
               className='w-full p-2 py-3 bg-gray-100 rounded-lg focus:outline-none focus:ring-1 focus:ring-orange-600'
             />
+            {formErrors.delivery && (
+              <p className='text-red-700 text-sm mt-1'>{formErrors.delivery}</p>
+            )}
           </div>
 
           <div>
@@ -360,6 +440,9 @@ const AddProduct = () => {
             className='w-full p-2 py-3 bg-gray-100 rounded-lg focus:outline-none focus:ring-1 focus:ring-orange-600'
             rows='4'
           />
+          {formErrors.shortDescription && (
+            <p className='text-red-700 text-sm mt-1'>{formErrors.shortDescription}</p>
+          )}
         </div>
 
         <div>
@@ -375,6 +458,9 @@ const AddProduct = () => {
               ],
             }}
           />
+          {formErrors.description && (
+            <p className='text-red-700 text-sm mt-1'>{formErrors.description}</p>
+          )}
         </div>
 
         <div>
@@ -396,7 +482,7 @@ const AddProduct = () => {
           <p className='block text-gray-600 mb-2 mt-5' htmlFor='details'>Zdjęcia</p>
           <p className='block text-gray-600 mb-2 text-sm'>Załaduj max. 3 obrazy. Pierwsze zdjęcie będzie główne.</p>
 
-          <div className='flex gap-4 mb-4'>
+          <div className='flex gap-4'>
             <input
               onChange={(e)=>setFiles(e.target.files)}
               type='file'
@@ -413,7 +499,10 @@ const AddProduct = () => {
             >{uploading ? 'Uploading...' : 'Upload'}</button>
           </div>
           <p className='text-red-700 text-sm'>{imageUploadError && imageUploadError}</p>
-          <div className='grid grid-cols-3 gap-4 mb-6'>
+          {formErrors.imageUrls && (
+            <p className='text-red-700 text-sm mt-1'>{formErrors.imageUrls}</p>
+          )}
+          <div className='grid grid-cols-3 gap-4 mb-6 mt-4'>
           {
             formData.imageUrls.length > 0 && formData.imageUrls.map((url, index) => (
               <div key={url} className='flex justify-between p-3 border items-center rounded-xl'>
