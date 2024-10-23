@@ -1,19 +1,60 @@
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
+import Modal from '../../common/Modal';
+import {
+  deleteProductStart,
+  deleteProductSuccess,
+  deleteProductFailure
+} from '../../redux/products/productsSlice';
 
 import { GoPlusCircle } from "react-icons/go";
 
 const Products = () => {
 
+  const [showModal, setShowModal] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedProduct, setSelectedProduct] = useState(null);
+
   const { items } = useSelector((state) => state.products);
 
-  const [searchQuery, setSearchQuery] = useState('');
+  const dispatch = useDispatch();
 
+  const handleDeleteProduct = async () => {
+    try {
+      dispatch(deleteProductStart());
+      const res = await fetch(`/api/product/delete/${selectedProduct._id}`, {
+        method: 'DELETE',
+      });
+      const data = await res.json();
+      if (data.success === false) {
+        dispatch(deleteProductFailure(data.message));
+        return;
+      }
+      dispatch(deleteProductSuccess(selectedProduct._id));
+      setShowModal(false);
+    } catch (error) {
+      dispatch(deleteProductFailure(error.message));
+    }
+  };
 
+  const openModal = (product) => {
+    setSelectedProduct(product);
+    setShowModal(true);
+  };
 
   return (
     <div className='bg-gray-100 rounded p-5'>
+
+      {showModal && (
+        <Modal
+          message="Czy na pewno chcesz usunąć produkt?"
+          username={selectedProduct.name}
+          onConfirm={handleDeleteProduct}
+          onCancel={() => setShowModal(false)}
+        />
+      )}
+
       <div className='flex justify-between items-center border-b-[1px] pb-5'>
         <p className='text-lg font-bold'>Produkty ({items.length})</p>
         <div className='flex'>
@@ -89,7 +130,10 @@ const Products = () => {
                   }
                   <td className='py-5 px-2 text-center'>
                     <button className='bg-green-500 hover:bg-green-600 text-white rounded px-2 py-1 cursor-pointer'>Edytuj</button>
-                    <button className='bg-red-500 hover:bg-red-600 text-white rounded px-2 py-1 ml-2 cursor-pointer'>Anuluj</button>
+                    <button
+                      onClick={() => openModal(product)}
+                      className='bg-red-500 hover:bg-red-600 text-white rounded px-2 py-1 ml-2 cursor-pointer'
+                    >Usuń</button>
                   </td>
                 </tr>
               ))}

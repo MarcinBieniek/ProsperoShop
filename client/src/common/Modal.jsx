@@ -5,7 +5,7 @@ const Modal = ({ message, username, onConfirm, onCancel }) => {
     <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center z-50">
       <div className="bg-white p-8 rounded-lg shadow-lg w-96">
         <p className="text-xl font-semibold mb-4">{message}</p>
-        <p className="mb-6">Użytkownik: {username}</p>
+        <p className="mb-6">Nazwa: {username}</p>
         <div className="flex justify-end">
           <button
             onClick={onCancel}
