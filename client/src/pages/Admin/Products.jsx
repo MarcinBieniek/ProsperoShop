@@ -20,6 +20,15 @@ const Products = () => {
 
   const dispatch = useDispatch();
 
+  const filteredProducts = items.filter((item) =>
+    item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    item.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    item.subcategory.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    item.producer.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    item.subcategory.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    item.shortDescription.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   const handleDeleteProduct = async () => {
     try {
       dispatch(deleteProductStart());
@@ -90,7 +99,7 @@ const Products = () => {
               </tr>
             </thead>
             <tbody>
-              {items.map(product => (
+              {filteredProducts.map(product => (
                 <tr key={product.id} className='border-b-[1px] border-bg-100 hover:bg-gray-100'>
                   <td className='py-5 px-2 flex items-center'>
                     <img src={product.imageUrls[0]} alt={product.name} className='w-10 h-10 mr-2' />
