@@ -24,10 +24,9 @@ export const createProduct = async (req, res, next) => {
 };
 
 // delete product
-
 export const deleteProduct = async (req, res, next) => {
 
-  console.log(req.body)
+  console.log('product id is', req.body)
 
   try {
     await Product.findByIdAndDelete(req.params.id);

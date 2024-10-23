@@ -36,6 +36,7 @@ const Products = () => {
         method: 'DELETE',
       });
       const data = await res.json();
+
       if (data.success === false) {
         dispatch(deleteProductFailure(data.message));
         return;
