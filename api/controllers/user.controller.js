@@ -4,7 +4,6 @@ import User from '../models/user.model.js';
 import Listing from '../models/listing.model.js';
 
 // Update user data - for user panel
-
 export const updateUser = async (req, res, next) => {
   if(req.user.id !== req.params.id) return next(errorHandler(401, "You can only update your own account!"))
   try {
@@ -32,7 +31,6 @@ export const updateUser = async (req, res, next) => {
 
 // Update user data - for admin panel - name to change to updateUser
 // Update z poziomu admina nie pozwala na zmianę hasła - tylko z poziomu usera
-
 export const updateNewUser = async (req, res, next) => {
   console.log('req is', req.body);
   console.log('req id', req.params.id);
@@ -87,7 +85,6 @@ export const updateNewUser = async (req, res, next) => {
 
 
 // delete user - for user panel
-
 export const deleteMyAccount = async (req, res, next) => {
   if(req.user.id !== req.params.id) return next(errorHandler(401, 'You can only delete your own account!'));
 
@@ -101,7 +98,6 @@ export const deleteMyAccount = async (req, res, next) => {
 }
 
 // delete user - for admin panel
-
 export const deleteUser = async (req, res, next) => {
 
   try {
@@ -114,7 +110,6 @@ export const deleteUser = async (req, res, next) => {
 }
 
 // Get user listings
-
 export const getUserListings = async (req, res, next) => {
   if(req.user.id === req.params.id) {
     try {
@@ -129,7 +124,6 @@ export const getUserListings = async (req, res, next) => {
 }
 
 // Get all users
-
 export const getAllUsers = async (req, res, next) => {
   try {
     const users = await User.find({}, { password: 0 }); // znajdź wszystkich użytkowników i nie pokazuj pola hasło
@@ -140,7 +134,6 @@ export const getAllUsers = async (req, res, next) => {
 }
 
 // Get single user
-
 export const getUser = async (req, res, next) => {
   try {
     const user = await User.findById(req.params.id, { password: 0 }); // Znajdź użytkownika i wyklucz pole hasło

@@ -9,7 +9,6 @@ import { GoPlusCircle } from "react-icons/go";
 
 const EditUser = () => {
 
-  const fileRef = useRef(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { id } = useParams();
