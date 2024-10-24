@@ -17,7 +17,6 @@ const Products = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
 
   const { items } = useSelector((state) => state.products);
-
   const dispatch = useDispatch();
 
   const filteredProducts = items.filter((item) =>
@@ -139,7 +138,12 @@ const Products = () => {
                     <td className='py-5 px-2 text-center'> - </td>
                   }
                   <td className='py-5 px-2 text-center'>
-                    <button className='bg-green-500 hover:bg-green-600 text-white rounded px-2 py-1 cursor-pointer'>Edytuj</button>
+                    <Link
+                      className='bg-green-500 hover:bg-green-600 text-white rounded px-2 py-1 cursor-pointer'
+                      to={`/admin/products/edit-product/${product._id}`} state={product}
+                    >
+                      Edytuj
+                    </Link>
                     <button
                       onClick={() => openModal(product)}
                       className='bg-red-500 hover:bg-red-600 text-white rounded px-2 py-1 ml-2 cursor-pointer'

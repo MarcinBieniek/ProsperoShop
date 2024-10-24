@@ -10,6 +10,20 @@ export const getAllProducts = async (req, res, next) => {
   }
 };
 
+// Get single product
+export const getProduct = async (req, res, next) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    if (!product) {
+      return next(errorHandler(404, 'Product not found!'));
+    }
+
+    res.status(200).json(product);
+  } catch (error) {
+    next(error);
+  }
+}
+
 // Create new product
 export const createProduct = async (req, res, next) => {
 
@@ -20,6 +34,41 @@ export const createProduct = async (req, res, next) => {
     return res.status(201).json(product)
   } catch (error) {
     next(error)
+  }
+};
+
+// Edit product
+export const updateProduct = async (req, res, next) => {
+  console.log('req is', req.body);
+
+  try {
+    const updatedFields = {
+      name: req.body.name,
+      category: req.body.category,
+      subcategory: req.body.subcategory,
+      productCode: req.body.productCode,
+      producer: req.body.producer,
+      price: req.body.price,
+      discountedPrice: req.body.discountedPrice,
+      shortDescription: req.body.shortDescription,
+      description: req.body.description,
+      details: req.body.details,
+      imageUrls: req.body.imageUrls,
+      delivery: req.body.delivery,
+      promotion: req.body.promotion,
+      sale: req.body.sale,
+    };
+
+    // Aktualizuj użytkownika w bazie
+    const updateProduct = await Product.findByIdAndUpdate(
+      req.params.id,
+      { $set: updatedFields },
+      { new: true }
+    );
+
+    res.status(200).json(rest);
+  } catch (error) {
+    next(error);
   }
 };
 

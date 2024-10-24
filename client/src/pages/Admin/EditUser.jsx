@@ -20,10 +20,6 @@ const EditUser = () => {
   const [formData, setFormData] = useState({});
   const [userData, setUserData] = useState(null);
 
-  console.log('userData', userData)
-
-  console.log('formData', formData)
-
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [formErrors, setFormErrors] = useState({});
@@ -238,7 +234,7 @@ const EditUser = () => {
   return (
     <div className='bg-gray-100 rounded p-5'>
       <div className='flex justify-between items-center border-b-[1px] pb-5'>
-        <p className='text-lg font-bold'>Dodaj użytkownika</p>
+        <p className='text-lg font-bold'>Edytuj użytkownika</p>
       </div>
 
       <form onSubmit={handleSubmit} className='bg-white p-4 rounded border-[1px] mt-5'>

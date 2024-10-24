@@ -28,6 +28,7 @@ import Products from "./pages/Admin/Products";
 import Orders from "./pages/Admin/Orders";
 import Service from "./pages/Admin/Service";
 import AddProduct from "./pages/Admin/AddProduct";
+import EditProduct from "./pages/Admin/EditProduct";
 
 const App = () => {
 
@@ -57,10 +58,11 @@ const App = () => {
             <Route index element={<Navigate to="dashboard" />} />
             <Route path='dashboard' element={<Dashboard />} />
             <Route path='users' element={<Users />} />
-            <Route path='users/add-user' element={<AddUser />} />
-            <Route path='users/edit-user/:id' element={<EditUser />} />
+              <Route path='users/add-user' element={<AddUser />} />
+              <Route path='users/edit-user/:id' element={<EditUser />} />
             <Route path='products' element={<Products />} />
-            <Route path='products/add-product' element={<AddProduct />} />
+              <Route path='products/add-product' element={<AddProduct />} />
+              <Route path='products/edit-product/:id' element={<EditProduct />} />
             <Route path='orders' element={<Orders />} />
             <Route path='service' element={<Service />} />
           </Route>
