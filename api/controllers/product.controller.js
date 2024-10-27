@@ -59,14 +59,14 @@ export const updateProduct = async (req, res, next) => {
       sale: req.body.sale,
     };
 
-    // Aktualizuj użytkownika w bazie
-    const updateProduct = await Product.findByIdAndUpdate(
+    // Aktualizuj produkt w bazie danych
+    const updatedProduct = await Product.findByIdAndUpdate(
       req.params.id,
       { $set: updatedFields },
-      { new: true }
+      { new: true } // opcja new: true zwraca zaktualizowany dokument
     );
 
-    res.status(200).json(rest);
+    res.status(200).json(updatedProduct);
   } catch (error) {
     next(error);
   }

@@ -254,8 +254,8 @@ const EditProduct = () => {
       setLoading(true);
       setError(false);
 
-      const res = await fetch('/api/product/create', {
-        method: 'POST',
+      const res = await fetch(`/api/product/${productData._id}`, {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -263,15 +263,17 @@ const EditProduct = () => {
           ...formData,
         })
       });
+
       const data = await res.json();
 
-      console.log('uploaded final data is', data)
+      if (data.success === false) {
+        setLoading(false);
+        setError(data.message);
+        return;
+      }
 
       setLoading(false);
-      if (data.success === false){
-        setError(data.message);
-      };
-
+      setError(null);
       dispatch(productsFetch())
       navigate(`/admin/products`);
 
