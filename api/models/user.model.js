@@ -17,9 +17,83 @@ const userSchema = new mongoose.Schema({
   },
   avatar: {
     type: String,
-    default: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
+    default: '/user-icon.png',
+    required: false,
+  },
+  status: {
+    type: String,
+    default: 'user',
+    required: false
+  },
+  telephone: {
+    type: String,
+    required: false,
+  },
+  // Adres korespondencyjny
+  address: {
+    type: Object,
+    required: false,
+
+    street: {
+      type: String,
+      required: false
+    },
+    streetNumber: {
+      type: String,
+      required: false
+    },
+    postalCode: {
+      type: String,
+      required: false
+    },
+    city: {
+      type: String,
+      required: false
+    },
+  },
+  // Dane firmy
+  company: {
+    type: Object,
+    required: false,
+
+    name: {
+      type: String,
+      required: false
+    },
+    street: {
+      type: String,
+      required: false
+    },
+    streetNumber: {
+      type: String,
+      required: false
+    },
+    postalCode: {
+      type: String,
+      required: false
+    },
+    city: {
+      type: String,
+      required: false
+    },
+    nip: {
+      type: String,
+      required: false
+    }
+  },
+  orders: {
+    type: Array,
+    required: false
+  },
+  favourite: {
+    type: Array,
+    required: false
+  },
+  service: {
+    type: Array,
+    required: false
   }
-}, { timestamps: true});
+}, { timestamps: true });
 
 const User = mongoose.model('User', userSchema);
 

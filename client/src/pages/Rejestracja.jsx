@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import OAuth from '../components/OAuth';
 import { MdKeyboardArrowRight } from "react-icons/md";
-import { FaCheck } from "react-icons/fa";
 
 const Rejestracja = () => {
 
@@ -11,6 +10,9 @@ const Rejestracja = () => {
   const [loading, setLoading] = useState(false);
 
   console.log('final error is', error)
+
+  // Dodane stany walidacji
+  const [formErrors, setFormErrors] = useState({});
 
   const navigate = useNavigate();
 
@@ -21,8 +23,43 @@ const Rejestracja = () => {
     });
   };
 
+  //funkcja walidująca formularz
+  const validateForm = () => {
+    const errors = {};
+
+    // Walidacja nazwy użytkownika
+    if (!formData.username) {
+      errors.username = 'Nazwa użytkownika jest wymagana';
+    } else if (formData.username.length < 3) {
+      errors.username = 'Nazwa użytkownika musi mieć co najmniej 3 znaki';
+    }
+
+    // Walidacja hasła
+    if (!formData.password) {
+      errors.password = 'Hasło jest wymagane';
+    } else if (formData.password.length < 3) {
+      errors.password = 'Hasło musi mieć co najmniej 3 znaki';
+    }
+
+    // Walidacja e-mail
+    if (!formData.email) {
+      errors.email = 'E-mail jest wymagany';
+    } else if (!formData.email.includes('@')) {
+      errors.email = 'E-mail musi zawierać znak "@"';
+    } else if (formData.email.length < 3) {
+      errors.email = 'E-mail musi mieć co najmniej 3 znaki';
+    }
+
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0; // Zwraca true, jeśli nie ma błędów
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!validateForm()) {
+      return; // Nie wysyłaj formularza, jeśli są błędy walidacji
+    }
 
     try {
       setLoading(true);
@@ -75,7 +112,7 @@ const Rejestracja = () => {
             <p className='py-3 pt-5'>Witamy w naszym sklepie.</p>
 
             <div className='py-3 w-full mx-auto'>
-              <form onSubmit={handleSubmit} className='flex flex-col gap-6'>
+              <form onSubmit={handleSubmit} className='flex flex-col'>
                 <input
                   type='text'
                   placeholder='Nazwa użytkownika'
@@ -83,6 +120,9 @@ const Rejestracja = () => {
                   id='username'
                   onChange={handleChange}
                 />
+                {formErrors.username && (
+                  <p className='text-red-700 text-sm mt-2 mb-5'>{formErrors.username}</p>
+                )}
                 <input
                   type='email'
                   placeholder='Adres email'
@@ -90,6 +130,9 @@ const Rejestracja = () => {
                   id='email'
                   onChange={handleChange}
                 />
+                {formErrors.email && (
+                  <p className='text-red-700 text-sm mt-2 mb-5'>{formErrors.email}</p>
+                )}
                 <input
                   type='password'
                   placeholder='Hasło'
@@ -97,6 +140,9 @@ const Rejestracja = () => {
                   id='password'
                   onChange={handleChange}
                 />
+                {formErrors.password && (
+                  <p className='text-red-700 text-sm mt-2 mb-5'>{formErrors.password}</p>
+                )}
 
                 <button
                   disabled={loading}

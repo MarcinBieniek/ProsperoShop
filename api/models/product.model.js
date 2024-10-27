@@ -6,11 +6,23 @@ const productSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    description: {
+    category: {
       type: String,
-      reguired: true,
+      required: true
     },
-    regularPrice:{
+    subcategory: {
+      type: String,
+      required: true
+    },
+    productCode: {
+      type: String,
+      required: false,
+    },
+    producer: {
+      type: String,
+      required: true,
+    },
+    price:{
       type: Number,
       required: true,
     },
@@ -18,12 +30,20 @@ const productSchema = new mongoose.Schema(
       type: Number,
       required: false,
     },
-    imageUrls:{
-      type: Array,
+    shortDescription:{
+      type: String,
+      required: true
+    },
+    description: {
+      type: String,
+      required: true,
+    },
+    details: {
+      type: String,
       required: false,
     },
-    userRef:{
-      type: String,
+    imageUrls:{
+      type: Array,
       required: true,
     },
     delivery:{
@@ -37,7 +57,7 @@ const productSchema = new mongoose.Schema(
     sale:{
       type: Boolean,
       required: false,
-    },
+    }
   }, {timestamps: true}
 )
 

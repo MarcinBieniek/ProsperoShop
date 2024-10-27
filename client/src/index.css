@@ -58,6 +58,40 @@ input[type=radio] {
   height: 100%;
 }
 
+/* zasady stylowania admina/user
 
+button - p-2 rounded-lg
 
+*/
 
+/* products categories colors
+
+#ea580d - orange bramy / orange-600
+#0d9dea - blue automatyka / lightBlue-500
+#a40dea - violet akcesoria / purple-600
+#eac50d - yellow ogrodzenia / yellow-400
+
+*/
+
+/* quill */
+
+.controls {
+  display: flex;
+  border: 1px solid #ccc;
+  border-top: 0;
+  padding: 10px;
+}
+
+.controls-right {
+  margin-left: auto;
+}
+
+.state {
+  margin: 10px 0;
+  font-family: monospace;
+}
+
+.state-title {
+  color: #999;
+  text-transform: uppercase;
+}

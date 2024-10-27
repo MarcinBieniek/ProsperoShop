@@ -16,6 +16,7 @@
     "@emotion/react": "^11.13.0",
     "@emotion/styled": "^11.13.0",
     "@mui/material": "^5.16.6",
+    "@tinymce/tinymce-react": "^5.1.1",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
@@ -23,6 +24,7 @@
     "express": "^4.18.3",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.2.1",
-    "nodemon": "^3.1.0"
+    "nodemon": "^3.1.0",
+    "react-simple-wysiwyg": "^3.1.2"
   }
 }

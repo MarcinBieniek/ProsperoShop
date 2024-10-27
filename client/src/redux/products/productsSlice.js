@@ -18,7 +18,24 @@ export const productsFetch = createAsyncThunk(
 const productsSlice = createSlice({
   name: "products",
   initialState,
-  reducers: {},
+  reducers: {
+
+    // Delete
+    deleteProductStart: (state) => {
+      state.loading = true;
+    },
+    deleteProductSuccess: (state, action) => {
+      const productId = action.payload; // ID usuniętego produktu jest teraz w payload
+      state.items = state.items.filter(product => product._id !== productId); // Usuwamy produkt po ID
+      state.loading = false;
+      state.error = null;
+    },
+    deleteProductFailure: (state, action) => {
+      state.error = action.payload;
+      state.loading = false;
+    },
+
+  },
   extraReducers: (builder) => {
     builder
       .addCase(productsFetch.pending, (state) => {
@@ -33,5 +50,13 @@ const productsSlice = createSlice({
       });
   },
 });
+
+export const {
+
+  deleteProductStart,
+  deleteProductSuccess,
+  deleteProductFailure,
+
+} = productsSlice.actions;
 
 export default productsSlice.reducer;

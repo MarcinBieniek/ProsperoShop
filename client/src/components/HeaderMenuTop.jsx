@@ -17,7 +17,16 @@ import { CiDeliveryTruck } from "react-icons/ci";
 import { GoTools } from "react-icons/go";
 import { RiCustomerService2Line } from "react-icons/ri";
 import { IoMdClose } from "react-icons/io";
+
+import { RiProductHuntLine } from "react-icons/ri";
 import { RiLogoutCircleRLine } from "react-icons/ri";
+import { LuLayoutPanelLeft } from "react-icons/lu";
+
+import {
+  signOutUserStart,
+  signOutUserFailure,
+  signOutUserSuccess }
+  from '../redux/user/userSlice';
 
 const HeaderMenuTop = () => {
 
@@ -40,8 +49,15 @@ const HeaderMenuTop = () => {
     { to: '/profil', icon: <PiUserCircleLight className='text-xl mr-2' />, label: 'Mój profil' },
     { to: '/profil', icon: <IoListCircleOutline className='text-xl mr-2' />, label: 'Zamówienia' },
     { to: '/profil', icon: <IoHeartOutline className='text-xl mr-2' />, label: 'Ulubione produkty' },
-    { to: '/profil', icon: <TbTruckReturn className='text-xl mr-2' />, label: 'Reklamacje i zwroty' },
-    { to: '/profil', icon: <RiLogoutCircleRLine className='text-xl mr-2' />, label: 'Wyloguj' },
+    { to: '/profil', icon: <TbTruckReturn className='text-xl mr-2' />, label: 'Reklamacje i zwroty' }
+  ];
+
+  const adminMenuItems = [
+    { to: '/admin/dashboard', icon: <LuLayoutPanelLeft className='text-xl mr-2' />, label: 'Panel admina' },
+    { to: '/admin/users', icon: <PiUserCircleLight className='text-xl mr-2' />, label: 'Użytkownicy' },
+    { to: '/admin/products', icon: <RiProductHuntLine className='text-xl mr-2' />, label: 'Produkty' },
+    { to: '/admin/orders', icon: <IoListCircleOutline className='text-xl mr-2' />, label: 'Zamówienia' },
+    { to: '/admin/orders', icon: <TbTruckReturn className='text-xl mr-2' />, label: 'Zwroty i reklamacje' }
   ];
 
   const helpMenuItems = [
@@ -65,6 +81,20 @@ const HeaderMenuTop = () => {
     setIsMenuCartOpen(false)
   }
 
+  const handleSignOut = async () => {
+    try {
+      dispatch(signOutUserStart())
+      const res = await fetch('/api/auth/signout');
+      const data = await res.json();
+      if (data.success === false) {
+        dispatch(signOutUserFailure(data.message))
+        return;
+      }
+      dispatch(signOutUserSuccess(data));
+    } catch (error) {
+      dispatch(signOutUserFailure(error.message))
+    }
+  }
 
   return (
     <div className='flex h-16 my-2 items-center justify-between'>
@@ -84,14 +114,14 @@ const HeaderMenuTop = () => {
         </div>
       </div>
 
-      <div className='flex items-center'>
+      <div className='login flex items-center'>
         <div className='relative'>
           <div
             onMouseEnter={() => setIsMenuUserOpen(true)}
             onMouseLeave={() => setIsMenuUserOpen(false)}
           >
             <Link
-              to='/profil'
+              to={currentUser ? (currentUser.status === 'admin' ? '/admin' : '/profil') : '/login'}
               className={`flex items-center cursor-pointer p-2 rounded-md transition-smooth ${isMenuUserOpen ? 'bg-gray-100' : 'hover:bg-gray-100'}`}
             >
               {currentUser ? (
@@ -115,7 +145,7 @@ const HeaderMenuTop = () => {
               )}
             </Link>
 
-            {currentUser && isMenuUserOpen && (
+            {currentUser?.status === 'user' && isMenuUserOpen && (
               <div
                 className='absolute right-0 mt-0 w-64 bg-white border border-gray-200 rounded-md shadow-lg'
                 onMouseEnter={() => setIsMenuUserOpen(true)}
@@ -133,6 +163,43 @@ const HeaderMenuTop = () => {
                     </div>
                   </Link>
                 ))}
+
+                <button
+                  onClick={handleSignOut}
+                  className='flex text-black hover:bg-gray-100 items-center rounded p-3 w-full'
+                >
+                  <RiLogoutCircleRLine className='text-xl mr-2' />
+                  <p className='ml-1'>Wyloguj</p>
+                </button>
+              </div>
+            )}
+
+            {currentUser?.status === 'admin' && isMenuUserOpen && (
+              <div
+                className='absolute right-0 mt-0 w-64 bg-white border border-gray-200 rounded-md shadow-lg'
+                onMouseEnter={() => setIsMenuUserOpen(true)}
+                onMouseLeave={() => setIsMenuUserOpen(false)}
+              >
+                {adminMenuItems.map((item, index) => (
+                  <Link
+                    key={index}
+                    to={item.to}
+                    className='flex text-black hover:bg-gray-100 items-center rounded'
+                  >
+                    <div className='flex text-black hover:bg-gray-100 items-center rounded p-3'>
+                      {item.icon}
+                      <p className='ml-1'>{item.label}</p>
+                    </div>
+                  </Link>
+                ))}
+
+                <button
+                  onClick={handleSignOut}
+                  className='flex text-black hover:bg-gray-100 items-center rounded p-3 w-full'
+                >
+                  <RiLogoutCircleRLine className='text-xl mr-2' />
+                  <p className='ml-1'>Wyloguj</p>
+                </button>
               </div>
             )}
           </div>
