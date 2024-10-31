@@ -16,6 +16,10 @@ const Shop = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
 
+  const { items } = useSelector((state) => state.products);
+  console.log('items are', items)
+  console.log('prodctsdata are', productsData)
+
   const [sortOption, setSortOption] = useState('Wybierz opcję');
   const [activeCategory, setActiveCategory] = useState('Wszystkie produkty');
   const [activeMainCategory, setActiveMainCategory] = useState(null);
@@ -104,7 +108,7 @@ const Shop = () => {
     console.log('Filtry zostały zastosowane:', priceRange);
   };
 
-  const filteredProducts = productsData
+  const filteredProducts = items
     .filter(product => {
       if (activeCategory === 'Wszystkie produkty') return true;
       return product.category === activeCategory;
