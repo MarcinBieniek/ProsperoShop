@@ -1,27 +1,29 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { categories } from "../../public/temp_data";
 import ShopProductCard from '../components/ShopProductCard';
 import { MdKeyboardArrowRight } from "react-icons/md";
+import { setShouldScroll } from '../redux/scroll/scrollSlice';
 
-// Utils do formatowania
+// Utils do formatowania - przenieść do osobnego pliku
 const formatCategoryName = (name) => name.toLowerCase().replace(/\s+/g, '-');
 const formatSubcategoryName = (name) => name.toLowerCase().replace(/\s+/g, '-');
-const capitalize = (string) => string.charAt(0).toUpperCase() + string.slice(1);
 
-// Zaktualizowana funkcja do formatowania wyświetlania
+// Zaktualizowana funkcja do formatowania wyświetlania - przenieść do osobnego pliku
 const formatDisplayName = (name) => {
-  const parts = name.split('-'); // Podziel na części
-  if (parts.length === 0) return name; // Zwróć oryginalny ciąg, jeśli jest pusty
-  // Zwróć tylko pierwszy element z wielką literą, a resztę z małymi
+  const parts = name.split('-');
+  if (parts.length === 0) return name;
   return parts[0].charAt(0).toUpperCase() + parts[0].slice(1) + ' ' + parts.slice(1).join(' ').toLowerCase();
 };
 
 const Shop = () => {
+
   const { items } = useSelector((state) => state.products);
+  const shouldScroll = useSelector((state) => state.scroll.shouldScroll);
   const { category, subcategory } = useParams();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [filteredProducts, setFilteredProducts] = useState(items);
   const [expandedCategory, setExpandedCategory] = useState(category || null);
@@ -29,6 +31,18 @@ const Shop = () => {
   // Nazwa do wyświetlania
   const displayCategory = category ? formatDisplayName(category) : 'Wszystkie produkty';
   const displaySubcategory = subcategory ? formatDisplayName(subcategory) : null;
+
+  console.log('scroll', shouldScroll)
+
+  useEffect(() => {
+    if (category) {
+      dispatch(setShouldScroll(false)); // Ustaw na false, gdy komponent się montuje
+    }
+
+    return () => {
+      dispatch(setShouldScroll(true)); // Ustaw na true, gdy komponent się odmontowuje
+    };
+  }, [category, dispatch]);
 
   useEffect(() => {
     const filtered = items.filter((product) => {
@@ -74,7 +88,7 @@ const Shop = () => {
         {category && (
           <>
             <MdKeyboardArrowRight className='px-1 text-3xl' />
-            <Link to={`/sklep/${formatCategoryName(category)}`} className={`hover:text-orange-600 ${formatCategoryName(category) === category ? 'text-orange-600' : ''}`}>
+            <Link to={`/sklep/${formatCategoryName(category)}`} className={`hover:text-orange-600 ${formatCategoryName(category) === category && !subcategory ? 'text-orange-600' : ''}`}>
               {displayCategory}
             </Link>
             {subcategory && (
@@ -90,7 +104,7 @@ const Shop = () => {
       </div>
 
       <div className='flex'>
-        <div className='w-[300px]'>
+        <div className='w-[300px] sticky top-5 h-max'>
           <ul className="border-[2px] rounded-xl">
             <h1 className="border-b-[2px] border-gray-200 p-5 text-xl text-gray-700">Kategorie</h1>
             <div className='py-5'>

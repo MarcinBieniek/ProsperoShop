@@ -4,11 +4,13 @@ import storage from 'redux-persist/lib/storage';
 import { persistReducer, persistStore } from 'redux-persist';
 import productsReducer, { productsFetch } from './products/productsSlice';
 import cartReducer, { getTotals } from './cart/cartSlice';
+import scrollReducer from './scroll/scrollSlice';
 
 const rootReducer = combineReducers({
   user: userReducer,
   products: productsReducer,
   cart: cartReducer,
+  scroll: scrollReducer
 })
 
 const persistConfig = {

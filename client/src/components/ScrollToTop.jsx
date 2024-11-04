@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
 
-  const [shouldScroll, setShouldScroll] = useState(true);
+  const shouldScroll = useSelector((state) => state.scroll.shouldScroll);
 
   useEffect(() => {
     if (shouldScroll) {
