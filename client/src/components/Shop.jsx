@@ -1,204 +1,144 @@
-import { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
-import { productsData, categories } from "../../public/temp_data";
-import { useSelector, useDispatch } from 'react-redux';
-import { addToCart, getTotals } from "../redux/cart/cartSlice";
-import PriceFilter from "../components/ShopFilterPriceRange";
-import ShopFilterDropdown from '../components/ShopFilterDropdown';
-import ShopSidebarMenu from '../components/ShopSidebarMenu';
-import ShopFilterProducers from '../components/ShopFilterProducers';
+import { useEffect, useState } from 'react';
+import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { categories } from "../../public/temp_data";
 import ShopProductCard from '../components/ShopProductCard';
 import { MdKeyboardArrowRight } from "react-icons/md";
-import { BsFillGrid3X3GapFill } from "react-icons/bs";
+
+// Utils do formatowania
+const formatCategoryName = (name) => name.toLowerCase().replace(/\s+/g, '-');
+const formatSubcategoryName = (name) => name.toLowerCase().replace(/\s+/g, '-');
+const capitalize = (string) => string.charAt(0).toUpperCase() + string.slice(1);
+
+// Zaktualizowana funkcja do formatowania wyświetlania
+const formatDisplayName = (name) => {
+  const parts = name.split('-'); // Podziel na części
+  if (parts.length === 0) return name; // Zwróć oryginalny ciąg, jeśli jest pusty
+  // Zwróć tylko pierwszy element z wielką literą, a resztę z małymi
+  return parts[0].charAt(0).toUpperCase() + parts[0].slice(1) + ' ' + parts.slice(1).join(' ').toLowerCase();
+};
 
 const Shop = () => {
-  const dispatch = useDispatch();
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-
   const { items } = useSelector((state) => state.products);
-  console.log('items are', items)
-  console.log('prodctsdata are', productsData)
+  const { category, subcategory } = useParams();
+  const navigate = useNavigate();
 
-  const [sortOption, setSortOption] = useState('Wybierz opcję');
-  const [activeCategory, setActiveCategory] = useState('Wszystkie produkty');
-  const [activeMainCategory, setActiveMainCategory] = useState(null);
-  const [expandedCategory, setExpandedCategory] = useState(null);
-  const [activeProducer, setActiveProducer] = useState('Wszyscy producenci');
-  const [priceRange, setPriceRange] = useState([0, 0]);
+  const [filteredProducts, setFilteredProducts] = useState(items);
+  const [expandedCategory, setExpandedCategory] = useState(category || null);
 
-  useEffect(() => {
-    const category = queryParams.get('category');
-    const subcategory = queryParams.get('subcategory');
-
-    if (category && subcategory) {
-      setActiveMainCategory(category);
-      setActiveCategory(subcategory);
-      setExpandedCategory(category);
-    } else if (category) {
-      setActiveCategory('Wszystkie produkty');
-      setActiveMainCategory(category);
-      setExpandedCategory(category);
-    } else {
-      setExpandedCategory(null);
-    }
-  }, [location.search]);
-
-  const value = useSelector((state) => state.products.items);
-  const status = useSelector((state) => state.products.status);
+  // Nazwa do wyświetlania
+  const displayCategory = category ? formatDisplayName(category) : 'Wszystkie produkty';
+  const displaySubcategory = subcategory ? formatDisplayName(subcategory) : null;
 
   useEffect(() => {
-    if (status === "fulfilled") {
-      dispatch(getTotals());
-    }
-  }, [status, dispatch]);
-
-  if (status === "pending") {
-    return <div className='flex w-full h-[400px] justify-center items-center'>Loading...</div>;
-  }
-
-  if (status === "rejected") {
-    return <div className='flex w-full h-[400px] justify-center items-center'>Nie można załadować produktów. Spróbuj ponownie, później.</div>;
-  }
-
-  const minPrice = Math.min(...productsData.map(product => product.regularPrice));
-  const maxPrice = Math.max(...productsData.map(product => product.regularPrice));
-
-  useEffect(() => {
-    setPriceRange([minPrice, maxPrice]);
-  }, [minPrice, maxPrice]);
-
-  const handleAddToCart = (product) => {
-    dispatch(addToCart(product));
-    dispatch(getTotals());
-  };
-
-  const handleSortOptionSelect = (option) => {
-    setSortOption(option);
-  };
-
-  const toggleCategory = (categoryName) => {
-    if (categoryName === 'Wszystkie produkty' || !categories.find(cat => cat.name === categoryName).subcategories) {
-      setActiveCategory(categoryName);
-      setActiveMainCategory(null);
-      setExpandedCategory(null);
-    } else {
-      setExpandedCategory(expandedCategory === categoryName ? null : categoryName);
-      setActiveMainCategory(categoryName);
-    }
-    setActiveProducer('Wszyscy producenci');
-  };
-
-  const setActiveSubcategory = (subcategoryName) => {
-    setActiveCategory(subcategoryName);
-    setActiveProducer('Wszyscy producenci');
-  };
-
-  const getAvailableProducers = () => {
-    const availableProducers = new Set();
-    productsData.forEach(product => {
-      if (activeCategory === 'Wszystkie produkty' || product.category === activeCategory) {
-        availableProducers.add(product.producer);
+    const filtered = items.filter((product) => {
+      if (!category || category === 'wszystkie-produkty') {
+        return true; // Zwracamy wszystkie produkty
       }
-    });
-    return Array.from(availableProducers);
-  };
-
-  const applyFilters = () => {
-    console.log('Filtry zostały zastosowane:', priceRange);
-  };
-
-  const filteredProducts = items
-    .filter(product => {
-      if (activeCategory === 'Wszystkie produkty') return true;
-      return product.category === activeCategory;
-    })
-    .filter(product => {
-      if (activeProducer === 'Wszyscy producenci') return true;
-      return product.producer === activeProducer;
-    })
-    .filter(product => {
-      return product.regularPrice >= priceRange[0] && product.regularPrice <= priceRange[1];
-    })
-    .sort((a, b) => {
-      switch (sortOption) {
-        case 'Najdroższe produkty':
-          return b.regularPrice - a.regularPrice;
-        case 'Najtańsze produkty':
-          return a.regularPrice - b.regularPrice;
-        case 'Nazwa A-Z':
-          return a.name.localeCompare(b.name);
-        case 'Nazwa Z-A':
-          return b.name.localeCompare(a.name);
-        case 'Najniższa ocena':
-          return a.stars - b.stars;
-        case 'Najwyższa ocena':
-          return b.stars - a.stars;
-        default:
-          return 0;
+      // Filtrowanie po kategorii i podkategorii
+      if (subcategory) {
+        return product.category.toLowerCase() === category && product.subcategory.toLowerCase().replace(/\s+/g, '-') === subcategory;
       }
+      if (category) {
+        return product.category.toLowerCase() === category;
+      }
+      return false; // Domyślnie nie zwracamy nic
     });
+    setFilteredProducts(filtered);
+  }, [items, category, subcategory]);
+
+  const handleCategoryClick = (categoryName) => {
+    const formattedCategoryName = formatCategoryName(categoryName);
+
+    if (formattedCategoryName === 'wszystkie-produkty') {
+      navigate(`/sklep/wszystkie-produkty`);
+      setExpandedCategory(false);
+    } else {
+      navigate(`/sklep/${formattedCategoryName}`);
+      setExpandedCategory((prevCategory) =>
+        prevCategory === categoryName ? null : categoryName
+      );
+    }
+  };
+
+  const handleSubcategoryClick = (categoryName, subcategoryName) => {
+    navigate(`/sklep/${formatCategoryName(categoryName)}/${formatSubcategoryName(subcategoryName)}`);
+  };
 
   return (
     <div className='container'>
-      <div className='pt-5 pb-9 flex items-center text-gray-800'>
-        <p>Strona główna</p>
+      <div className='breadcrumbs pt-5 pb-9 flex items-center text-gray-800'>
+        <Link to="/" className="hover:text-orange-600">Strona główna</Link>
         <MdKeyboardArrowRight className='px-1 text-3xl' />
-        <p>Sklep</p>
+        <Link to="/sklep" className={`hover:text-orange-600 ${!category ? 'text-orange-600' : ''}`}>Sklep</Link>
+        {category && (
+          <>
+            <MdKeyboardArrowRight className='px-1 text-3xl' />
+            <Link to={`/sklep/${formatCategoryName(category)}`} className={`hover:text-orange-600 ${formatCategoryName(category) === category ? 'text-orange-600' : ''}`}>
+              {displayCategory}
+            </Link>
+            {subcategory && (
+              <>
+                <MdKeyboardArrowRight className='px-1 text-3xl' />
+                <Link to={`/sklep/${formatCategoryName(category)}/${formatSubcategoryName(subcategory)}`} className={`hover:text-orange-600 text-orange-600`}>
+                  {displaySubcategory}
+                </Link>
+              </>
+            )}
+          </>
+        )}
       </div>
 
       <div className='flex'>
         <div className='w-[300px]'>
-          <div className="w-64 h-full text-gray-800">
-            <ShopSidebarMenu
-              categories={categories}
-              activeCategory={activeCategory}
-              expandedCategory={expandedCategory}
-              toggleCategory={toggleCategory}
-              setActiveSubcategory={setActiveSubcategory}
-            />
-            <div className='relative'>
-              <h1 className='text-xl mt-10 pb-3 border-b-[1px] border-gray-200'>Filtry</h1>
-              <div className='absolute h-[2px] w-[70px] bg-orange-500 bottom-[1px]'></div>
+          <ul className="border-[2px] rounded-xl">
+            <h1 className="border-b-[2px] border-gray-200 p-5 text-xl text-gray-700">Kategorie</h1>
+            <div className='py-5'>
+              {categories.map((categoryItem) => (
+                <li key={categoryItem.name} className="flex flex-col items-center">
+                  <button
+                    className={`flex items-center justify-between w-[80%] text-left py-2 transition-smooth ${
+                      formatCategoryName(categoryItem.name) === category ? 'font-bold' : ''
+                    }`}
+                    onClick={() => handleCategoryClick(categoryItem.name)}
+                  >
+                    {categoryItem.name}
+                    {categoryItem.subcategories && <MdKeyboardArrowRight />}
+                  </button>
+                  {expandedCategory === categoryItem.name && categoryItem.subcategories && (
+                    <ul className="w-full transition-smooth">
+                      {categoryItem.subcategories.map((subcategoryItem) => (
+                        <li
+                          key={subcategoryItem}
+                          className={`py-1 pl-10 text-left w-full cursor-pointer transition-smooth ${
+                            formatSubcategoryName(subcategoryItem) === subcategory ? 'font-bold text-orange-600' : ''
+                          }`}
+                          onClick={() => handleSubcategoryClick(categoryItem.name, subcategoryItem)}
+                        >
+                          {subcategoryItem}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </li>
+              ))}
             </div>
-            <ShopFilterProducers
-              activeProducer={activeProducer}
-              setActiveProducer={setActiveProducer}
-              availableProducers={getAvailableProducers()}
-            />
-            <PriceFilter
-              minPrice={minPrice}
-              maxPrice={maxPrice}
-              priceRange={priceRange}
-              setPriceRange={setPriceRange}
-              applyFilters={applyFilters}
-            />
-          </div>
+          </ul>
         </div>
 
         <div className='w-full pl-10'>
-          <h1 className="text-3xl text-gray-700">
-            {activeMainCategory ? `${activeMainCategory} / ${activeCategory}` : activeCategory}
+          <h1 className="text-3xl text-gray-700 mb-5">
+            {displaySubcategory ? `${displayCategory} / ${displaySubcategory}` : displayCategory}
           </h1>
-          <div className='bg-gray-100 my-5 rounded-xl'>
-            <div className='p-2 pr-4 flex justify-between items-center'>
-              <BsFillGrid3X3GapFill className='text-xl ml-2' />
-              <ShopFilterDropdown onOptionSelect={handleSortOptionSelect} />
-            </div>
-          </div>
           <div className='grid grid-cols-4 gap-4 text-gray-800 py-2'>
-            {filteredProducts.map((product, index) => (
-              <ShopProductCard
-                key={index}
-                product={product}
-                handleAddToCart={handleAddToCart}
-              />
+            {filteredProducts.map((product) => (
+              <ShopProductCard key={product._id} product={product} />
             ))}
           </div>
         </div>
       </div>
     </div>
   );
-}
+};
 
 export default Shop;

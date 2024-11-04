@@ -11,8 +11,8 @@ const ShopProductCard= ({ product, handleAddToCart }) => {
       </Link>
       <Link className='relative'>
         <img
-          className='object-fit w-full rounded h-[200px]'
-          src='https://www.skandoor.co.uk/wp-content/uploads/2023/01/9e449b54-bc56-43fd-9cc3-c075b6bb83c7-1500x1125.jpg'
+          className='object-cover w-full rounded h-[200px]'
+          src={product.imageUrls}
           alt={product.name}
         />
       </Link>
@@ -20,11 +20,11 @@ const ShopProductCard= ({ product, handleAddToCart }) => {
         {product.discountedPrice ? (
           <div className='flex items-center'>
             <p className='text-red-600 text-2xl mr-5'>{product.discountedPrice} zł</p>
-            <p className='text-sm line-through'>{product.regularPrice} zł</p>
+            <p className='text-sm line-through'>{product.price} zł</p>
           </div>
         ) : (
           <div className='flex items-center'>
-            <p className='text-2xl mr-5'>{product.regularPrice} zł</p>
+            <p className='text-2xl mr-5'>{product.price} zł</p>
           </div>
         )}
         <div
@@ -34,7 +34,7 @@ const ShopProductCard= ({ product, handleAddToCart }) => {
           <SlBasket className='text-2xl' />
         </div>
       </div>
-      <p className='text-sm py-2'>{product.description}</p>
+      <p className='text-sm py-2'>{product.shortDescription}</p>
     </div>
   );
 };
