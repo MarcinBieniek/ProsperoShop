@@ -6,72 +6,73 @@ import ShopProductCard from '../components/ShopProductCard';
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { setShouldScroll } from '../redux/scroll/scrollSlice';
 
-// Utils do formatowania - przenieść do osobnego pliku
+// Utils for formatting
 const formatCategoryName = (name) => name.toLowerCase().replace(/\s+/g, '-');
 const formatSubcategoryName = (name) => name.toLowerCase().replace(/\s+/g, '-');
-
-// Zaktualizowana funkcja do formatowania wyświetlania - przenieść do osobnego pliku
 const formatDisplayName = (name) => {
   const parts = name.split('-');
-  if (parts.length === 0) return name;
   return parts[0].charAt(0).toUpperCase() + parts[0].slice(1) + ' ' + parts.slice(1).join(' ').toLowerCase();
 };
 
 const Shop = () => {
-
   const { items } = useSelector((state) => state.products);
-  const shouldScroll = useSelector((state) => state.scroll.shouldScroll);
   const { category, subcategory } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const [categoryFilteredProducts, setCategoryFilteredProducts] = useState(items);
   const [filteredProducts, setFilteredProducts] = useState(items);
+  const [availableProducers, setAvailableProducers] = useState([]);
+  const [activeProducer, setActiveProducer] = useState('Wszyscy producenci');
   const [expandedCategory, setExpandedCategory] = useState(category || null);
 
-  // Nazwa do wyświetlania
   const displayCategory = category ? formatDisplayName(category) : 'Wszystkie produkty';
   const displaySubcategory = subcategory ? formatDisplayName(subcategory) : null;
 
-  console.log('scroll', shouldScroll)
-
   useEffect(() => {
     if (category) {
-      dispatch(setShouldScroll(false)); // Ustaw na false, gdy komponent się montuje
+      dispatch(setShouldScroll(false));
     }
-
     return () => {
-      dispatch(setShouldScroll(true)); // Ustaw na true, gdy komponent się odmontowuje
+      dispatch(setShouldScroll(true));
     };
   }, [category, dispatch]);
 
   useEffect(() => {
-    const filtered = items.filter((product) => {
-      if (!category || category === 'wszystkie-produkty') {
-        return true; // Zwracamy wszystkie produkty
-      }
-      // Filtrowanie po kategorii i podkategorii
+    // Filter products by category and subcategory
+    const filteredByCategory = items.filter((product) => {
+      if (!category || category === 'wszystkie-produkty') return true;
       if (subcategory) {
         return product.category.toLowerCase() === category && product.subcategory.toLowerCase().replace(/\s+/g, '-') === subcategory;
       }
-      if (category) {
-        return product.category.toLowerCase() === category;
-      }
-      return false; // Domyślnie nie zwracamy nic
+      return product.category.toLowerCase() === category;
     });
-    setFilteredProducts(filtered);
+
+    setCategoryFilteredProducts(filteredByCategory);
+
+    const producers = filteredByCategory.map((product) => product.producer);
+    const uniqueProducers = [...new Set(producers)];
+    setAvailableProducers(uniqueProducers);
+
+    setActiveProducer(uniqueProducers.length === 1 ? uniqueProducers[0] : 'Wszyscy producenci');
   }, [items, category, subcategory]);
+
+  useEffect(() => {
+    // Filter products by producer based on categoryFilteredProducts
+    const producerFilteredProducts = categoryFilteredProducts.filter((product) =>
+      activeProducer === 'Wszyscy producenci' || product.producer === activeProducer
+    );
+    setFilteredProducts(producerFilteredProducts);
+  }, [activeProducer, categoryFilteredProducts]);
 
   const handleCategoryClick = (categoryName) => {
     const formattedCategoryName = formatCategoryName(categoryName);
-
     if (formattedCategoryName === 'wszystkie-produkty') {
       navigate(`/sklep/wszystkie-produkty`);
       setExpandedCategory(false);
     } else {
       navigate(`/sklep/${formattedCategoryName}`);
-      setExpandedCategory((prevCategory) =>
-        prevCategory === categoryName ? null : categoryName
-      );
+      setExpandedCategory((prevCategory) => (prevCategory === categoryName ? null : categoryName));
     }
   };
 
@@ -94,7 +95,7 @@ const Shop = () => {
             {subcategory && (
               <>
                 <MdKeyboardArrowRight className='px-1 text-3xl' />
-                <Link to={`/sklep/${formatCategoryName(category)}/${formatSubcategoryName(subcategory)}`} className={`hover:text-orange-600 text-orange-600`}>
+                <Link to={`/sklep/${formatCategoryName(category)}/${formatSubcategoryName(subcategory)}`} className="hover:text-orange-600 text-orange-600">
                   {displaySubcategory}
                 </Link>
               </>
@@ -104,7 +105,7 @@ const Shop = () => {
       </div>
 
       <div className='flex'>
-        <div className='w-[300px] sticky top-5 h-max'>
+        <div className='w-[300px]'>
           <ul className="border-[2px] rounded-xl">
             <h1 className="border-b-[2px] border-gray-200 p-5 text-xl text-gray-700">Kategorie</h1>
             <div className='py-5'>
@@ -138,6 +139,40 @@ const Shop = () => {
               ))}
             </div>
           </ul>
+
+          <div className='producers mt-10 mb-7 pb-2 border-b-[1px] border-gray-200'>
+            <p className='font-bold mb-5'>Producent</p>
+            <div className='mb-5'>
+              {availableProducers.length > 1 && (
+                <div className='flex items-center'>
+                  <input
+                    type="radio"
+                    id="wszyscy-producenci"
+                    className="form-radio h-4 w-4 text-orange-600"
+                    checked={activeProducer === 'Wszyscy producenci'}
+                    onChange={() => setActiveProducer('Wszyscy producenci')}
+                  />
+                  <label htmlFor="wszyscy-producenci" className="ml-2 text-gray-700">
+                    Wszyscy producenci
+                  </label>
+                </div>
+              )}
+              {availableProducers.map((producer, index) => (
+                <div key={index} className='flex items-center'>
+                  <input
+                    type="radio"
+                    id={`producer-${producer}`}
+                    className="form-radio h-4 w-4 text-orange-600"
+                    checked={activeProducer === producer}
+                    onChange={() => setActiveProducer(producer)}
+                  />
+                  <label htmlFor={`producer-${producer}`} className="ml-2 text-gray-700">
+                    {producer}
+                  </label>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
         <div className='w-full pl-10'>
