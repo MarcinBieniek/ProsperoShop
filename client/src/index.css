@@ -95,3 +95,7 @@ button - p-2 rounded-lg
   color: #999;
   text-transform: uppercase;
 }
+
+.form-checkbox {
+  background-color: #ea580d;
+}

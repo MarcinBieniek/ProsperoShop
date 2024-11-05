@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import ReactSlider from 'react-slider';
 import { categories } from "../../public/temp_data";
 import ShopProductCard from '../components/ShopProductCard';
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { setShouldScroll } from '../redux/scroll/scrollSlice';
 
-// Utils for formatting
 const formatCategoryName = (name) => name.toLowerCase().replace(/\s+/g, '-');
 const formatSubcategoryName = (name) => name.toLowerCase().replace(/\s+/g, '-');
 const formatDisplayName = (name) => {
@@ -23,8 +23,12 @@ const Shop = () => {
   const [categoryFilteredProducts, setCategoryFilteredProducts] = useState(items);
   const [filteredProducts, setFilteredProducts] = useState(items);
   const [availableProducers, setAvailableProducers] = useState([]);
-  const [activeProducer, setActiveProducer] = useState('Wszyscy producenci');
+  const [activeProducers, setActiveProducers] = useState([]); // Changed to array for multiple producers
   const [expandedCategory, setExpandedCategory] = useState(category || null);
+
+  const [minPrice, setMinPrice] = useState(0);
+  const [maxPrice, setMaxPrice] = useState(0);
+  const [priceRange, setPriceRange] = useState([0, 0]);
 
   const displayCategory = category ? formatDisplayName(category) : 'Wszystkie produkty';
   const displaySubcategory = subcategory ? formatDisplayName(subcategory) : null;
@@ -39,7 +43,6 @@ const Shop = () => {
   }, [category, dispatch]);
 
   useEffect(() => {
-    // Filter products by category and subcategory
     const filteredByCategory = items.filter((product) => {
       if (!category || category === 'wszystkie-produkty') return true;
       if (subcategory) {
@@ -54,16 +57,38 @@ const Shop = () => {
     const uniqueProducers = [...new Set(producers)];
     setAvailableProducers(uniqueProducers);
 
-    setActiveProducer(uniqueProducers.length === 1 ? uniqueProducers[0] : 'Wszyscy producenci');
+    const prices = filteredByCategory.map((product) => product.price);
+    const min = Math.min(...prices);
+    const max = Math.max(...prices);
+    setMinPrice(min);
+    setMaxPrice(max);
+    setPriceRange([min, max]);
   }, [items, category, subcategory]);
 
   useEffect(() => {
-    // Filter products by producer based on categoryFilteredProducts
     const producerFilteredProducts = categoryFilteredProducts.filter((product) =>
-      activeProducer === 'Wszyscy producenci' || product.producer === activeProducer
+      activeProducers.length === 0 || activeProducers.includes(product.producer)
     );
-    setFilteredProducts(producerFilteredProducts);
-  }, [activeProducer, categoryFilteredProducts]);
+
+    const priceFilteredProducts = producerFilteredProducts.filter((product) =>
+      product.price >= priceRange[0] && product.price <= priceRange[1]
+    );
+
+    setFilteredProducts(priceFilteredProducts);
+  }, [activeProducers, categoryFilteredProducts, priceRange]);
+
+  useEffect(() => {
+    const updatedProducers = categoryFilteredProducts
+      .filter((product) => product.price >= priceRange[0] && product.price <= priceRange[1])
+      .map((product) => product.producer);
+
+    const uniqueProducersInRange = [...new Set(updatedProducers)];
+    setAvailableProducers(uniqueProducersInRange);
+
+    if (!uniqueProducersInRange.some((producer) => activeProducers.includes(producer))) {
+      setActiveProducers([]);
+    }
+  }, [priceRange, categoryFilteredProducts]);
 
   const handleCategoryClick = (categoryName) => {
     const formattedCategoryName = formatCategoryName(categoryName);
@@ -78,6 +103,22 @@ const Shop = () => {
 
   const handleSubcategoryClick = (categoryName, subcategoryName) => {
     navigate(`/sklep/${formatCategoryName(categoryName)}/${formatSubcategoryName(subcategoryName)}`);
+  };
+
+  const handlePriceInputChange = (index, value) => {
+    const newValue = [...priceRange];
+    newValue[index] = Number(value);
+    setPriceRange(newValue);
+  };
+
+  const toggleProducer = (producer) => {
+    setActiveProducers((prev) => {
+      if (prev.includes(producer)) {
+        return prev.filter((p) => p !== producer); // Remove producer if already selected
+      } else {
+        return [...prev, producer]; // Add producer if not selected
+      }
+    });
   };
 
   return (
@@ -140,37 +181,87 @@ const Shop = () => {
             </div>
           </ul>
 
-          <div className='producers mt-10 mb-7 pb-2 border-b-[1px] border-gray-200'>
+          <div className='producers mt-10 mb-7 pb-2 px-5 border-b-[1px] border-gray-200'>
             <p className='font-bold mb-5'>Producent</p>
             <div className='mb-5'>
-              {availableProducers.length > 1 && (
+              {availableProducers.length > 0 && (
                 <div className='flex items-center'>
                   <input
-                    type="radio"
+                    type="checkbox"
                     id="wszyscy-producenci"
-                    className="form-radio h-4 w-4 text-orange-600"
-                    checked={activeProducer === 'Wszyscy producenci'}
-                    onChange={() => setActiveProducer('Wszyscy producenci')}
+                    className="form-checkbox h-4 w-4 text-orange-600 accent-orange-600"
+                    checked={activeProducers.length === 0}
+                    onChange={() => {
+                      if (activeProducers.length === 0) {
+                        setActiveProducers(availableProducers);
+                      } else {
+                        setActiveProducers([]);
+                      }
+                    }}
                   />
                   <label htmlFor="wszyscy-producenci" className="ml-2 text-gray-700">
                     Wszyscy producenci
                   </label>
                 </div>
               )}
-              {availableProducers.map((producer, index) => (
-                <div key={index} className='flex items-center'>
+              {availableProducers.map((producer) => (
+                <div key={producer} className='flex items-center'>
                   <input
-                    type="radio"
+                    type="checkbox"
                     id={`producer-${producer}`}
-                    className="form-radio h-4 w-4 text-orange-600"
-                    checked={activeProducer === producer}
-                    onChange={() => setActiveProducer(producer)}
+                    className="form-checkbox h-4 w-4 text-orange-600 accent-orange-600"
+                    checked={activeProducers.includes(producer)}
+                    onChange={() => toggleProducer(producer)}
                   />
                   <label htmlFor={`producer-${producer}`} className="ml-2 text-gray-700">
                     {producer}
                   </label>
                 </div>
               ))}
+            </div>
+          </div>
+
+          <div className='px-5'>
+            <p className='font-bold mb-5 text-gray-700'>Przedział cenowy</p>
+
+            <ReactSlider
+              className="relative w-full h-[6px] mt-[10px] cursor-pointer"
+              thumbClassName="custom-thumb"
+              trackClassName="custom-track"
+              min={minPrice}
+              max={maxPrice}
+              value={priceRange}
+              onChange={(value) => setPriceRange(value)}
+              renderThumb={(props, state) => (
+                <div {...props} className="bg-orange-600 absolute top-[-7px] text-white p-1 rounded-full h-5 w-5" />
+              )}
+              ariaLabel={['Minimum price', 'Maximum price']}
+              ariaValuetext={(state) => `Price: ${state.valueNow}`}
+            />
+
+            <div className='flex justify-between mt-4 text-sm text-gray-600'>
+              <span>Od {priceRange[0]} zł</span>
+              <span>Do {priceRange[1]} zł</span>
+            </div>
+
+            <div className='flex justify-between items-center mt-4'>
+              <input
+                type="number"
+                className="border p-2 rounded-md w-[45%]"
+                value={priceRange[0]}
+                min={minPrice}
+                max={priceRange[1]}
+                onChange={(e) => handlePriceInputChange(0, e.target.value)}
+              />
+              <span className='mx-2 text-gray-700'>-</span>
+              <input
+                type="number"
+                className="border p-2 rounded-md w-[45%]"
+                value={priceRange[1]}
+                min={priceRange[0]}
+                max={maxPrice}
+                onChange={(e) => handlePriceInputChange(1, e.target.value)}
+              />
             </div>
           </div>
         </div>
