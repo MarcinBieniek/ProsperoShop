@@ -10,10 +10,50 @@ import { BsFillGrid3X3GapFill } from "react-icons/bs";
 import ShopFilterDropdown from '../components/ShopFilterDropdown';
 
 const formatCategoryName = (name) => name.toLowerCase().replace(/\s+/g, '-');
-const formatSubcategoryName = (name) => name.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '').trim();
+
+const formatSubcategoryName = (name) => {
+  const mapDiacritics = {
+    'ą': 'a', 'ć': 'c', 'ę': 'e', 'ł': 'l', 'ń': 'n',
+    'ó': 'o', 'ś': 's', 'ź': 'z', 'ż': 'z',
+    'Ą': 'A', 'Ć': 'C', 'Ę': 'E', 'Ł': 'L', 'Ń': 'N',
+    'Ó': 'O', 'Ś': 'S', 'Ź': 'Z', 'Ż': 'Z',
+  };
+
+  return name
+    .replace(/[ąćęłńóśźżĄĆĘŁŃÓŚŹŻ]/g, (char) => mapDiacritics[char] || char)
+    .toLowerCase()
+    .replace(/\s+/g, '-')
+    .replace(/[^\w-]+/g, '')
+    .trim();
+};
+
 const formatDisplayName = (name) => {
   const parts = name.split('-');
   return parts[0].charAt(0).toUpperCase() + parts[0].slice(1) + ' ' + parts.slice(1).join(' ').toLowerCase();
+};
+
+const reverseFormatName = (urlName) => {
+  const nameMap = {
+    'wszystkie-produkty': 'Wszystkie produkty',
+    'bramy-segmentowe': 'Bramy segmentowe',
+    'bramy-rozwierne': 'Bramy rozwierne',
+    'bramy-uchylne': 'Bramy uchylne',
+    'bramy-roletowe': 'Bramy roletowe',
+    'bramy-przemyslowe': 'Bramy przemysłowe',
+    'bramy-garazowe': 'Bramy garażowe',
+    'szyny-do-napedow': 'Szyny do napędów',
+    'silowniki-przemyslowe': 'Siłowniki przemysłowe',
+    'bramy-przesuwne': 'Bramy przesuwne',
+    'bramy-dwuskrzydlowe': 'Bramy dwuskrzydłowe',
+    'piloty': 'Piloty',
+    'fotokomorki': 'Fotokomórki',
+    'baterie': 'Baterie',
+    'radioodbiorniki': 'Radioodbiorniki',
+    'panelowe': 'Panelowe',
+    'automatyka': 'Automatyka'
+  };
+
+  return nameMap[urlName] || urlName;
 };
 
 const Shop = () => {
@@ -27,16 +67,16 @@ const Shop = () => {
   const [availableProducers, setAvailableProducers] = useState([]);
   const [activeProducers, setActiveProducers] = useState([]);
   const [expandedCategory, setExpandedCategory] = useState(category || null);
-
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(0);
   const [priceRange, setPriceRange] = useState([0, 0]);
-
-  // Stan do przechowywania wybranej opcji sortowania
   const [sortOption, setSortOption] = useState('Sortuj według');
 
-  const displayCategory = category ? formatDisplayName(category) : 'Wszystkie produkty';
-  const displaySubcategory = subcategory ? formatDisplayName(subcategory) : null;
+  const displayCategory = category ? reverseFormatName(category) : 'Wszystkie produkty';
+  const displaySubcategory = subcategory ? reverseFormatName(subcategory) : null;
+
+  console.log('display category', displayCategory)
+  console.log('displaySubcategory', displaySubcategory)
 
   useEffect(() => {
     if (category) {
@@ -48,44 +88,44 @@ const Shop = () => {
   }, [category, dispatch]);
 
   useEffect(() => {
-    // Filtrujemy produkty na podstawie kategorii
     const filteredByCategory = items.filter((product) => {
+      const formattedCategory = formatCategoryName(product.category);
+      const formattedSubcategory = formatSubcategoryName(product.subcategory || '');
+
       if (!category || category === 'wszystkie-produkty') return true;
       if (subcategory) {
-        return product.category.toLowerCase() === category && product.subcategory.toLowerCase().replace(/\s+/g, '-') === subcategory;
+        return formattedCategory === category && formattedSubcategory === subcategory;
       }
-      return product.category.toLowerCase() === category;
+      return formattedCategory === category;
     });
 
     setCategoryFilteredProducts(filteredByCategory);
 
-    // Pobieramy dostępnych producentów
+    console.log('filteredByCategory - result', filteredByCategory)
+
     const producers = filteredByCategory.map((product) => product.producer);
     const uniqueProducers = [...new Set(producers)];
     setAvailableProducers(uniqueProducers);
 
-    // Ustawiamy zakres cenowy (min i max) w zależności od filtrów
     const filteredByPriceAndProducer = filteredByCategory.filter((product) => {
       return (activeProducers.length === 0 || activeProducers.includes(product.producer));
     });
 
-    // Obliczamy min i max ceny z produktów po filtrach
     if (filteredByPriceAndProducer.length > 0) {
       const prices = filteredByPriceAndProducer.map((product) => product.price);
       const min = Math.min(...prices);
       const max = Math.max(...prices);
       setMinPrice(min);
       setMaxPrice(max);
-      setPriceRange([min, max]); // Ustawiamy początkowy zakres suwaka
+      setPriceRange([min, max]);
     } else {
       setMinPrice(0);
       setMaxPrice(0);
-      setPriceRange([0, 0]); // Jeśli brak produktów po filtrach
+      setPriceRange([0, 0]);
     }
   }, [items, category, subcategory, activeProducers]);
 
   useEffect(() => {
-    // Filtrujemy produkty na podstawie producentów i ceny
     const producerFilteredProducts = categoryFilteredProducts.filter((product) =>
       activeProducers.length === 0 || activeProducers.includes(product.producer)
     );
@@ -94,7 +134,6 @@ const Shop = () => {
       product.price >= priceRange[0] && product.price <= priceRange[1]
     );
 
-    // Sortowanie produktów
     let sortedProducts = [...priceFilteredProducts];
     if (sortOption === 'Najdroższe produkty') {
       sortedProducts.sort((a, b) => b.price - a.price);
