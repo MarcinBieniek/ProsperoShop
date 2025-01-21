@@ -12,6 +12,26 @@ const HeaderMenuBottomShopButton = () => {
     category => category.name !== 'Wszystkie produkty' && category.name !== 'Bramy'
   );
 
+  const slugify = (text) => {
+    const map = {
+      ą: 'a',
+      ć: 'c',
+      ę: 'e',
+      ł: 'l',
+      ń: 'n',
+      ó: 'o',
+      ś: 's',
+      ź: 'z',
+      ż: 'z',
+    };
+
+    return text
+      .toLowerCase()
+      .replace(/[ąćęłńóśźż]/g, (match) => map[match])
+      .replace(/\s+/g, '-')
+      .replace(/[^a-z0-9-]/g, '');
+  };
+
   return (
     <div
       className={`relative flex items-center mr-8 p-2 cursor-pointer rounded-md transition-smooth ${isMenuShopOpen ? 'bg-gray-100' : 'hover:bg-gray-100'}`}
@@ -44,7 +64,7 @@ const HeaderMenuBottomShopButton = () => {
                   <div>
                     {category.subcategories.map((subcategory, subIndex) => (
                       <Link
-                        to={`/sklep?category=${encodeURIComponent(category.name)}&subcategory=${encodeURIComponent(subcategory)}`}
+                        to={`/sklep/${slugify(category.name)}/${slugify(subcategory)}`}
                         key={subIndex}
                         className='flex items-center pb-2'
                       >

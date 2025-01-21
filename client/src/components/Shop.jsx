@@ -10,7 +10,7 @@ import { BsFillGrid3X3GapFill } from "react-icons/bs";
 import ShopFilterDropdown from '../components/ShopFilterDropdown';
 
 const formatCategoryName = (name) => name.toLowerCase().replace(/\s+/g, '-');
-const formatSubcategoryName = (name) => name.toLowerCase().replace(/\s+/g, '-');
+const formatSubcategoryName = (name) => name.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '').trim();
 const formatDisplayName = (name) => {
   const parts = name.split('-');
   return parts[0].charAt(0).toUpperCase() + parts[0].slice(1) + ' ' + parts.slice(1).join(' ').toLowerCase();
