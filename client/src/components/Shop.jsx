@@ -27,11 +27,6 @@ const formatSubcategoryName = (name) => {
     .trim();
 };
 
-const formatDisplayName = (name) => {
-  const parts = name.split('-');
-  return parts[0].charAt(0).toUpperCase() + parts[0].slice(1) + ' ' + parts.slice(1).join(' ').toLowerCase();
-};
-
 const reverseFormatName = (urlName) => {
   const nameMap = {
     'wszystkie-produkty': 'Wszystkie produkty',
@@ -75,9 +70,6 @@ const Shop = () => {
   const displayCategory = category ? reverseFormatName(category) : 'Wszystkie produkty';
   const displaySubcategory = subcategory ? reverseFormatName(subcategory) : null;
 
-  console.log('display category', displayCategory)
-  console.log('displaySubcategory', displaySubcategory)
-
   useEffect(() => {
     if (category) {
       dispatch(setShouldScroll(false));
@@ -100,8 +92,6 @@ const Shop = () => {
     });
 
     setCategoryFilteredProducts(filteredByCategory);
-
-    console.log('filteredByCategory - result', filteredByCategory)
 
     const producers = filteredByCategory.map((product) => product.producer);
     const uniqueProducers = [...new Set(producers)];
@@ -162,6 +152,10 @@ const Shop = () => {
       setExpandedCategory((prevCategory) => (prevCategory === categoryName ? null : categoryName));
     }
   };
+
+  useEffect(() => {
+    setActiveProducers([]);
+  }, [category, subcategory]);
 
   const handleSubcategoryClick = (categoryName, subcategoryName) => {
     navigate(`/sklep/${formatCategoryName(categoryName)}/${formatSubcategoryName(subcategoryName)}`);
@@ -330,7 +324,10 @@ const Shop = () => {
 
           <div className="grid grid-cols-4 gap-4 text-gray-800 py-2">
             {filteredProducts.map((product) => (
-              <ShopProductCard key={product._id} product={product} />
+              <ShopProductCard
+                key={product._id}
+                product={product}
+              />
             ))}
           </div>
         </div>
