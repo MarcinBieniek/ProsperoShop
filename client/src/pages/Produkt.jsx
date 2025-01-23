@@ -19,6 +19,7 @@ const Produkt = () => {
 
   const [mainImage, setMainImage] = useState(0);
   const [selectedTab, setSelectedTab] = useState('opis');
+  const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
     dispatch(productFetch(productId));
@@ -62,8 +63,22 @@ const Produkt = () => {
     discountedPrice
    } = selectedProduct;
 
-   const sanitizedDescription = DOMPurify.sanitize(description);
-   const sanitizedDetails = DOMPurify.sanitize(details);
+  const sanitizedDescription = DOMPurify.sanitize(description);
+  const sanitizedDetails = DOMPurify.sanitize(details);
+
+  const handleIncrease = () => {
+    if (quantity < 10) {
+      setQuantity(quantity + 1);
+    }
+  };
+
+  const handleDecrease = () => {
+    if (quantity > 1) {
+      setQuantity(quantity - 1);
+    }
+  };
+
+  const updatedPrice = discountedPrice ? discountedPrice * quantity : price * quantity;
 
   return (
     <div className='container text-gray-800'>
@@ -118,13 +133,20 @@ const Produkt = () => {
             }
           </div>
           <div>
-            <p>Ilość:</p>
+            <div className='flex justify-between'>
+              <p>Ilość: {quantity}</p>
+              <p className='flex'>Łączna cena: <p className='text-orange-600 ml-1'>{quantity !== 1 ? updatedPrice : discountedPrice || price} zł</p></p>
+            </div>
             <div className='border-[1px] rounded-full flex justify-between items-center px-4 py-2 mt-4 w-[50%]'>
-              <p>1</p>
-              <div className='flex'>
-                <HiPlusSm className='bg-gray-200 cursor-pointer rounded-full text-xl mr-2' />
-                <HiMinusSm className='bg-gray-200 cursor-pointer rounded-full text-xl' />
-              </div>
+              <HiMinusSm
+                className={`bg-gray-200 cursor-pointer rounded-full text-xl ${quantity === 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                onClick={handleDecrease}
+              />
+              <p>{quantity}</p>
+              <HiPlusSm
+                className={`bg-gray-200 cursor-pointer rounded-full text-xl ${quantity === 10 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                onClick={handleIncrease}
+              />
             </div>
           </div>
           <div className='bg-gray-200 cursor-pointer flex justify-center my-5 p-3 rounded-3xl hover:bg-orange-600 hover:text-white transition-smooth' >
