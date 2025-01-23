@@ -15,6 +15,14 @@ export const productsFetch = createAsyncThunk(
   }
 );
 
+export const productFetch = createAsyncThunk(
+  "products/productFetch",
+  async (id) => {
+    const response = await axios.get(`http://localhost:3000/api/product/get/${id}`);
+    return response?.data;
+  }
+);
+
 const productsSlice = createSlice({
   name: "products",
   initialState,
@@ -25,8 +33,8 @@ const productsSlice = createSlice({
       state.loading = true;
     },
     deleteProductSuccess: (state, action) => {
-      const productId = action.payload; // ID usuniętego produktu jest teraz w payload
-      state.items = state.items.filter(product => product._id !== productId); // Usuwamy produkt po ID
+      const productId = action.payload;
+      state.items = state.items.filter(product => product._id !== productId);
       state.loading = false;
       state.error = null;
     },
@@ -38,6 +46,8 @@ const productsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+
+      // pobieramy wszystkie produkty
       .addCase(productsFetch.pending, (state) => {
         state.status = "pending";
       })
@@ -47,6 +57,19 @@ const productsSlice = createSlice({
       })
       .addCase(productsFetch.rejected, (state) => {
         state.status = "rejected";
+      })
+
+      // pobieramy jeden produkt
+      .addCase(productFetch.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(productFetch.fulfilled, (state, action) => {
+        state.loading = false;
+        state.selectedProduct = action.payload;
+      })
+      .addCase(productFetch.rejected, (state) => {
+        state.loading = false;
+        state.error = "Failed to fetch product";
       });
   },
 });

@@ -1,8 +1,14 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { HiPlusSm, HiMinusSm } from "react-icons/hi";
 import { BiCartDownload } from "react-icons/bi";
 import { CiHeart } from "react-icons/ci";
+import { useDispatch, useSelector } from 'react-redux';
+import { productFetch } from '../redux/products/productsSlice';
+import { FaTruckLoading } from "react-icons/fa";
+import { MdError } from "react-icons/md";
+import { HiMiniQuestionMarkCircle } from "react-icons/hi2";
 
 const Produkt = () => {
 
@@ -12,8 +18,54 @@ const Produkt = () => {
     'https://napedykey.pl/userdata/public/gfx/273.png',
   ];
 
+  const { productId } = useParams();
+  const dispatch = useDispatch();
+  const { selectedProduct, loading, error } = useSelector((state) => state.products);
+
   const [mainImage, setMainImage] = useState(0);
   const [selectedTab, setSelectedTab] = useState('opis');
+
+  useEffect(() => {
+    dispatch(productFetch(productId));
+  }, [dispatch, productId]);
+
+  if (loading) {
+    return <div className='flex flex-col items-center justify-center h-screen'>
+      <FaTruckLoading className='text-orange-600 text-6xl' />
+      <p className='text-xl mt-5'>Ładowanie produktu...</p>
+    </div>;
+  }
+
+  if (error) {
+    return <div className='flex flex-col items-center justify-center h-screen'>
+      <MdError className='text-orange-600 text-6xl' />
+      <p className='text-xl mt-5'>Błąd {error}</p>
+    </div>;
+  }
+
+  if (!selectedProduct) {
+    return <div className='flex flex-col items-center justify-center h-screen'>
+      <HiMiniQuestionMarkCircle className='text-orange-600 text-6xl' />
+      <p className='text-xl mt-5'>Nie znaleziono produktu...</p>
+    </div>;
+  }
+
+  const {
+    name,
+    category,
+    subcategory,
+    productCode,
+    producer,
+    price,
+    shortDescription,
+    description,
+    details,
+    imageUrls,
+    delivery,
+    promotion,
+    sale,
+    discountedPrice
+   } = selectedProduct;
 
   return (
     <div className='container text-gray-800'>
