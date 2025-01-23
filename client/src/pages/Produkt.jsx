@@ -9,14 +9,9 @@ import { productFetch } from '../redux/products/productsSlice';
 import { FaTruckLoading } from "react-icons/fa";
 import { MdError } from "react-icons/md";
 import { HiMiniQuestionMarkCircle } from "react-icons/hi2";
+import DOMPurify from 'dompurify';
 
 const Produkt = () => {
-
-  const images = [
-    'https://a.allegroimg.com/s512/1160bc/2df9cfc6427f9b023496e2561a48/NAPED-DO-BRAMY-PRZESUWNEJ-AB1000-VIDOS',
-    'https://a.allegroimg.com/s512/1160bc/2df9cfc6427f9b023496e2561a48/NAPED-DO-BRAMY-PRZESUWNEJ-AB1000-VIDOS',
-    'https://napedykey.pl/userdata/public/gfx/273.png',
-  ];
 
   const { productId } = useParams();
   const dispatch = useDispatch();
@@ -67,6 +62,9 @@ const Produkt = () => {
     discountedPrice
    } = selectedProduct;
 
+   const sanitizedDescription = DOMPurify.sanitize(description);
+   const sanitizedDetails = DOMPurify.sanitize(details);
+
   return (
     <div className='container text-gray-800'>
       <div className='pt-5 pb-9 flex items-center text-gray-800'>
@@ -79,11 +77,11 @@ const Produkt = () => {
         <div className='slider w-2/6'>
 
           <div className="mb-4 flex item-center justify-center">
-            <img src={images[mainImage]} alt="Główne zdjęcie" className="h-[300px]" />
+            <img src={imageUrls[mainImage]} alt="Główne zdjęcie" className="h-[300px]" />
           </div>
 
           <div className="flex justify-between">
-            {images.map((img, index) => (
+            {imageUrls.map((img, index) => (
               <img
                 key={index}
                 src={img}
@@ -96,23 +94,28 @@ const Produkt = () => {
         </div>
 
         <div className='w-3/6 p-5 px-10'>
-          <p className='text-sm text-gray-600 hover:text-orange-600 cursor-pointer transition-smooth'>Producent</p>
-          <p className='text-2xl pb-2'>Nazwa produktu</p>
-          <p className='text-sm text-gray-600 border-b-[1px] border-gray-200 pb-4'>Kod producenta: 12345</p>
-          <div className='text-gray-600 py-4'>
-            <p>Skrócony opis produktu</p>
-            <p>Pierwszy opis produktu.</p>
-            <p>Pierwszy opis produktu.</p>
-            <p>Pierwszy opis produktu.</p>
-            <p>Pierwszy opis produktu.</p>
+          <p className='text-sm text-gray-600 flex'>Producent: <p className='text-orange-600 ml-1'>{producer}</p></p>
+          <p className='text-2xl pb-2 py-2'>{name}</p>
+          { productCode && (
+            <p className='text-sm text-gray-600 '>Kod producenta: {productCode}</p>
+          )}
+          <div className='text-gray-600 py-4 border-t-[1px] border-gray-200 mt-4'>
+            <p>{shortDescription}</p>
           </div>
         </div>
 
         <div className='w-2/6 p-5 border-2 rounded-3xl'>
-          <p className='pb-3 border-b-[1px] border-gray-200 text-gray-600'>Czas realizacji:<span className='text-green-500'> 3-4 dni robocze</span></p>
+          <p className='pb-3 border-b-[1px] border-gray-200 text-gray-600'>Czas realizacji:<span className='text-green-500'> {delivery} dni robocze</span></p>
           <div className='py-4'>
-            <p className='text-3xl'>100 zł</p>
-            <p className='text text-gray-600 line-through'>100 zł</p>
+            {discountedPrice ? (
+              <>
+                <p className='text-3xl'>{discountedPrice} zł</p>
+                <p className='text text-gray-600 line-through'>{price} zł</p>
+              </>
+            ) : (
+              <p className='text-3xl'>{price} zł</p>
+            )
+            }
           </div>
           <div>
             <p>Ilość:</p>
@@ -162,12 +165,12 @@ const Produkt = () => {
           {selectedTab === 'opis' ? (
             <div>
               <h2 className='text-xl mb-4'>Opis Produktu</h2>
-              <p>To jest szczegółowy opis produktu. Znajdziesz tu wszystkie informacje dotyczące tego, co oferuje ten produkt.</p>
+              <div dangerouslySetInnerHTML={{ __html: sanitizedDescription }} />
             </div>
           ) : (
             <div>
               <h2 className='text-xl mb-4'>Specyfikacja</h2>
-              <p>Tu znajduje się specyfikacja techniczna produktu, w tym jego parametry, rozmiary, waga i inne istotne dane.</p>
+              <div dangerouslySetInnerHTML={{ __html: sanitizedDetails }} />
             </div>
           )}
         </div>

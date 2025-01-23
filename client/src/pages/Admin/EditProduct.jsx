@@ -33,6 +33,7 @@ const EditProduct = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [formErrors, setFormErrors] = useState({});
+
   // Nowe stany dla SunEditor: description i details
   const [descriptionLoaded, setDescriptionLoaded] = useState(false);
   const [detailsLoaded, setDetailsLoaded] = useState(false);
@@ -40,7 +41,7 @@ const EditProduct = () => {
   const fetchProduct = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`/api/product/${id}`);
+      const response = await fetch(`/api/product/get/${id}`);
       const data = await response.json();
 
       if (response.ok) {
