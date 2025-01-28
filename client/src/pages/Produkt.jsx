@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { productFetch } from '../redux/products/productsSlice';
 import { addToCart, getTotals } from "../redux/cart/cartSlice";
+import QuantitySelector from '../common/QuantitySelector';
 
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { HiPlusSm, HiMinusSm } from "react-icons/hi";
@@ -128,7 +129,7 @@ const Produkt = () => {
           <div className='py-4'>
             {discountedPrice ? (
               <>
-                <p className='text-3xl'>{discountedPrice} zł</p>
+                <p className='text-3xl text-red-600'>{discountedPrice} zł</p>
                 <p className='text text-gray-600 line-through'>{price} zł</p>
               </>
             ) : (
@@ -141,17 +142,7 @@ const Produkt = () => {
               <p>Ilość: {quantity}</p>
               <p className='flex'>Łączna cena: <span className='text-orange-600 ml-1'>{quantity !== 1 ? updatedPrice : discountedPrice || price} zł</span></p>
             </div>
-            <div className='border-[1px] rounded-full flex justify-between items-center px-4 py-2 mt-4 w-[50%]'>
-              <HiMinusSm
-                className={`bg-gray-200 cursor-pointer rounded-full text-xl ${quantity === 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
-                onClick={handleDecrease}
-              />
-              <p>{quantity}</p>
-              <HiPlusSm
-                className={`bg-gray-200 cursor-pointer rounded-full text-xl ${quantity === 10 ? 'opacity-50 cursor-not-allowed' : ''}`}
-                onClick={handleIncrease}
-              />
-            </div>
+            <QuantitySelector quantity={quantity} setQuantity={setQuantity} />
           </div>
           <div
             className='bg-gray-200 cursor-pointer flex justify-center my-5 p-3 rounded-3xl hover:bg-orange-600 hover:text-white transition-smooth'

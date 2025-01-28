@@ -315,7 +315,7 @@ const HeaderMenuTop = () => {
                         <p>Ilość: {item.cartQuantity}</p>
                         <div className='flex justify-between'>
                           {item.discountedPrice ? (
-                            <p>Cena: {item.discountedPrice} zł</p>
+                            <p className='text-red-600'>Cena: {item.discountedPrice} zł</p>
                           ) : (
                             <p>Cena: {item.price} zł</p>
                           )}
