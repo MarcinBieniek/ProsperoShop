@@ -11,24 +11,38 @@ const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
+
     // add to cart reducer
     addToCart(state, action) {
       const itemIndex = state.cartItems.findIndex(
         (item) => item._id === action.payload._id
       );
-      if(itemIndex >= 0){
-        state.cartItems[itemIndex].cartQuantity += 1;
-        toast.info(`Zwiększono ilość: ${action.payload.name}`, {
-          position: "bottom-left",
-        })
+
+      if (itemIndex >= 0) {
+        // Produkt istnieje w koszyku - zwiększ ilość
+        state.cartItems[itemIndex].cartQuantity += action.payload.quantity;
+
+        toast.info(
+          `Zwiększono ilość: ${action.payload.name}, teraz w koszyku: ${state.cartItems[itemIndex].cartQuantity}`,
+          {
+            position: "bottom-left",
+          }
+        );
       } else {
-        const tempProduct = { ...action.payload, cartQuantity: 1}
+        // Produkt nie istnieje w koszyku - dodaj nowy
+        const tempProduct = {
+          ...action.payload,
+          cartQuantity: action.payload.quantity,
+        };
         state.cartItems.push(tempProduct);
+
         toast.success(`Dodano do koszyka: ${action.payload.name}`, {
           position: "bottom-left",
-        })
+        });
       }
     },
+
+
     // remove item reducer
     removeFromCart(state, action) {
       const nextCartItems = state.cartItems.filter(
@@ -78,20 +92,22 @@ const cartSlice = createSlice({
     },
 
     // get total price
-    getTotals(state, action){
-      let {total, quantity} = state.cartItems.reduce(
+    getTotals(state, action) {
+      let { total, quantity } = state.cartItems.reduce(
         (cartTotal, cartItem) => {
+          const { price, discountedPrice, cartQuantity } = cartItem;
 
-          const { regularPrice, cartQuantity } = cartItem;
-          const itemTotal = regularPrice * cartQuantity;
+          const itemPrice = discountedPrice ?? price;
+          const itemTotal = itemPrice * cartQuantity;
 
           cartTotal.total += itemTotal;
           cartTotal.quantity += cartQuantity;
 
           return cartTotal;
-        }, {
+        },
+        {
           total: 0,
-          quantity: 0
+          quantity: 0,
         }
       );
 

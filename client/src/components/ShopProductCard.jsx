@@ -24,8 +24,6 @@ const slugify = (text) => {
 
 const ShopProductCard= ({ product, handleAddToCart }) => {
 
-  console.log('product is', product)
-
   const navigate = useNavigate();
 
   const handleProductClick = () => {

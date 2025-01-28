@@ -69,7 +69,7 @@ const Cart = () => {
                   </div>
                 </div>
 
-                <div className="col-span-1">{cartItem.regularPrice} zł</div>
+                <div className="col-span-1">{cartItem.price} zł</div>
                 <div className="col-span-1 flex items-center justify-center w-[138px] max-w-full border-2 border-gray-400 rounded py-2">
                   <button onClick = {() => handleDecreaseCart(cartItem)}>
                   -
@@ -79,7 +79,7 @@ const Cart = () => {
                   +
                   </button>
                 </div>
-                <div className="col-span-1 flex justify-end font-bold">{cartItem.regularPrice} zł</div>
+                <div className="col-span-1 flex justify-end font-bold">{cartItem.price} zł</div>
               </div>
             ))}
           </div>

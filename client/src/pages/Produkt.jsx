@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { productFetch } from '../redux/products/productsSlice';
+import { addToCart, getTotals } from "../redux/cart/cartSlice";
+
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { HiPlusSm, HiMinusSm } from "react-icons/hi";
 import { BiCartDownload } from "react-icons/bi";
 import { CiHeart } from "react-icons/ci";
-import { useDispatch, useSelector } from 'react-redux';
-import { productFetch } from '../redux/products/productsSlice';
 import { FaTruckLoading } from "react-icons/fa";
-import { MdError } from "react-icons/md";
 import { HiMiniQuestionMarkCircle } from "react-icons/hi2";
 import DOMPurify from 'dompurify';
 
@@ -32,13 +33,6 @@ const Produkt = () => {
     </div>;
   }
 
-  if (error) {
-    return <div className='flex flex-col items-center justify-center h-screen'>
-      <MdError className='text-orange-600 text-6xl' />
-      <p className='text-xl mt-5'>Błąd {error}</p>
-    </div>;
-  }
-
   if (!selectedProduct) {
     return <div className='flex flex-col items-center justify-center h-screen'>
       <HiMiniQuestionMarkCircle className='text-orange-600 text-6xl' />
@@ -48,8 +42,6 @@ const Produkt = () => {
 
   const {
     name,
-    category,
-    subcategory,
     productCode,
     producer,
     price,
@@ -80,6 +72,18 @@ const Produkt = () => {
 
   const updatedPrice = discountedPrice ? discountedPrice * quantity : price * quantity;
 
+  const handleAddToCart = (product) => {
+    const productWithQuantity = {
+      ...product,
+      quantity: quantity,
+    };
+
+    console.log('final product is', productWithQuantity)
+
+    dispatch(addToCart(productWithQuantity));
+    dispatch(getTotals());
+  };
+
   return (
     <div className='container text-gray-800'>
       <div className='pt-5 pb-9 flex items-center text-gray-800'>
@@ -101,7 +105,7 @@ const Produkt = () => {
                 key={index}
                 src={img}
                 alt={`Miniaturka ${index + 1}`}
-                className={`w-1/3 mr-3 h-[120px] object-fit p-2 cursor-pointer transition-smooth ${mainImage === index ? 'border-[1px] border-b-2 border-b-orange-600 ' : 'border-[1px] border-gray-200'}`}
+                className={`w-1/3 mr-3 h-[120px] object-cover p-2 cursor-pointer transition-smooth ${mainImage === index ? 'border-[1px] border-b-2 border-b-orange-600 ' : 'border-[1px] border-gray-200'}`}
                 onClick={() => setMainImage(index)}
               />
             ))}
@@ -109,7 +113,7 @@ const Produkt = () => {
         </div>
 
         <div className='w-3/6 p-5 px-10'>
-          <p className='text-sm text-gray-600 flex'>Producent: <p className='text-orange-600 ml-1'>{producer}</p></p>
+          <p className='text-sm text-gray-600 flex'>Producent: <span className='text-orange-600 ml-1'>{producer}</span></p>
           <p className='text-2xl pb-2 py-2'>{name}</p>
           { productCode && (
             <p className='text-sm text-gray-600 '>Kod producenta: {productCode}</p>
@@ -135,7 +139,7 @@ const Produkt = () => {
           <div>
             <div className='flex justify-between'>
               <p>Ilość: {quantity}</p>
-              <p className='flex'>Łączna cena: <p className='text-orange-600 ml-1'>{quantity !== 1 ? updatedPrice : discountedPrice || price} zł</p></p>
+              <p className='flex'>Łączna cena: <span className='text-orange-600 ml-1'>{quantity !== 1 ? updatedPrice : discountedPrice || price} zł</span></p>
             </div>
             <div className='border-[1px] rounded-full flex justify-between items-center px-4 py-2 mt-4 w-[50%]'>
               <HiMinusSm
@@ -149,7 +153,10 @@ const Produkt = () => {
               />
             </div>
           </div>
-          <div className='bg-gray-200 cursor-pointer flex justify-center my-5 p-3 rounded-3xl hover:bg-orange-600 hover:text-white transition-smooth' >
+          <div
+            className='bg-gray-200 cursor-pointer flex justify-center my-5 p-3 rounded-3xl hover:bg-orange-600 hover:text-white transition-smooth'
+            onClick={() => handleAddToCart(selectedProduct)}
+          >
             <BiCartDownload className='text-2xl mr-2' />
             <p>Dodaj do koszyka</p>
           </div>

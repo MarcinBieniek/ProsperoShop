@@ -268,7 +268,7 @@ const HeaderMenuTop = () => {
               <SlBasket className='text-2xl'/>
               {cartTotalQuantity > 0 && (
                 <div className='absolute right-1 top-2 bg-orange-600 h-4 w-4 rounded flex items-center justify-center'>
-                  <p className='text-xs text-white font-medium'>{cartTotalQuantity}</p>
+                  <p className='text-xs text-white font-medium'>{cartItems.length}</p>
                 </div>
               )}
             </Link>
@@ -314,11 +314,16 @@ const HeaderMenuTop = () => {
                         <Link to='/' className='font-bold text-orange-600 hover:text-black transition-smooth'>{item.name}</Link>
                         <p>Ilość: {item.cartQuantity}</p>
                         <div className='flex justify-between'>
-                          <p>Cena: {item.regularPrice} zł</p>
+                          {item.discountedPrice ? (
+                            <p>Cena: {item.discountedPrice} zł</p>
+                          ) : (
+                            <p>Cena: {item.price} zł</p>
+                          )}
                           <button
                             onClick={() => handleRemoveFromCart(item)}
                             className='font-bold text-orange-600 hover:text-black transition-smooth'
                           >Usuń</button>
+
                         </div>
                       </div>
                     </div>
