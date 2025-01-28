@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 
 import { FaLongArrowAltLeft } from "react-icons/fa";
+import { PiEmptyLight } from "react-icons/pi";
 import { addToCart, clearCart, decreaseCart, getTotals, removeFromCart } from "../redux/cart/cartSlice";
 
 const Cart = () => {
@@ -33,15 +34,17 @@ const Cart = () => {
   };
 
   return (
+
     <div>
       <h2 className='font-medium text-3xl text-center py-6'>Koszyk</h2>
       {cart.cartItems.length === 0 ? (
-        <div className='emptyCart flex flex-col items-center'>
-          <p className="">Twój koszyk jest pusty</p>
+        <div className='emptyCart flex flex-col items-center justify-center h-[400px]'>
+          <PiEmptyLight className='text-orange-600 text-6xl mb-20' />
+          <p className="text-xl mb-5">Twój koszyk jest pusty</p>
           <div className=''>
-            <Link to="/" className='flex items-center'>
+            <Link to="/" className='flex items-center hover:text-orange-600 transition-all duration-300 transform hover:-translate-x-1'>
               <FaLongArrowAltLeft />
-              <span className="ml-2">Zapraszamy do zakupów</span>
+              <span className="ml-2 text-xl">Zapraszamy do zakupów</span>
             </Link>
           </div>
         </div>
@@ -108,6 +111,8 @@ const Cart = () => {
         </div>
       )}
     </div>
+
+
   )
 }
 
