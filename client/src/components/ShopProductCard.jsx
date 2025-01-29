@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { addToCart, getTotals } from "../redux/cart/cartSlice";
 import { slugify } from '../utils/slugify';
+import { IoHeartOutline } from "react-icons/io5";
 
 const ShopProductCard= ({ product }) => {
 
@@ -31,6 +32,13 @@ const ShopProductCard= ({ product }) => {
     dispatch(getTotals());
   };
 
+  const handleHeartClick = (e) => {
+    e.stopPropagation();
+    console.log("Dodaj do ulubionych:", product);
+
+    // Tutaj dodamy dispatch do reduxa w następnym kroku
+  };
+
   return (
     <div className='basket-container border border-gray-200 rounded-lg p-2 box-shadow cursor-pointer' onClick={handleProductClick}>
       <p className='text-sm pb-2'>{product.producer}</p>
@@ -43,6 +51,12 @@ const ShopProductCard= ({ product }) => {
           src={product.imageUrls}
           alt={product.name}
         />
+        <div
+          className='absolute top-1 right-1 p-2 cursor-pointer hover:text-red-500 transition'
+          onClick={handleHeartClick}
+        >
+          <IoHeartOutline className='text-xl' />
+        </div>
       </div>
       <div className='pt-3 flex items-center justify-between'>
         {product.discountedPrice ? (
