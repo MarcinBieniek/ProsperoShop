@@ -1,7 +1,6 @@
 import "react-toastify/dist/ReactToastify.css";
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ToastContainer } from "react-toastify";
-import { useState } from 'react'; // Importuj useState
 
 import Home from './pages/Home';
 import Login from './pages/Login';
@@ -29,6 +28,7 @@ import Orders from "./pages/Admin/Orders";
 import Service from "./pages/Admin/Service";
 import AddProduct from "./pages/Admin/AddProduct";
 import EditProduct from "./pages/Admin/EditProduct";
+import Ulubione from "./pages/Ulubione";
 
 const App = () => {
 
@@ -42,6 +42,7 @@ const App = () => {
         <Route path='/login' element={<Login />} />
         <Route path='/rejestracja' element={<Rejestracja />} />
         <Route path='/koszyk' element={<Koszyk />} />
+        <Route path='/ulubione' element={<Ulubione />} />
         <Route path='/sklep' element={<Sklep />} />
         <Route path="/sklep/:category" element={<Sklep />} />
         <Route path="/sklep/:category/:subcategory" element={<Sklep />} />
