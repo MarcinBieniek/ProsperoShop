@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { slugify } from "../utils/slugify";
 
 import { FaLongArrowAltLeft } from "react-icons/fa";
 import { PiEmptyLight } from "react-icons/pi";
@@ -66,7 +67,9 @@ const Cart = () => {
                 <div className="col-span-3 flex">
                   <img className="w-[100px] h-[100px] mr-4 object-cover" src={cartItem.imageUrls} alt={cartItem.name} />
                   <div>
-                    <h3 className="uppercase text-lg">{cartItem.name}</h3>
+                    <Link to={`/sklep/${slugify(cartItem.category)}/${slugify(cartItem.subcategory)}/${slugify(cartItem.name)}/${cartItem._id}`}>
+                      <h3 className="text-lg font-bold text-sky-400 hover:text-yellow-300 transition-smooth cursor-pointer">{cartItem.name}</h3>
+                    </Link>
                     <h3 className="py-2">{cartItem.shortDescription}</h3>
                     <button
                       className="bg-gray-300 p-2 mt-2 rounded pointer hover:bg-gray-200"

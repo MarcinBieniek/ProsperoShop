@@ -6,7 +6,6 @@ import { addToCart, getTotals } from "../redux/cart/cartSlice";
 import QuantitySelector from '../common/QuantitySelector';
 
 import { MdKeyboardArrowRight } from "react-icons/md";
-import { HiPlusSm, HiMinusSm } from "react-icons/hi";
 import { BiCartDownload } from "react-icons/bi";
 import { CiHeart } from "react-icons/ci";
 import { FaTruckLoading } from "react-icons/fa";
@@ -58,18 +57,6 @@ const Produkt = () => {
 
   const sanitizedDescription = DOMPurify.sanitize(description);
   const sanitizedDetails = DOMPurify.sanitize(details);
-
-  const handleIncrease = () => {
-    if (quantity < 10) {
-      setQuantity(quantity + 1);
-    }
-  };
-
-  const handleDecrease = () => {
-    if (quantity > 1) {
-      setQuantity(quantity - 1);
-    }
-  };
 
   const updatedPrice = discountedPrice ? discountedPrice * quantity : price * quantity;
 

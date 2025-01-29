@@ -1,30 +1,13 @@
-import React from 'react';
 import { SlBasket } from "react-icons/sl";
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { addToCart, getTotals } from "../redux/cart/cartSlice";
+import { slugify } from '../utils/slugify';
 
-const slugify = (text) => {
-  const map = {
-    ą: 'a',
-    ć: 'c',
-    ę: 'e',
-    ł: 'l',
-    ń: 'n',
-    ó: 'o',
-    ś: 's',
-    ź: 'z',
-    ż: 'z',
-  };
-
-  return text
-    .toLowerCase()
-    .replace(/[ąćęłńóśźż]/g, (match) => map[match])
-    .replace(/\s+/g, '-')
-    .replace(/[^a-z0-9-]/g, '');
-};
-
-const ShopProductCard= ({ product, handleAddToCart }) => {
+const ShopProductCard= ({ product }) => {
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleProductClick = () => {
     const formattedCategory = slugify(product.category);
@@ -38,8 +21,14 @@ const ShopProductCard= ({ product, handleAddToCart }) => {
 
   const handleBasketClick = (e) => {
     e.stopPropagation();
-    console.log('click')
-    // handleAddToCart(product);
+
+    const productWithQuantity = {
+      ...product,
+      quantity: 1,
+    };
+
+    dispatch(addToCart(productWithQuantity));
+    dispatch(getTotals());
   };
 
   return (

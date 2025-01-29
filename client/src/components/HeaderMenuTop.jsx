@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { removeFromCart, getTotals } from "../redux/cart/cartSlice";
 import ButtonGray from '../common/ButtonGray';
 import ButtonOrange from '../common/ButtonOrange';
+import { slugify } from '../utils/slugify';
 
 import { PiUserCircleLight } from "react-icons/pi";
 import { IoHelpCircleOutline, IoHeartOutline } from "react-icons/io5";
@@ -311,7 +312,10 @@ const HeaderMenuTop = () => {
                         className='h-20 w-20 object-cover'
                       />
                       <div className='flex flex-col justify-between pl-5 w-full'>
-                        <Link to='/' className='font-bold text-orange-600 hover:text-black transition-smooth'>{item.name}</Link>
+                        <Link
+                          to={`/sklep/${slugify(item.category)}/${slugify(item.subcategory)}/${slugify(item.name)}/${item._id}`}
+                          className='font-bold text-orange-600 hover:text-black transition-smooth'>{item.name}
+                        </Link>
                         <p>Ilość: {item.cartQuantity}</p>
                         <div className='flex justify-between'>
                           {item.discountedPrice ? (
