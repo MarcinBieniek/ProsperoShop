@@ -12,14 +12,23 @@ import { IoIosSend } from "react-icons/io";
 import { MdCancel } from "react-icons/md";
 import { addToCart, clearCart, decreaseCart, getTotals, removeFromCart } from "../redux/cart/cartSlice";
 
+const deliveryOptions = [
+  { id: 1, name: "Kurier DHL", time: "1-2 dni", price: 15, icon: '/logo/kurier-dhl.png' },
+  { id: 2, name: "Kurier DPD", time: "2-3 dni", price: 12, icon: '/logo/kurier-dpd.png' },
+  { id: 3, name: "Paczkomat InPost", time: "2-4 dni", price: 10, icon: '/logo/kurier-inpost.png' },
+  { id: 4, name: "Odbiór osobisty", time: "1-2 dni", price: 0}
+]
+
 const Cart = () => {
 
   const cart = useSelector((state) => state.cart);
   const dispatch = useDispatch();
   const [quantity, setQuantity] = useState(1);
+  const [selectedCourier, setSelectedCourier] = useState(deliveryOptions[0]);
   const maxQuantity = 10;
 
   console.log('cart is', cart)
+  console.log('selected courier', selectedCourier)
 
   useEffect(() => {
     dispatch(getTotals())
@@ -40,6 +49,10 @@ const Cart = () => {
   const handleClearCart = () => {
     dispatch(clearCart())
   };
+
+  const updateCourier = () => {
+
+  }
 
   return (
 
@@ -77,12 +90,13 @@ const Cart = () => {
             </div>
           </div>
           <div className='flex gap-10'>
+
             <div className='w-2/3'>
               <div className='flex'>
-                <div className='bg-gray-300 rounded-lg p-2 flex justify-center mb-5 mr-2'>
+                <div className='bg-sky-400 rounded-lg p-2 flex justify-center mb-5 mr-2'>
                   <p className='text-white'>Koszyk</p>
                 </div>
-                <div className='bg-sky-400 rounded-lg p-2 flex justify-center mb-5 mr-2'>
+                <div className='bg-gray-300 rounded-lg p-2 flex justify-center mb-5 mr-2'>
                   <p className='text-white'>Ilość produktów: {cart.cartItems.length}</p>
                 </div>
                 <div
@@ -158,42 +172,86 @@ const Cart = () => {
                 ))}
               </div>
               <div className='summary flex justify-between items-start border-t-[2px] border-gray-300 py-5'>
-
                 <div className='checkout w-[270px] max-w-full'>
-
-
                   <Link to="/sklep" className='flex items-center hover:text-orange-600 transition-all duration-300 transform hover:-translate-x-1'>
                     <FaLongArrowAltLeft className="mr-2"/>
                     <span>Kontynuuj zakupy</span>
                   </Link>
                 </div>
               </div>
-            </div>
-
-            <div className='w-1/3'>
-              <div className='flex '>
-                <div className='bg-gray-300 rounded-lg p-2 flex justify-center mb-5'>
-                  <p className='text-white'>Podsumowanie zamówienia</p>
+              <div className='flex'>
+                <div className='bg-sky-400 rounded-lg p-2 flex justify-center mb-5 mr-2'>
+                  <p className='text-white'>Wybierz sposób dostawy</p>
                 </div>
               </div>
-              <div className='flex'>
-                <p className='mr-2'>Suma całkowita: </p>
-                <p>{cart.cartTotalAmount} zł</p>
+
+              <div className="flex flex-col gap-4 mb-5">
+                {deliveryOptions.map((option) => (
+                  <label
+                    key={option.id}
+                    className={`flex items-center justify-between p-4 border rounded-lg cursor-pointer ${
+                      selectedCourier.id === option.id ? "border-orange-600" : "border-gray-300"
+                    }`}
+                  >
+                    <div className="flex items-center">
+                      <input
+                        type="radio"
+                        name="delivery"
+                        value={option.id}
+                        checked={selectedCourier.id === option.id}
+                        onChange={() => setSelectedCourier(option)}
+                        className="hidden"
+                      />
+                      <div className="w-5 h-5 border-2 border-orange-600 rounded-full flex items-center justify-center mr-3">
+                        {selectedCourier.id === option.id && <div className="w-3 h-3 bg-orange-600 rounded-full"></div>}
+                      </div>
+                      {option.icon && (
+                        <img src={option.icon} alt={option.name} className="w-8 h-8 mr-3 bg-white" />
+                      )}
+                      <p className="font-semibold">{option.name}</p>
+                    </div>
+                    <p className="text-sm text-gray-600 min-w-[100px]">Czas: {option.time}</p>
+                    <p className="text-sm text-gray-600">Koszt: {option.price} zł</p>
+                  </label>
+                ))}
               </div>
-              <div className='flex'>
-                <p className='mr-2'>Koszt dostawy: </p>
-                <p>{cart.cartTotalAmount} zł</p>
-              </div>
-              <div className='flex'>
-                <p className='mr-2'>Suma całkowita: </p>
-                <p>{cart.cartTotalAmount} zł</p>
-              </div>
-              <div className='flex'>
-                <p className='mr-2'>Do zapłaty: </p>
-                <p>{cart.cartTotalAmount} zł</p>
-              </div>
-              <button className="py-2 my-2 bg-orange-600 w-full rounded text-white hover:bg-gray-800">Zamów</button>
             </div>
+
+            <div className='w-1/3 relative'>
+              <div className='sticky top-5'>
+                <div className='flex '>
+                  <div className='bg-sky-400 rounded-lg p-2 flex justify-center mb-5'>
+                    <p className='text-white'>Podsumowanie zamówienia</p>
+                  </div>
+                </div>
+                <div className='flex mb-2 w-[50%] justify-between'>
+                  <p className='mr-2'>Suma całkowita: </p>
+                  <p>{cart.cartTotalAmount} zł</p>
+                </div>
+
+                <div className='mb-2'>
+                  <div className='flex w-[50%] justify-between mb-2'>
+                    <p className='mr-2'>Koszt dostawy: </p>
+                    <p>{selectedCourier.price} zł</p>
+                  </div>
+                  <div className='flex items-center mb-2'>
+                    <p>Dostawa:</p>
+                    <p className='ml-2'>{selectedCourier.name}</p>
+                  </div>
+                  <div className='flex items-center'>
+                    <p>Sposób płatności:</p>
+                    <p className='ml-2'>{selectedCourier.name}</p>
+                  </div>
+                </div>
+
+                <div className='flex mb-5'>
+                  <p className='mr-2 text-2xl'>Do zapłaty: </p>
+                  <p className='text-2xl'>{cart.cartTotalAmount + selectedCourier.price} zł</p>
+                </div>
+                <button className="py-2 my-2 bg-orange-600 w-full rounded-lg text-white hover:bg-gray-800 transition-smooth">Dalej</button>
+              </div>
+            </div>
+
           </div>
         </div>
       )}
