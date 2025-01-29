@@ -19,12 +19,18 @@ const deliveryOptions = [
   { id: 4, name: "Odbiór osobisty", time: "1-2 dni", price: 0}
 ]
 
+const paymentOptions = [
+  { id: 1, name: "Przelewy 24", icon: '/logo/przelewy-24.png' },
+  { id: 2, name: "Przelew tradycyjny" }
+]
+
 const Cart = () => {
 
   const cart = useSelector((state) => state.cart);
   const dispatch = useDispatch();
   const [quantity, setQuantity] = useState(1);
   const [selectedCourier, setSelectedCourier] = useState(deliveryOptions[0]);
+  const [selectedPayment, setSelectedPayment] = useState(paymentOptions[0]);
   const maxQuantity = 10;
 
   console.log('cart is', cart)
@@ -49,10 +55,6 @@ const Cart = () => {
   const handleClearCart = () => {
     dispatch(clearCart())
   };
-
-  const updateCourier = () => {
-
-  }
 
   return (
 
@@ -179,12 +181,12 @@ const Cart = () => {
                   </Link>
                 </div>
               </div>
+
               <div className='flex'>
                 <div className='bg-sky-400 rounded-lg p-2 flex justify-center mb-5 mr-2'>
                   <p className='text-white'>Wybierz sposób dostawy</p>
                 </div>
               </div>
-
               <div className="flex flex-col gap-4 mb-5">
                 {deliveryOptions.map((option) => (
                   <label
@@ -215,15 +217,50 @@ const Cart = () => {
                   </label>
                 ))}
               </div>
+
+              <div className='flex'>
+                <div className='bg-sky-400 rounded-lg p-2 flex justify-center mb-5 mr-2'>
+                  <p className='text-white'>Wybierz sposób płatności</p>
+                </div>
+              </div>
+              <div className="flex flex-col gap-4 mb-5">
+                {paymentOptions.map((option) => (
+                  <label
+                    key={option.id}
+                    className={`flex items-center justify-between p-4 border rounded-lg cursor-pointer ${
+                      selectedPayment.id === option.id ? "border-orange-600" : "border-gray-300"
+                    }`}
+                  >
+                    <div className="flex items-center">
+                      <input
+                        type="radio"
+                        name="delivery"
+                        value={option.id}
+                        checked={selectedPayment.id === option.id}
+                        onChange={() => setSelectedPayment(option)}
+                        className="hidden"
+                      />
+                      <div className="w-5 h-5 border-2 border-orange-600 rounded-full flex items-center justify-center mr-3">
+                        {selectedPayment.id === option.id && <div className="w-3 h-3 bg-orange-600 rounded-full"></div>}
+                      </div>
+                      {option.icon && (
+                        <img src={option.icon} alt={option.name} className="h-6 mr-3 bg-white" />
+                      )}
+                      <p className="font-semibold">{option.name}</p>
+                    </div>
+
+                  </label>
+                ))}
+              </div>
+
             </div>
 
             <div className='w-1/3 relative'>
               <div className='sticky top-5'>
-                <div className='flex '>
-                  <div className='bg-sky-400 rounded-lg p-2 flex justify-center mb-5'>
-                    <p className='text-white'>Podsumowanie zamówienia</p>
-                  </div>
+                <div className='bg-sky-400 rounded-lg p-2 flex justify-center mb-7'>
+                  <p className='text-white'>Podsumowanie zamówienia</p>
                 </div>
+
                 <div className='flex mb-2 w-[50%] justify-between'>
                   <p className='mr-2'>Suma całkowita: </p>
                   <p>{cart.cartTotalAmount} zł</p>
@@ -240,7 +277,7 @@ const Cart = () => {
                   </div>
                   <div className='flex items-center'>
                     <p>Sposób płatności:</p>
-                    <p className='ml-2'>{selectedCourier.name}</p>
+                    <p className='ml-2'>{selectedPayment.name}</p>
                   </div>
                 </div>
 
