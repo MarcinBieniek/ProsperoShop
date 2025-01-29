@@ -21,25 +21,25 @@ const ShopFilterDropdown = ({ onOptionSelect }) => {
   const handleOptionClick = (option) => {
     setSelectedOption(option);
     setIsOpen(false);
-    onOptionSelect(option);
+    onOptionSelect(option); // Wywołanie funkcji przekazanej z rodzica
   };
 
   return (
-    <div className='relative inline-block text-left'>
+    <div className="relative inline-block text-left">
       <button
         onClick={toggleDropdown}
-        className=' text-gray-800 bg-white px-4 py-2 rounded-2xl border-2 border-gray-200 focus:outline-none flex items-center'
+        className="text-gray-800 bg-white px-4 py-2 rounded-2xl border-2 border-gray-200 focus:outline-none flex items-center"
       >
         {selectedOption}
-        <IoIosArrowDown className='ml-10' />
+        <IoIosArrowDown className="ml-10" />
       </button>
       {isOpen && (
-        <div className='absolute right-0 w-48 bg-white border border-gray-300 rounded-xl shadow-lg z-10'>
+        <div className="absolute right-0 w-48 bg-white border border-gray-300 rounded-xl shadow-lg z-10">
           {options.map((option, index) => (
             <div
               key={index}
               onClick={() => handleOptionClick(option)}
-              className='px-4 py-2 hover:bg-gray-100 cursor-pointer'
+              className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
             >
               {option}
             </div>

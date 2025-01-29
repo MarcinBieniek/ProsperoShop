@@ -38,7 +38,7 @@ const AdminLayout = () => {
     <div className='container my-10'>
       <div className='flex'>
 
-        <div className='w-1/4 p-3'>
+        <div className='w-1/4 p-3 sticky top-5 h-max'>
           <div className='bg-sky-600 rounded p-5 text-white'>
             <p className='text-lg font-bold mb-5'>Panel admina</p>
 

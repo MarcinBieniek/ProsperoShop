@@ -1,5 +1,4 @@
 import "react-toastify/dist/ReactToastify.css";
-
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ToastContainer } from "react-toastify";
 
@@ -29,49 +28,53 @@ import Orders from "./pages/Admin/Orders";
 import Service from "./pages/Admin/Service";
 import AddProduct from "./pages/Admin/AddProduct";
 import EditProduct from "./pages/Admin/EditProduct";
+import Ulubione from "./pages/Ulubione";
 
 const App = () => {
 
   return (
     <BrowserRouter>
-    <ToastContainer />
+      <ToastContainer />
       <ScrollToTop />
       <Header />
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/login' element={<Login />} />
         <Route path='/rejestracja' element={<Rejestracja />} />
-        <Route path='/koszyk' element={<Koszyk /> } />
-        <Route path='/sklep' element={<Sklep /> } />
-        <Route path='/produkt/:produktId' element={<Produkt /> } />
+        <Route path='/koszyk' element={<Koszyk />} />
+        <Route path='/ulubione' element={<Ulubione />} />
+        <Route path='/sklep' element={<Sklep />} />
+        <Route path="/sklep/:category" element={<Sklep />} />
+        <Route path="/sklep/:category/:subcategory" element={<Sklep />} />
+        <Route path="/sklep/:category/:subcategory/:productName/:productId" element={<Produkt />} />
+        <Route path='/produkt/:produktId' element={<Produkt />} />
         <Route path='/user' element={<User />} />
         <Route path='/error' element={<Error />} />
 
-        <Route element={<PrivateRoute />} >
+        <Route element={<PrivateRoute />}>
           <Route path='/profil' element={<Profil />} />
-          <Route path='/create-listing' element={<CreateListing />}/>
-          <Route path='/update-listing/:listingId' element={<UpdateListing />}/>
+          <Route path='/create-listing' element={<CreateListing />} />
+          <Route path='/update-listing/:listingId' element={<UpdateListing />} />
         </Route>
 
         <Route element={<PrivateRouteAdmin />}>
-          <Route path='/admin' element={<AdminLayout /> }>
+          <Route path='/admin' element={<AdminLayout />}>
             <Route index element={<Navigate to="dashboard" />} />
             <Route path='dashboard' element={<Dashboard />} />
             <Route path='users' element={<Users />} />
-              <Route path='users/add-user' element={<AddUser />} />
-              <Route path='users/edit-user/:id' element={<EditUser />} />
+            <Route path='users/add-user' element={<AddUser />} />
+            <Route path='users/edit-user/:id' element={<EditUser />} />
             <Route path='products' element={<Products />} />
-              <Route path='products/add-product' element={<AddProduct />} />
-              <Route path='products/edit-product/:id' element={<EditProduct />} />
+            <Route path='products/add-product' element={<AddProduct />} />
+            <Route path='products/edit-product/:id' element={<EditProduct />} />
             <Route path='orders' element={<Orders />} />
             <Route path='service' element={<Service />} />
           </Route>
         </Route>
-
       </Routes>
       <Footer />
     </BrowserRouter>
   )
 }
 
-export default App
+export default App;

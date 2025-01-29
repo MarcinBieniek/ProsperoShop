@@ -33,6 +33,7 @@ const EditProduct = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [formErrors, setFormErrors] = useState({});
+
   // Nowe stany dla SunEditor: description i details
   const [descriptionLoaded, setDescriptionLoaded] = useState(false);
   const [detailsLoaded, setDetailsLoaded] = useState(false);
@@ -40,7 +41,7 @@ const EditProduct = () => {
   const fetchProduct = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`/api/product/${id}`);
+      const response = await fetch(`/api/product/get/${id}`);
       const data = await response.json();
 
       if (response.ok) {
@@ -211,12 +212,12 @@ const EditProduct = () => {
       errors.price = 'Cena musi być liczbą większą od zera';
     }
 
-    if (!formData.discountedPrice) {
-      errors.discountedPrice = 'Cena po rabacie jest wymagana';
-    } else if (isNaN(formData.discountedPrice) || formData.discountedPrice <= 0) {
-      errors.discountedPrice = 'Cena musi być liczbą większą od zera';
-    } else if (parseFloat(formData.price) <= parseFloat(formData.discountedPrice)) {
-      errors.discountedPrice = 'Cena po rabacie musi być niższa od podstawowej';
+    if (formData.discountedPrice) {
+      if (isNaN(formData.discountedPrice) || formData.discountedPrice <= 0) {
+        errors.discountedPrice = 'Cena musi być liczbą większą od zera';
+      } else if (parseFloat(formData.price) <= parseFloat(formData.discountedPrice)) {
+        errors.discountedPrice = 'Cena po rabacie musi być niższa od podstawowej';
+      }
     }
 
     if (!formData.shortDescription) {
@@ -369,7 +370,7 @@ const EditProduct = () => {
                   <option value='Szyny do napędów'>Szyny do napędów</option>
                   <option value='Siłowniki przemysłowe'>Siłowniki przemysłowe</option>
                   <option value='Bramy przesuwne'>Bramy przesuwne</option>
-                  <option value='Bramy 2-skrzydłowe'>Bramy 2-skrzydłowe</option>
+                  <option value='Bramy dwuskrzydłowe'>Bramy dwuskrzydłowe</option>
                 </>
               )}
 

@@ -1,14 +1,19 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { slugify } from "../utils/slugify";
 
 import { FaLongArrowAltLeft } from "react-icons/fa";
+import { PiEmptyLight } from "react-icons/pi";
+import { HiPlusSm, HiMinusSm } from "react-icons/hi";
 import { addToCart, clearCart, decreaseCart, getTotals, removeFromCart } from "../redux/cart/cartSlice";
 
 const Cart = () => {
 
   const cart = useSelector((state) => state.cart);
   const dispatch = useDispatch();
+  const [quantity, setQuantity] = useState(1);
+  const maxQuantity = 10;
 
   console.log('cart is', cart)
 
@@ -33,15 +38,17 @@ const Cart = () => {
   };
 
   return (
+
     <div>
       <h2 className='font-medium text-3xl text-center py-6'>Koszyk</h2>
       {cart.cartItems.length === 0 ? (
-        <div className='emptyCart flex flex-col items-center'>
-          <p className="">Twój koszyk jest pusty</p>
+        <div className='emptyCart flex flex-col items-center justify-center h-[400px]'>
+          <PiEmptyLight className='text-orange-600 text-6xl mb-20' />
+          <p className="text-xl mb-5">Twój koszyk jest pusty</p>
           <div className=''>
-            <Link to="/" className='flex items-center'>
+            <Link to="/sklep" className='flex items-center hover:text-orange-600 transition-all duration-300 transform hover:-translate-x-1'>
               <FaLongArrowAltLeft />
-              <span className="ml-2">Zapraszamy do zakupów</span>
+              <span className="ml-2 text-xl">Zapraszamy do zakupów</span>
             </Link>
           </div>
         </div>
@@ -58,28 +65,53 @@ const Cart = () => {
               <div className='text-sm grid grid-cols-6 gap-4 items-center border-t-[2px] border-gray-300 py-5' key={cartItem._id}>
 
                 <div className="col-span-3 flex">
-                  <img className="w-[100px] h-[100px] mr-4" src={cartItem.imageUrls} alt={cartItem.name} />
+                  <img className="w-[100px] h-[100px] mr-4 object-cover" src={cartItem.imageUrls} alt={cartItem.name} />
                   <div>
-                    <h3 className="uppercase text-lg">{cartItem.name}</h3>
-                    <h3 className="py-2">{cartItem.description}</h3>
+                    <Link to={`/sklep/${slugify(cartItem.category)}/${slugify(cartItem.subcategory)}/${slugify(cartItem.name)}/${cartItem._id}`}>
+                      <h3 className="text-lg font-bold text-sky-400 hover:text-yellow-300 transition-smooth cursor-pointer">{cartItem.name}</h3>
+                    </Link>
+                    <h3 className="py-2">{cartItem.shortDescription}</h3>
                     <button
-                      className="bg-gray-300 p-2 rounded pointer hover:bg-gray-200"
+                      className="bg-gray-300 p-2 mt-2 rounded pointer hover:bg-gray-200"
                       onClick={() => handleRemoveFromCart(cartItem)}
-                    >Remove</button>
+                    >Usuń produkt</button>
                   </div>
                 </div>
+                {cartItem.discountedPrice ? (
+                  <div>
+                    <div className="col-span-1 text-red-600">{cartItem.discountedPrice} zł</div>
+                    <div className="col-span-1 line-through">{cartItem.price} zł</div>
+                  </div>
+                ) : (
+                  <div className="col-span-1">{cartItem.price} zł</div>
+                )}
 
-                <div className="col-span-1">{cartItem.regularPrice} zł</div>
-                <div className="col-span-1 flex items-center justify-center w-[138px] max-w-full border-2 border-gray-400 rounded py-2">
-                  <button onClick = {() => handleDecreaseCart(cartItem)}>
-                  -
-                  </button>
-                  <div className='count'>{cartItem.cartQuantity}</div>
-                  <button onClick={()  => handleIncreaseCart(cartItem)}>
-                  +
-                  </button>
+                <div className="border-[1px] rounded-full flex justify-between items-center px-4 py-2 mt-4 w-[50%]">
+                  <HiMinusSm
+                    className={`bg-gray-200 cursor-pointer rounded-full text-xl ${
+                      quantity === 1 ? "opacity-50 cursor-not-allowed" : ""
+                    }`}
+                    onClick = {() => handleDecreaseCart(cartItem)}
+                  />
+                  <p>{cartItem.cartQuantity}</p>
+                  <HiPlusSm
+                    className={`bg-gray-200 cursor-pointer rounded-full text-xl ${
+                      cartItem.cartQuantity >= maxQuantity ? "opacity-50 cursor-not-allowed" : ""
+                    }`}
+                    onClick={() => {
+                      if (cartItem.cartQuantity < maxQuantity) {
+                        handleIncreaseCart(cartItem);
+                      }
+                    }}
+                  />
                 </div>
-                <div className="col-span-1 flex justify-end font-bold">{cartItem.regularPrice} zł</div>
+
+                <div className="col-span-1 flex justify-end font-bold">
+                  {cartItem.discountedPrice
+                    ? (cartItem.discountedPrice * cartItem.cartQuantity).toFixed(2)
+                    : (cartItem.price * cartItem.cartQuantity).toFixed(2)
+                  } zł
+                </div>
               </div>
             ))}
           </div>
@@ -92,13 +124,13 @@ const Cart = () => {
               Wyczyść koszyk
             </button>
             <div className='checkout w-[270px] max-w-full'>
-              <div className="flex justify-between">
+              <div className="flex justify-between mb-2">
                 <span>Cena całkowita:</span>
-                <span className='amount font-bold'> ${cart.cartTotalAmount}  zł</span>
+                <span className='amount font-bold'> {cart.cartTotalAmount}  zł</span>
               </div>
-              <p>Koszty wysyłki zostaną dodane w kolejnym kroku</p>
-              <button className="py-2 my-2 bg-blue-500 w-full rounded text-white hover:bg-blue-400">Zamów</button>
-              <Link to="/" className='flex items-center'>
+              <button className="py-2 my-2 bg-orange-600 w-full rounded text-white hover:bg-gray-800">Zamów</button>
+              <p className='mb-2'>Koszty wysyłki zostaną dodane w kolejnym kroku.</p>
+              <Link to="/sklep" className='flex items-center hover:text-orange-600 transition-all duration-300 transform hover:-translate-x-1'>
                 <FaLongArrowAltLeft className="mr-2"/>
                 <span>Kontynuuj zakupy</span>
               </Link>
@@ -108,6 +140,8 @@ const Cart = () => {
         </div>
       )}
     </div>
+
+
   )
 }
 

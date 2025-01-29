@@ -8,7 +8,7 @@ export const categories = [
   },
   {
     name: 'Automatyka',
-    subcategories: ['Bramy garażowe', 'Szyny do napędów', 'Siłowniki przemysłowe', 'Bramy przesuwne', 'Bramy 2-skrzydłowe'],
+    subcategories: ['Bramy garażowe', 'Szyny do napędów', 'Siłowniki przemysłowe', 'Bramy przesuwne', 'Bramy dwuskrzydłowe'],
   },
   {
     name: 'Akcesoria',

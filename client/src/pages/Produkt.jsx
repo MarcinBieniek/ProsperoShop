@@ -1,19 +1,76 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { productFetch } from '../redux/products/productsSlice';
+import { addToCart, getTotals } from "../redux/cart/cartSlice";
+import QuantitySelector from '../common/QuantitySelector';
+
 import { MdKeyboardArrowRight } from "react-icons/md";
-import { HiPlusSm, HiMinusSm } from "react-icons/hi";
 import { BiCartDownload } from "react-icons/bi";
 import { CiHeart } from "react-icons/ci";
+import { FaTruckLoading } from "react-icons/fa";
+import { HiMiniQuestionMarkCircle } from "react-icons/hi2";
+import DOMPurify from 'dompurify';
 
 const Produkt = () => {
 
-  const images = [
-    'https://a.allegroimg.com/s512/1160bc/2df9cfc6427f9b023496e2561a48/NAPED-DO-BRAMY-PRZESUWNEJ-AB1000-VIDOS',
-    'https://a.allegroimg.com/s512/1160bc/2df9cfc6427f9b023496e2561a48/NAPED-DO-BRAMY-PRZESUWNEJ-AB1000-VIDOS',
-    'https://napedykey.pl/userdata/public/gfx/273.png',
-  ];
+  const { productId } = useParams();
+  const dispatch = useDispatch();
+  const { selectedProduct, loading, error } = useSelector((state) => state.products);
 
   const [mainImage, setMainImage] = useState(0);
   const [selectedTab, setSelectedTab] = useState('opis');
+  const [quantity, setQuantity] = useState(1);
+
+  useEffect(() => {
+    dispatch(productFetch(productId));
+  }, [dispatch, productId]);
+
+  if (loading) {
+    return <div className='flex flex-col items-center justify-center h-screen'>
+      <FaTruckLoading className='text-orange-600 text-6xl' />
+      <p className='text-xl mt-5'>Ładowanie produktu...</p>
+    </div>;
+  }
+
+  if (!selectedProduct) {
+    return <div className='flex flex-col items-center justify-center h-screen'>
+      <HiMiniQuestionMarkCircle className='text-orange-600 text-6xl' />
+      <p className='text-xl mt-5'>Nie znaleziono produktu...</p>
+    </div>;
+  }
+
+  const {
+    name,
+    productCode,
+    producer,
+    price,
+    shortDescription,
+    description,
+    details,
+    imageUrls,
+    delivery,
+    promotion,
+    sale,
+    discountedPrice
+   } = selectedProduct;
+
+  const sanitizedDescription = DOMPurify.sanitize(description);
+  const sanitizedDetails = DOMPurify.sanitize(details);
+
+  const updatedPrice = discountedPrice ? discountedPrice * quantity : price * quantity;
+
+  const handleAddToCart = (product) => {
+    const productWithQuantity = {
+      ...product,
+      quantity: quantity,
+    };
+
+    console.log('final product is', productWithQuantity)
+
+    dispatch(addToCart(productWithQuantity));
+    dispatch(getTotals());
+  };
 
   return (
     <div className='container text-gray-800'>
@@ -27,16 +84,16 @@ const Produkt = () => {
         <div className='slider w-2/6'>
 
           <div className="mb-4 flex item-center justify-center">
-            <img src={images[mainImage]} alt="Główne zdjęcie" className="h-[300px]" />
+            <img src={imageUrls[mainImage]} alt="Główne zdjęcie" className="h-[300px]" />
           </div>
 
           <div className="flex justify-between">
-            {images.map((img, index) => (
+            {imageUrls.map((img, index) => (
               <img
                 key={index}
                 src={img}
                 alt={`Miniaturka ${index + 1}`}
-                className={`w-1/3 mr-3 h-[120px] object-fit p-2 cursor-pointer transition-smooth ${mainImage === index ? 'border-[1px] border-b-2 border-b-orange-600 ' : 'border-[1px] border-gray-200'}`}
+                className={`w-1/3 mr-3 h-[120px] object-cover p-2 cursor-pointer transition-smooth ${mainImage === index ? 'border-[1px] border-b-2 border-b-orange-600 ' : 'border-[1px] border-gray-200'}`}
                 onClick={() => setMainImage(index)}
               />
             ))}
@@ -44,35 +101,40 @@ const Produkt = () => {
         </div>
 
         <div className='w-3/6 p-5 px-10'>
-          <p className='text-sm text-gray-600 hover:text-orange-600 cursor-pointer transition-smooth'>Producent</p>
-          <p className='text-2xl pb-2'>Nazwa produktu</p>
-          <p className='text-sm text-gray-600 border-b-[1px] border-gray-200 pb-4'>Kod producenta: 12345</p>
-          <div className='text-gray-600 py-4'>
-            <p>Skrócony opis produktu</p>
-            <p>Pierwszy opis produktu.</p>
-            <p>Pierwszy opis produktu.</p>
-            <p>Pierwszy opis produktu.</p>
-            <p>Pierwszy opis produktu.</p>
+          <p className='text-sm text-gray-600 flex'>Producent: <span className='text-orange-600 ml-1'>{producer}</span></p>
+          <p className='text-2xl pb-2 py-2'>{name}</p>
+          { productCode && (
+            <p className='text-sm text-gray-600 '>Kod producenta: {productCode}</p>
+          )}
+          <div className='text-gray-600 py-4 border-t-[1px] border-gray-200 mt-4'>
+            <p>{shortDescription}</p>
           </div>
         </div>
 
         <div className='w-2/6 p-5 border-2 rounded-3xl'>
-          <p className='pb-3 border-b-[1px] border-gray-200 text-gray-600'>Czas realizacji:<span className='text-green-500'> 3-4 dni robocze</span></p>
+          <p className='pb-3 border-b-[1px] border-gray-200 text-gray-600'>Czas realizacji:<span className='text-green-500'> {delivery} dni robocze</span></p>
           <div className='py-4'>
-            <p className='text-3xl'>100 zł</p>
-            <p className='text text-gray-600 line-through'>100 zł</p>
+            {discountedPrice ? (
+              <>
+                <p className='text-3xl text-red-600'>{discountedPrice} zł</p>
+                <p className='text text-gray-600 line-through'>{price} zł</p>
+              </>
+            ) : (
+              <p className='text-3xl'>{price} zł</p>
+            )
+            }
           </div>
           <div>
-            <p>Ilość:</p>
-            <div className='border-[1px] rounded-full flex justify-between items-center px-4 py-2 mt-4 w-[50%]'>
-              <p>1</p>
-              <div className='flex'>
-                <HiPlusSm className='bg-gray-200 cursor-pointer rounded-full text-xl mr-2' />
-                <HiMinusSm className='bg-gray-200 cursor-pointer rounded-full text-xl' />
-              </div>
+            <div className='flex justify-between'>
+              <p>Ilość: {quantity}</p>
+              <p className='flex'>Łączna cena: <span className='text-orange-600 ml-1'>{quantity !== 1 ? updatedPrice : discountedPrice || price} zł</span></p>
             </div>
+            <QuantitySelector quantity={quantity} setQuantity={setQuantity} />
           </div>
-          <div className='bg-gray-200 cursor-pointer flex justify-center my-5 p-3 rounded-3xl hover:bg-orange-600 hover:text-white transition-smooth' >
+          <div
+            className='bg-gray-200 cursor-pointer flex justify-center my-5 p-3 rounded-3xl hover:bg-orange-600 hover:text-white transition-smooth'
+            onClick={() => handleAddToCart(selectedProduct)}
+          >
             <BiCartDownload className='text-2xl mr-2' />
             <p>Dodaj do koszyka</p>
           </div>
@@ -110,12 +172,12 @@ const Produkt = () => {
           {selectedTab === 'opis' ? (
             <div>
               <h2 className='text-xl mb-4'>Opis Produktu</h2>
-              <p>To jest szczegółowy opis produktu. Znajdziesz tu wszystkie informacje dotyczące tego, co oferuje ten produkt.</p>
+              <div dangerouslySetInnerHTML={{ __html: sanitizedDescription }} />
             </div>
           ) : (
             <div>
               <h2 className='text-xl mb-4'>Specyfikacja</h2>
-              <p>Tu znajduje się specyfikacja techniczna produktu, w tym jego parametry, rozmiary, waga i inne istotne dane.</p>
+              <div dangerouslySetInnerHTML={{ __html: sanitizedDetails }} />
             </div>
           )}
         </div>
