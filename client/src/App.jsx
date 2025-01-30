@@ -29,6 +29,7 @@ import Service from "./pages/Admin/Service";
 import AddProduct from "./pages/Admin/AddProduct";
 import EditProduct from "./pages/Admin/EditProduct";
 import Ulubione from "./pages/Ulubione";
+import DaneUsera from "./pages/DaneUsera";
 
 const App = () => {
 
@@ -42,6 +43,7 @@ const App = () => {
         <Route path='/login' element={<Login />} />
         <Route path='/rejestracja' element={<Rejestracja />} />
         <Route path='/koszyk' element={<Koszyk />} />
+        <Route path='/koszyk/dane' element={<DaneUsera />} />
         <Route path='/ulubione' element={<Ulubione />} />
         <Route path='/sklep' element={<Sklep />} />
         <Route path="/sklep/:category" element={<Sklep />} />

@@ -309,10 +309,12 @@ const Cart = () => {
                   <p className='mr-2 text-2xl'>Do zapłaty: </p>
                   <p className='text-2xl'>{cart.cartTotalAmount + selectedCourier.price} zł</p>
                 </div>
-                <button
-                  className="py-2 my-2 bg-orange-600 w-full rounded-lg text-white hover:bg-gray-800 transition-smooth"
-                  onClick={handleNextStep}
-                >Dalej</button>
+                <Link to="/koszyk/dane">
+                  <button
+                    className="py-2 my-2 bg-orange-600 w-full rounded-lg text-white hover:bg-gray-800 transition-smooth"
+                    onClick={handleNextStep}
+                  >Dalej</button>
+                </Link>
               </div>
             </div>
 
