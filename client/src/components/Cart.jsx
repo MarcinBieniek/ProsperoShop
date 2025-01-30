@@ -43,18 +43,20 @@ const Cart = () => {
     dispatch(getTotals())
   }, [cart, dispatch])
 
+  useEffect(() => {
+    dispatch(updateCartItems(cart.cartItems));
+  }, [cart.cartItems, dispatch]);
+
   const handleRemoveFromCart = (cartItem) => {
     dispatch(removeFromCart(cartItem))
   };
 
   const handleDecreaseCart = (cartItem) => {
     dispatch(decreaseCart(cartItem))
-    dispatch(updateCartItems(cart.cartItems))
   };
 
   const handleIncreaseCart = (cartItem) => {
-    dispatch(addToCart(cartItem))
-    dispatch(updateCartItems(cart.cartItems))
+    dispatch(addToCart({ _id: cartItem._id }));
   };
 
   const handleClearCart = () => {

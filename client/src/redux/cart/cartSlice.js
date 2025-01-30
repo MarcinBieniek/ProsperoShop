@@ -19,29 +19,17 @@ const cartSlice = createSlice({
       );
 
       if (itemIndex >= 0) {
-        // Produkt istnieje w koszyku - zwiększ ilość
-        state.cartItems[itemIndex].cartQuantity += action.payload.quantity;
-
-        toast.info(
-          `Zwiększono ilość: ${action.payload.name}, teraz w koszyku: ${state.cartItems[itemIndex].cartQuantity}`,
-          {
-            position: "bottom-left",
-          }
-        );
+        // Produkt istnieje w koszyku - zwiększ ilość o 1
+        state.cartItems[itemIndex].cartQuantity += 1;
       } else {
-        // Produkt nie istnieje w koszyku - dodaj nowy
+        // Produkt nie istnieje w koszyku - dodaj nowy z ilością 1
         const tempProduct = {
           ...action.payload,
-          cartQuantity: action.payload.quantity,
+          cartQuantity: 1,
         };
         state.cartItems.push(tempProduct);
-
-        toast.success(`Dodano do koszyka: ${action.payload.name}`, {
-          position: "bottom-left",
-        });
       }
     },
-
 
     // remove item reducer
     removeFromCart(state, action) {
@@ -65,7 +53,7 @@ const cartSlice = createSlice({
       if(state.cartItems[itemIndex].cartQuantity > 1){
         state.cartItems[itemIndex].cartQuantity -= 1
 
-        toast.info(`Zwiększono ilość: ${action.payload.name}`, {
+        toast.info(`Zmieniono ilość: ${action.payload.name}`, {
           position: "bottom-left",
         });
       } else if (state.cartItems[itemIndex].cartQuantity === 1){
