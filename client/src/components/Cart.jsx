@@ -11,12 +11,12 @@ import { FaAddressCard } from "react-icons/fa";
 import { IoIosSend } from "react-icons/io";
 import { MdCancel } from "react-icons/md";
 import { addToCart, clearCart, decreaseCart, getTotals, removeFromCart } from "../redux/cart/cartSlice";
+import { updateCartItems, updateDeliveryMethod, updatePaymentMethod } from "../redux/order/orderSlice";
 
 const deliveryOptions = [
   { id: 1, name: "Kurier DHL", time: "1-2 dni", price: 15, icon: '/logo/kurier-dhl.png' },
   { id: 2, name: "Kurier DPD", time: "2-3 dni", price: 12, icon: '/logo/kurier-dpd.png' },
-  { id: 3, name: "Paczkomat InPost", time: "2-4 dni", price: 10, icon: '/logo/kurier-inpost.png' },
-  { id: 4, name: "Odbiór osobisty", time: "1-2 dni", price: 0}
+  { id: 3, name: "Odbiór osobisty", time: "1-2 dni", price: 0}
 ]
 
 const paymentOptions = [
@@ -27,6 +27,8 @@ const paymentOptions = [
 const Cart = () => {
 
   const cart = useSelector((state) => state.cart);
+  const order = useSelector((state) => state.order);
+
   const dispatch = useDispatch();
   const [quantity, setQuantity] = useState(1);
   const [selectedCourier, setSelectedCourier] = useState(deliveryOptions[0]);
@@ -35,6 +37,7 @@ const Cart = () => {
 
   console.log('cart is', cart)
   console.log('selected courier', selectedCourier)
+  console.log('order is', order)
 
   useEffect(() => {
     dispatch(getTotals())
@@ -46,14 +49,33 @@ const Cart = () => {
 
   const handleDecreaseCart = (cartItem) => {
     dispatch(decreaseCart(cartItem))
+    dispatch(updateCartItems(cart.cartItems))
   };
 
   const handleIncreaseCart = (cartItem) => {
     dispatch(addToCart(cartItem))
+    dispatch(updateCartItems(cart.cartItems))
   };
 
   const handleClearCart = () => {
     dispatch(clearCart())
+  };
+
+  const handleDeliveryChange = (option) => {
+    setSelectedCourier(option);
+    dispatch(updateDeliveryMethod(option));
+  };
+
+  const handlePaymentChange = (option) => {
+    setSelectedPayment(option);
+    dispatch(updatePaymentMethod(option));
+  };
+
+  const handleNextStep = () => {
+    dispatch(updateCartItems(cart.cartItems));
+    dispatch(updateDeliveryMethod(selectedCourier));
+    dispatch(updatePaymentMethod(selectedPayment));
+    console.log("Przechodzimy do kolejnego kroku:", order);
   };
 
   return (
@@ -201,7 +223,7 @@ const Cart = () => {
                         name="delivery"
                         value={option.id}
                         checked={selectedCourier.id === option.id}
-                        onChange={() => setSelectedCourier(option)}
+                        onChange={() => handleDeliveryChange(option)}
                         className="hidden"
                       />
                       <div className="w-5 h-5 border-2 border-orange-600 rounded-full flex items-center justify-center mr-3">
@@ -237,7 +259,7 @@ const Cart = () => {
                         name="delivery"
                         value={option.id}
                         checked={selectedPayment.id === option.id}
-                        onChange={() => setSelectedPayment(option)}
+                        onChange={() => handlePaymentChange(option)}
                         className="hidden"
                       />
                       <div className="w-5 h-5 border-2 border-orange-600 rounded-full flex items-center justify-center mr-3">
@@ -285,7 +307,10 @@ const Cart = () => {
                   <p className='mr-2 text-2xl'>Do zapłaty: </p>
                   <p className='text-2xl'>{cart.cartTotalAmount + selectedCourier.price} zł</p>
                 </div>
-                <button className="py-2 my-2 bg-orange-600 w-full rounded-lg text-white hover:bg-gray-800 transition-smooth">Dalej</button>
+                <button
+                  className="py-2 my-2 bg-orange-600 w-full rounded-lg text-white hover:bg-gray-800 transition-smooth"
+                  onClick={handleNextStep}
+                >Dalej</button>
               </div>
             </div>
 
