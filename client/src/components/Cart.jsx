@@ -35,8 +35,6 @@ const Cart = () => {
   const [selectedPayment, setSelectedPayment] = useState(paymentOptions[0]);
   const maxQuantity = 10;
 
-  console.log('cart is', cart)
-  console.log('selected courier', selectedCourier)
   console.log('order is', order)
 
   useEffect(() => {

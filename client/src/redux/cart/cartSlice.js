@@ -19,16 +19,17 @@ const cartSlice = createSlice({
       );
 
       if (itemIndex >= 0) {
-        // Produkt istnieje w koszyku - zwiększ ilość o 1
-        state.cartItems[itemIndex].cartQuantity += 1;
+        // Produkt istnieje w koszyku - dodaj ilość z payload
+        state.cartItems[itemIndex].cartQuantity += action.payload.cartQuantity || 1;
       } else {
-        // Produkt nie istnieje w koszyku - dodaj nowy z ilością 1
+        // Produkt nie istnieje w koszyku - dodaj nowy z ilością z payload
         const tempProduct = {
           ...action.payload,
-          cartQuantity: 1,
+          cartQuantity: action.payload.cartQuantity || 1,
         };
         state.cartItems.push(tempProduct);
       }
+
     },
 
     // remove item reducer

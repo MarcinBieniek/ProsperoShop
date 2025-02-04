@@ -31,6 +31,9 @@ const orderSlice = createSlice({
     updatePaymentMethod: (state, action) => {
       state.paymentMethod = action.payload;
     },
+    updateAddress: (state, action) => {
+      state.address = action.payload;
+    },
     createOrder: (state) => {
       console.log("Zamówienie utworzone:", state);
     },
@@ -41,7 +44,9 @@ export const {
   updateCartItems,
   updateDeliveryMethod,
   updatePaymentMethod,
+  updateAddress,
   createOrder
 } = orderSlice.actions;
 
 export default orderSlice.reducer;
+

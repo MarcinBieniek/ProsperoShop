@@ -6,6 +6,7 @@ import { PiEmptyLight } from "react-icons/pi";
 import { SlBasket } from "react-icons/sl";
 import { FaAddressCard } from "react-icons/fa";
 import { IoIosSend } from "react-icons/io";
+import { updateAddress  } from "../redux/order/orderSlice";
 
 const deliveryOptions = [
   { id: 1, name: "Kurier DHL", time: "1-2 dni", price: 15, icon: '/logo/kurier-dhl.png' },
@@ -24,10 +25,11 @@ const DaneUsera = () => {
   const order = useSelector((state) => state.order);
   const dispatch = useDispatch();
 
+  console.log('order is', order)
+
   const [selectedCourier, setSelectedCourier] = useState(deliveryOptions[0]);
   const [selectedPayment, setSelectedPayment] = useState(paymentOptions[0]);
 
-  // Stany formularzy
   const [clientData, setClientData] = useState({
     name: "",
     street: "",
@@ -55,10 +57,15 @@ const DaneUsera = () => {
   const [remarks, setRemarks] = useState("");
 
   const handleNextStep = () => {
+    const addressData = {
+      clientData,
+      companyData: isInvoiceRequired ? companyData : null,
+    };
+
+    dispatch(updateAddress(addressData));
     console.log("Przechodzimy do finalizacji:", order);
   };
 
-  // Funkcja obsługująca zmianę danych klienta
   const handleClientDataChange = (e) => {
     const { name, value } = e.target;
     setClientData((prevState) => ({
@@ -67,7 +74,6 @@ const DaneUsera = () => {
     }));
   };
 
-  // Funkcja obsługująca zmianę danych firmy
   const handleCompanyDataChange = (e) => {
     const { name, value } = e.target;
     setCompanyData((prevState) => ({
@@ -76,7 +82,6 @@ const DaneUsera = () => {
     }));
   };
 
-  // Funkcja obsługująca zmianę uwag
   const handleRemarksChange = (e) => {
     setRemarks(e.target.value);
   };
@@ -371,6 +376,17 @@ const DaneUsera = () => {
                 <div className='bg-sky-400 rounded-lg p-2 flex justify-center mb-7'>
                   <p className='text-white'>Podsumowanie zamówienia</p>
                 </div>
+
+                <div className='mb-2'>
+                  <p>Wybrane produkty:</p>
+                  {order.cartItems.map((item) => (
+                    <div className='flex'>
+                      <p className='mr-2'>{item.name}</p>
+                      <p>{item.cartQuantity} szt</p>
+                    </div>
+                  ))}
+                </div>
+
                 <div className='flex mb-2 w-[50%] justify-between'>
                   <p className='mr-2'>Suma całkowita: </p>
                   <p>{cart.cartTotalAmount} zł</p>
@@ -396,7 +412,7 @@ const DaneUsera = () => {
                   <p className='text-2xl'>{order.totalPrice} zł</p>
                 </div>
 
-                <Link to="/koszyk/dane">
+                <Link to="/koszyk/podsumowanie">
                   <button
                     className="py-2 my-2 bg-orange-600 w-full rounded-lg text-white hover:bg-gray-800 transition-smooth"
                     onClick={handleNextStep}
