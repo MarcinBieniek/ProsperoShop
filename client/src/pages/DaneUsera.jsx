@@ -6,7 +6,7 @@ import { PiEmptyLight } from "react-icons/pi";
 import { SlBasket } from "react-icons/sl";
 import { FaAddressCard } from "react-icons/fa";
 import { IoIosSend } from "react-icons/io";
-import { updateAddress  } from "../redux/order/orderSlice";
+import { updateAddress, addUser } from "../redux/order/orderSlice";
 
 const deliveryOptions = [
   { id: 1, name: "Kurier DHL", time: "1-2 dni", price: 15, icon: '/logo/kurier-dhl.png' },
@@ -23,12 +23,15 @@ const DaneUsera = () => {
 
   const cart = useSelector((state) => state.cart);
   const order = useSelector((state) => state.order);
+  const users = useSelector(state => state.user);
   const dispatch = useDispatch();
 
   console.log('order is', order)
 
   const [selectedCourier, setSelectedCourier] = useState(deliveryOptions[0]);
   const [selectedPayment, setSelectedPayment] = useState(paymentOptions[0]);
+  const [isInvoiceRequired, setIsInvoiceRequired] = useState(false);
+  const [remarks, setRemarks] = useState("");
 
   const [clientData, setClientData] = useState({
     name: "",
@@ -53,17 +56,19 @@ const DaneUsera = () => {
     companyNamePerson: "",
   });
 
-  const [isInvoiceRequired, setIsInvoiceRequired] = useState(false);
-  const [remarks, setRemarks] = useState("");
-
   const handleNextStep = () => {
     const addressData = {
       clientData,
       companyData: isInvoiceRequired ? companyData : null,
-      deliveryAddress: clientData
+      deliveryAddress: clientData,
+      remarks
     };
 
+    const user = users.currentUser;
+
     dispatch(updateAddress(addressData));
+    dispatch(addUser(user))
+
     console.log("Przechodzimy do finalizacji:", order);
   };
 

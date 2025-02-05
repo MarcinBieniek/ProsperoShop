@@ -5,6 +5,7 @@ const initialState = {
   deliveryMethod: null,
   paymentMethod: null,
   address: null,
+  user: null,
   totalPrice: 0,
 };
 
@@ -35,6 +36,9 @@ const orderSlice = createSlice({
     updateAddress: (state, action) => {
       state.address = action.payload;
     },
+    addUser: (state, action) => {
+      state.user = action.payload;
+    },
     createOrder: (state) => {
       console.log("Zamówienie utworzone:", state);
     },
@@ -46,6 +50,7 @@ export const {
   updateDeliveryMethod,
   updatePaymentMethod,
   updateAddress,
+  addUser,
   createOrder
 } = orderSlice.actions;
 

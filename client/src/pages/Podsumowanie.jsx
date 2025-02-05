@@ -204,6 +204,7 @@ const Podsumowanie = () => {
                       <MdEdit className='text-3xl text-orange-600 mt-1' />
                     </Link>
                   </div>
+                  <p>{order.address.remarks}</p>
                 </div>
               </div>
             </div>
