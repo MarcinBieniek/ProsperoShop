@@ -4,6 +4,7 @@ const initialState = {
   cartItems: [],
   deliveryMethod: null,
   paymentMethod: null,
+  address: null,
   totalPrice: 0,
 };
 

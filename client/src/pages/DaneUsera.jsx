@@ -60,6 +60,7 @@ const DaneUsera = () => {
     const addressData = {
       clientData,
       companyData: isInvoiceRequired ? companyData : null,
+      deliveryAddress: clientData
     };
 
     dispatch(updateAddress(addressData));
