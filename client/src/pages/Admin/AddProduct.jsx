@@ -26,14 +26,11 @@ const AddProduct = () => {
  const [loading, setLoading] = useState(false);
  const [formErrors, setFormErrors] = useState({});
 
-
  const navigate = useNavigate();
  const dispatch = useDispatch();
 
-
  console.log('formData', formData);
  console.log('formErrors', formErrors)
-
 
  const handleChange = (e) => {
    const { id, value } = e.target;
@@ -54,14 +51,12 @@ const AddProduct = () => {
    }
  };
 
-
  const handleDescriptionChange = (content) => {
    setFormData((prevData) => ({
      ...prevData,
      description: content,
    }));
  };
-
 
  const handleDetailsChange = (content) => {
    setFormData((prevData) => ({
@@ -85,7 +80,6 @@ const AddProduct = () => {
        return '';
    }
  };
-
 
  const handleImageSubmit = (e) => {
    if (files.length > 0 && files.length + formData.imageUrls.length < 4) {
@@ -145,7 +139,6 @@ const AddProduct = () => {
    })
  }
 
-
  const handleRemoveImage = (index) => {
    setFormData({
      ...formData,
@@ -153,10 +146,8 @@ const AddProduct = () => {
    })
  };
 
-
  const validateForm = () => {
    const errors = {};
-
 
    if (!formData.name) {
      errors.name = 'Nazwa produktu jest wymagana';
@@ -220,16 +211,13 @@ const AddProduct = () => {
  const handleSubmit = async (e) => {
    e.preventDefault();
 
-
    if (!validateForm()) {
      return;
    }
 
-
    try {
      setLoading(true);
      setError(false);
-
 
      const res = await fetch('/api/product/create', {
        method: 'POST',
@@ -242,9 +230,7 @@ const AddProduct = () => {
      });
      const data = await res.json();
 
-
      console.log('uploaded final data is', data)
-
 
      setLoading(false);
      if (data.success === false){

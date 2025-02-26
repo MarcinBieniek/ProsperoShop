@@ -29,6 +29,12 @@ const Podsumowanie = () => {
     dispatch(updateCartItems(cart.cartItems));
   }, [cart.cartItems, dispatch]);
 
+  const handleOrderSubmit = () => {
+    console.log('Order details:', order);
+    console.log('Cart details:', cart);
+
+  };
+
   return (
 
     <div className='container'>
@@ -239,12 +245,12 @@ const Podsumowanie = () => {
                   <p className='mr-2 text-2xl'>Do zapłaty: </p>
                   <p className='text-2xl'>{order.totalPrice} zł</p>
                 </div>
-                <Link to="/koszyk/dane">
-                  <button
-                    className="py-2 my-2 bg-orange-600 w-full rounded-lg text-white hover:bg-gray-800 transition-smooth"
-
-                  >Zamów</button>
-                </Link>
+                <button
+                  className="py-2 my-2 bg-orange-600 w-full rounded-lg text-white hover:bg-gray-800 transition-smooth"
+                  onClick={handleOrderSubmit}
+                >
+                  Zamów
+                </button>
               </div>
             </div>
 
