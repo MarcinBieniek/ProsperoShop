@@ -1,3 +1,5 @@
+// ten plik dotyczy starego zamówienia, związanego z pierwszą wersją sklepu
+
 import mongoose from 'mongoose';
 
 const listingSchema = new mongoose.Schema(

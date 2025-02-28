@@ -63,7 +63,7 @@ const Produkt = () => {
   const handleAddToCart = (product) => {
     const productWithQuantity = {
       ...product,
-      quantity: quantity,
+      cartQuantity: quantity,
     };
 
     console.log('final product is', productWithQuantity)
