@@ -5,6 +5,7 @@ import userRouter from './routes/user.route.js';
 import authRouter from './routes/auth.route.js';
 import listingRouter from './routes/listing.route.js';
 import productRouter from './routes/product.route.js';
+import orderRouter from './routes/order.route.js';
 import favouriteRouter from './routes/favourite.route.js';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
@@ -32,6 +33,7 @@ app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/listing", listingRouter);
 app.use("/api/product", productRouter);
+app.use("/api/order", orderRouter);
 
 // error middleware
 app.use((err, req, res, next) => {

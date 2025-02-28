@@ -4,7 +4,6 @@ import { errorHandler } from '../utils/error.js';
 import jwt from 'jsonwebtoken';
 
 export const signup = async (req, res, next) => {
-  console.log('req.body is', req.body);
 
   const { username, email, password, avatar, status, telephone, address, company, orders, favourite, service } = req.body;
 
@@ -56,13 +55,14 @@ export const signin = async (req, res, next) => {
 
 export const google = async (req, res, next) => {
 
-  console.log('red body photo si', req.body.photo)
-
   try {
     const user = await User.findOne({ email: req.body.email })
 
     if (user) {
       const token = jwt.sign({ id: user._id}, process.env.JWT_SECRET);
+
+      console.log('google token is', token)
+
       const { password: pass, ...rest} = user._doc;
       res
         .cookie('access_token', token, { httpOnly: true })

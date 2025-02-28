@@ -29,10 +29,23 @@ const Podsumowanie = () => {
     dispatch(updateCartItems(cart.cartItems));
   }, [cart.cartItems, dispatch]);
 
-  const handleOrderSubmit = () => {
+  const handleOrderSubmit = async () => {
     console.log('Order details:', order);
-    console.log('Cart details:', cart);
 
+    try {
+      const response = await fetch("/api/order/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(order),
+      });
+
+      const data = await response.json();
+      console.log("Order created:", data);
+    } catch (error) {
+      console.error("Error creating order:", error);
+    }
   };
 
   return (
