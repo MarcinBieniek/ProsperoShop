@@ -92,6 +92,9 @@ const AdminProductsList = ({ limit = null }) => {
       </div>
 
       <div className='mt-5'>
+
+
+
         <div className='bg-white border-[1px] rounded-lg p-4'>
           <table className='min-w-full'>
             <thead>
@@ -160,7 +163,10 @@ const AdminProductsList = ({ limit = null }) => {
             </tbody>
           </table>
         </div>
+
+
       </div>
+
     </div>
   );
 }

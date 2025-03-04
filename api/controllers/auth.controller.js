@@ -3,6 +3,7 @@ import bcryptjs from 'bcryptjs';
 import { errorHandler } from '../utils/error.js';
 import jwt from 'jsonwebtoken';
 
+// rejestracja
 export const signup = async (req, res, next) => {
 
   const { username, email, password, avatar, status, telephone, address, company, orders, favourite, service } = req.body;
@@ -33,6 +34,7 @@ export const signup = async (req, res, next) => {
   }
 }
 
+// login
 export const signin = async (req, res, next) => {
   const { email, password } = req.body;
   try {
@@ -42,7 +44,7 @@ export const signin = async (req, res, next) => {
     if (!validPassword) return next(errorHandler(401, 'Wrong credentials!'));
     const { password: pass, ...rest } = validUser._doc;
 
-    const token = jwt.sign({ id: validUser._id}, process.env.JWT_SECRET)
+    const token = jwt.sign({ id: validUser._id, status: validUser.status }, process.env.JWT_SECRET)
     res
       .cookie('access_token', token, { httpOnly: true })
       .status(200)
@@ -59,7 +61,7 @@ export const google = async (req, res, next) => {
     const user = await User.findOne({ email: req.body.email })
 
     if (user) {
-      const token = jwt.sign({ id: user._id}, process.env.JWT_SECRET);
+      const token = jwt.sign({ id: user._id, status: user.status}, process.env.JWT_SECRET);
 
       console.log('google token is', token)
 

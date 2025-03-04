@@ -32,13 +32,18 @@ const Podsumowanie = () => {
   const handleOrderSubmit = async () => {
     console.log('Order details:', order);
 
+    const orderWithStatus = {
+      ...order,
+      status: "Paid",
+    };
+
     try {
       const response = await fetch("/api/order/create", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(order),
+        body: JSON.stringify(orderWithStatus),
       });
 
       const data = await response.json();

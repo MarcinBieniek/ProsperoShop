@@ -1,8 +1,37 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from "axios";
 
 const Orders = () => {
 
+  const [orders, setOrders] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+
+    const fetchOrders = async () => {
+
+      setLoading(true)
+
+      try {
+        const response = await axios.get("http://localhost:3000/api/order/get", {
+          withCredentials: true,
+        });
+
+        console.log('response', response);
+
+        setOrders(response.data);
+
+      } catch (error) {
+        console.log('Błąd pobierania zamówień:', error);
+      }
+
+      setLoading(false)
+    };
+
+    fetchOrders();
+
+  }, []);
 
   return (
     <div className='bg-gray-100 rounded p-5'>
@@ -23,9 +52,16 @@ const Orders = () => {
       </div>
 
       <div className='mt-5'>
-        <div className='bg-white border-[1px] rounded-lg p-2'>
-          Zamówienia
-        </div>
+
+        {loading ? (
+          <div className='bg-white border-[1px] rounded-lg p-2'>
+            Ładowanie zamówień...
+          </div>
+        ) : (
+          <div className='bg-white border-[1px] rounded-lg p-2'>
+            Zamówienia
+          </div>
+        )}
       </div>
 
     </div>

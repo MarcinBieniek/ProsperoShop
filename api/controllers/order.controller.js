@@ -13,4 +13,13 @@ export const createOrder = async (req, res, next) => {
   }
 };
 
+// Get all orders
+export const getAllOrders = async (req, res, next) => {
+  try {
+    const orders = await Order.find();
+    res.status(200).json(orders);
+  } catch (error) {
+    next(error);
+  }
+};
 
