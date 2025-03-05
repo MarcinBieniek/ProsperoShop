@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
 import axios from "axios";
+import { Link } from 'react-router-dom';
+
+import { FaArrowAltCircleRight } from "react-icons/fa";
 
 const Orders = () => {
 
@@ -33,6 +36,20 @@ const Orders = () => {
     fetchOrders();
 
   }, []);
+
+  // dodawanie koloru do statusu
+  const getStatusStyle = (status) => {
+    const statusColors = {
+      "Nieopłacony": "bg-red-500",
+      "Opłacony": "bg-orange-500",
+      "Realizacja": "bg-orange-500",
+      "Wysłany": "bg-green-500",
+      "Zakończony": "bg-gray-300",
+      "Anulowany": "bg-red-500",
+    };
+
+    return statusColors[status] || "bg-gray-200";
+  };
 
   return (
     <div className='bg-gray-100 rounded p-5'>
@@ -70,11 +87,12 @@ const Orders = () => {
                 <th className='py-5 px-2'>Profit</th>
                 <th className='py-5 px-2'>Status</th>
                 <th className='py-5 px-2'>Aktualizacja</th>
+                <th className='py-5 px-2'>Więcej</th>
               </tr>
             </thead>
             <tbody>
               {orders.map(order => (
-                <tr key={order._id} className='border-b-[1px] border-bg-100 hover:bg-gray-100'>
+                <tr key={order._id} className='border-b-[1px] border-bg-100 hover:bg-gray-100 cursor-pointer'>
 
                   <td className='py-5 px-2 text-center'>
                     {new Date(order.createdAt).toLocaleDateString("pl-PL")}
@@ -97,11 +115,19 @@ const Orders = () => {
                   </td>
 
                   <td className='py-5 px-2 text-center'>
-                    -
+                    <span className={`text-white px-3 py-1 rounded-lg text-sm font-semibold ${getStatusStyle(order.status)}`}>
+                      {order.status}
+                    </span>
                   </td>
 
                   <td className='py-5 px-2 text-center'>
                     {new Date(order.updatedAt).toLocaleDateString("pl-PL")}
+                  </td>
+
+                  <td className='py-5 px-2 flex justify-center items-center'>
+                    <Link to="/" >
+                      <FaArrowAltCircleRight className='text-orange-500 hover:text-orange-600 transition-smooth'/>
+                    </Link>
                   </td>
 
                 </tr>
