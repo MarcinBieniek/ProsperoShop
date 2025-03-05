@@ -31,6 +31,7 @@ import EditProduct from "./pages/Admin/EditProduct";
 import Ulubione from "./pages/Ulubione";
 import DaneUsera from "./pages/DaneUsera";
 import Podsumowanie from "./pages/Podsumowanie";
+import SingleOrder from "./pages/Admin/SingleOrder";
 
 const App = () => {
 
@@ -72,6 +73,7 @@ const App = () => {
             <Route path='products/add-product' element={<AddProduct />} />
             <Route path='products/edit-product/:id' element={<EditProduct />} />
             <Route path='orders' element={<Orders />} />
+            <Route path='orders/:id' element={<SingleOrder />} />
             <Route path='service' element={<Service />} />
           </Route>
         </Route>

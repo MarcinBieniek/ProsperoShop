@@ -24,7 +24,9 @@ const Orders = () => {
 
         console.log('response', response.data);
 
-        setOrders(response.data);
+        const sortedOrders = response.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+        setOrders(sortedOrders);
 
       } catch (error) {
         console.log('Błąd pobierania zamówień:', error);
@@ -115,7 +117,7 @@ const Orders = () => {
                   </td>
 
                   <td className='py-5 px-2 text-center'>
-                    <span className={`text-white px-3 py-1 rounded-lg text-sm font-semibold ${getStatusStyle(order.status)}`}>
+                    <span className={`text-white px-3 py-2 rounded text-sm font-semibold ${getStatusStyle(order.status)}`}>
                       {order.status}
                     </span>
                   </td>
@@ -125,7 +127,7 @@ const Orders = () => {
                   </td>
 
                   <td className='py-5 px-2 flex justify-center items-center'>
-                    <Link to="/" >
+                    <Link to={`/admin/orders/${order._id}`} state={order} >
                       <FaArrowAltCircleRight className='text-orange-500 hover:text-orange-600 transition-smooth'/>
                     </Link>
                   </td>
