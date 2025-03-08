@@ -264,6 +264,11 @@ const orderSchema = new mongoose.Schema(
     status: {
       type: String,
       required: true
+    },
+
+    trackingUrl: {
+      type: String,
+      required: true
     }
 
   }, {timestamps: true}

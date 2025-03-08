@@ -23,3 +23,65 @@ export const getAllOrders = async (req, res, next) => {
   }
 };
 
+// Get single order
+export const getSingleOrder = async (req, res, next) => {
+  const { id } = req.params;
+
+  try {
+    const order = await Order.findById(id);
+
+    if (!order) {
+      return res.status(404).json({ message: "Zamówienie nie zostało znalezione" });
+    }
+
+    res.status(200).json(order);
+  } catch (error) {
+    next(errorHandler(500, "Błąd podczas pobierania zamówienia"));
+  }
+};
+
+// Edit order status
+export const updateOrderStatus = async (req, res, next) => {
+  const { id, newStatus } = req.body;
+
+  console.log('data', req.body)
+
+  try {
+    const updatedOrder = await Order.findByIdAndUpdate(
+      id,
+      { status: newStatus },
+      { new: true }
+    );
+
+    if (!updatedOrder) {
+      return res.status(404).json({ message: "Zamówienie nie zostało znalezione" });
+    }
+
+    res.status(200).json(updatedOrder);
+  } catch (error) {
+    next(errorHandler(500, "Błąd podczas aktualizacji statusu zamówienia"));
+  }
+};
+
+// Edit order tracking
+export const updateOrderTracking = async (req, res, next) => {
+  const { id, trackingUrl } = req.body;
+
+  console.log('data', req.body)
+
+  try {
+    const updatedOrder = await Order.findByIdAndUpdate(
+      id,
+      { trackingUrl },
+      { new: true }
+    );
+
+    if (!updatedOrder) {
+      return res.status(404).json({ message: "Zamówienie nie zostało znalezione" });
+    }
+
+    res.status(200).json(updatedOrder);
+  } catch (error) {
+    next(errorHandler(500, "Błąd podczas aktualizacji statusu zamówienia"));
+  }
+};
