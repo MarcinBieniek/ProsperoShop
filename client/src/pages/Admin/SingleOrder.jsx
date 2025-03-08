@@ -1,10 +1,27 @@
-import React from 'react'
+import { useState } from 'react'
 import { useLocation } from "react-router-dom";
+import { MdKeyboardArrowDown } from 'react-icons/md';
 
 const SingleOrder = () => {
 
   const location = useLocation();
   const order = location.state;
+  const [status, setStatus] = useState(order.status || "Nieopłacony");
+  const [isOpen, setIsOpen] = useState(false);
+
+  const statusOptions = {
+    "Nieopłacony": "bg-red-500",
+    "Opłacony": "bg-orange-500",
+    "Realizacja": "bg-orange-500",
+    "Wysłany": "bg-green-500",
+    "Zakończony": "bg-gray-300",
+    "Anulowany": "bg-red-500",
+  };
+
+  const handleStatusChange = (newStatus) => {
+    setStatus(newStatus);
+    setIsOpen(false);
+  };
 
   console.log('order', order)
 
@@ -61,7 +78,7 @@ const SingleOrder = () => {
             <div>
               <p className='font-bold mb-2'>Dostawa</p>
               <div className='flex items-center'>
-                <img src={order.deliveryMethod.icon} className='h-10 w-10 mr-2' />
+                <img src={order.deliveryMethod.icon} className='h-10 w-10 mr-2 rounded' />
                 <p>{order.deliveryMethod.name}</p>
               </div>
               <p>Cena: {order.deliveryMethod.price} zł</p>
@@ -73,7 +90,64 @@ const SingleOrder = () => {
               <p>{order.paymentMethod.name}</p>
             </div>
           </div>
-          asd
+          <div className='flex border-b-[1px] pb-5'>
+            <div className='w-2/3'>
+            <p className="font-bold mb-3">Elementy zamówienia</p>
+              {order.cartItems.length > 0 ? (
+                <ul className="space-y-4">
+                  {order.cartItems.map((item, index) => (
+                    <li key={index} className="flex items-center bg-gray-100 p-4 mr-4 mb-2">
+                      <img src={item.imageUrls} alt={item.name} className="h-20 w-20 object-cover rounded mr-4" />
+                      <div>
+                        <p className="font-semibold">{item.name}</p>
+                        <p>Ilość: {item.cartQuantity}</p>
+                        <p>Cena: {item.price} zł</p>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>Brak produktów w koszyku.</p>
+              )}
+            </div>
+            <div className='w-1/3 '>
+              <p className='mb-2 font-bold'>Szczegóły</p>
+              <p>Data złożenia zamówienia: {new Date(order.createdAt).toLocaleDateString("pl-PL")}</p>
+              <p>Cena brutto: {order.totalPrice}</p>
+            </div>
+          </div>
+          <div className='pt-3 flex'>
+            <div className='w-1/3'>
+              <p className='font-bold'>Status</p>
+              <div className='relative inline-block text-left'>
+                <button
+                  onClick={() => setIsOpen(!isOpen)}
+                  className={`px-4 py-2 text-white font-semibold rounded flex items-center ${statusOptions[status]}`}
+                >
+                  {status} <MdKeyboardArrowDown className='ml-2' />
+                </button>
+                {isOpen && (
+                  <div className='absolute z-10 w-48 bg-white border shadow-md'>
+                    {Object.keys(statusOptions).map((option) => (
+                      <button
+                        key={option}
+                        onClick={() => handleStatusChange(option)}
+                        className={`block w-full px-4 py-2 text-left hover:bg-gray-200 ${statusOptions[option]} text-white`}
+                      >
+                        {option}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+            <div className='w-1/3'>
+              <p className='font-bold'>Kod śledzenia przesyłki</p>
+            </div>
+            <div className='w-1/3'>
+              <p className='font-bold'>Dodaj fakturę</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>

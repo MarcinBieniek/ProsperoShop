@@ -34,7 +34,7 @@ const Podsumowanie = () => {
 
     const orderWithStatus = {
       ...order,
-      status: "Paid",
+      status: "Opłacony",
     };
 
     try {
