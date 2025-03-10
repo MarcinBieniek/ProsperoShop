@@ -5,11 +5,8 @@ import { ToastContainer } from "react-toastify";
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Rejestracja from './pages/Rejestracja';
-import Profil from './pages/Profil';
 import Header from './components/Header';
 import PrivateRoute from './components/PrivateRoute';
-import CreateListing from './pages/CreateListing';
-import UpdateListing from './pages/UpdateListing';
 import Koszyk from "./pages/Koszyk";
 import Sklep from "./pages/Sklep";
 import Footer from "./components/Footer";
@@ -32,6 +29,10 @@ import Ulubione from "./pages/Ulubione";
 import DaneUsera from "./pages/DaneUsera";
 import Podsumowanie from "./pages/Podsumowanie";
 import SingleOrder from "./pages/Admin/SingleOrder";
+import UserLayout from "./pages/UserLayout";
+import UserOrders from "./pages/UserOrders";
+import UserFavourite from "./pages/UserFavourite";
+import UserReturns from "./pages/UserReturns";
 
 const App = () => {
 
@@ -53,13 +54,16 @@ const App = () => {
         <Route path="/sklep/:category/:subcategory" element={<Sklep />} />
         <Route path="/sklep/:category/:subcategory/:productName/:productId" element={<Produkt />} />
         <Route path='/produkt/:produktId' element={<Produkt />} />
-        <Route path='/user' element={<User />} />
         <Route path='/error' element={<Error />} />
 
         <Route element={<PrivateRoute />}>
-          <Route path='/profil' element={<Profil />} />
-          <Route path='/create-listing' element={<CreateListing />} />
-          <Route path='/update-listing/:listingId' element={<UpdateListing />} />
+          <Route path='/user' element={<UserLayout />}>
+            <Route index element={<Navigate to="profil" />} />
+            <Route path='profil' element={<User />} />
+            <Route path="zamowienia" element={<UserOrders />} />
+            <Route path='ulubione' element={<UserFavourite />} />
+            <Route path='reklamacje' element={<UserReturns />} />
+          </Route>
         </Route>
 
         <Route element={<PrivateRouteAdmin />}>
