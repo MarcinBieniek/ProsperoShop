@@ -26,8 +26,8 @@ import Service from "./pages/Admin/Service";
 import AddProduct from "./pages/Admin/AddProduct";
 import EditProduct from "./pages/Admin/EditProduct";
 import Ulubione from "./pages/Ulubione";
-import DaneUsera from "./pages/DaneUsera";
-import Podsumowanie from "./pages/Podsumowanie";
+import KoszykDaneUsera from "./pages/KoszykDaneUsera";
+import KoszykPodsumowanie from "./pages/KoszykPodsumowanie";
 import SingleOrder from "./pages/Admin/SingleOrder";
 import UserLayout from "./pages/UserLayout";
 import UserOrders from "./pages/UserOrders";
@@ -46,8 +46,8 @@ const App = () => {
         <Route path='/login' element={<Login />} />
         <Route path='/rejestracja' element={<Rejestracja />} />
         <Route path='/koszyk' element={<Koszyk />} />
-        <Route path='/koszyk/dane' element={<DaneUsera />} />
-        <Route path='/koszyk/podsumowanie' element={<Podsumowanie />} />
+        <Route path='/koszyk/dane' element={<KoszykDaneUsera />} />
+        <Route path='/koszyk/podsumowanie' element={<KoszykPodsumowanie />} />
         <Route path='/ulubione' element={<Ulubione />} />
         <Route path='/sklep' element={<Sklep />} />
         <Route path="/sklep/:category" element={<Sklep />} />
@@ -60,7 +60,7 @@ const App = () => {
           <Route path='/user' element={<UserLayout />}>
             <Route index element={<Navigate to="profil" />} />
             <Route path='profil' element={<User />} />
-            <Route path="zamowienia" element={<UserOrders />} />
+            <Route path='zamowienia' element={<UserOrders />} />
             <Route path='ulubione' element={<UserFavourite />} />
             <Route path='reklamacje' element={<UserReturns />} />
           </Route>

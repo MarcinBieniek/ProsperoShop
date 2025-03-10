@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 
@@ -12,7 +12,7 @@ import { getTotals } from "../redux/cart/cartSlice";
 import { updateCartItems } from "../redux/order/orderSlice";
 import { slugify } from "../utils/slugify";
 
-const Podsumowanie = () => {
+const KoszykPodsumowanie = () => {
 
   const cart = useSelector((state) => state.cart);
   const order = useSelector((state) => state.order);
@@ -281,4 +281,4 @@ const Podsumowanie = () => {
   )
 }
 
-export default Podsumowanie
+export default KoszykPodsumowanie;

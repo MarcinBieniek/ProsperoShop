@@ -19,7 +19,7 @@ const paymentOptions = [
   { id: 2, name: "Przelew tradycyjny" }
 ];
 
-const DaneUsera = () => {
+const KoszykDaneUsera = () => {
 
   const cart = useSelector((state) => state.cart);
   const order = useSelector((state) => state.order);
@@ -435,4 +435,4 @@ const DaneUsera = () => {
   );
 };
 
-export default DaneUsera;
+export default KoszykDaneUsera;
