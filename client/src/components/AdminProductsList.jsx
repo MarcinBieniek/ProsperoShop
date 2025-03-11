@@ -160,7 +160,10 @@ const AdminProductsList = ({ limit = null }) => {
             </tbody>
           </table>
         </div>
+
+
       </div>
+
     </div>
   );
 }

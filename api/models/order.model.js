@@ -244,21 +244,19 @@ const orderSchema = new mongoose.Schema(
     },
 
     user: {
-      type: Object,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
       required: false,
+    },
 
-      _id: {
-        type: String,
-        required: true,
-      },
-      username: {
-        type: String,
-        required: true,
-      },
-      email: {
-        type: String,
-        required: true
-      }
+    status: {
+      type: String,
+      required: true
+    },
+
+    trackingUrl: {
+      type: String,
+      required: false
     }
 
   }, {timestamps: true}

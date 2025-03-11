@@ -1,43 +1,32 @@
-import { useState, useEffect } from 'react';
-import axios from "axios";
+import { useSelector } from 'react-redux';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { FaArrowAltCircleRight } from "react-icons/fa";
 
-const Orders = () => {
+const UserOrders = () => {
 
+  const { currentUser } = useSelector((state) => state.user);
   const [orders, setOrders] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
-  // pobieramy dane zamówień
+  console.log('orders are', orders)
+  console.log('current user is', currentUser)
+
   useEffect(() => {
 
-    const fetchOrders = async () => {
+    setLoading(true)
 
-      setLoading(true)
+    if (currentUser) {
+      axios.get(`/api/order/user/${currentUser._id}`)
+        .then((res) => setOrders(res.data))
+        .catch((err) => console.error('Błąd:', err));
+    }
 
-      try {
-        const response = await axios.get("http://localhost:3000/api/order/get", {
-          withCredentials: true,
-        });
-
-        console.log('response', response.data);
-
-        const sortedOrders = response.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-
-        setOrders(sortedOrders);
-
-      } catch (error) {
-        console.log('Błąd pobierania zamówień:', error);
-      }
-
-      setLoading(false)
-    };
-
-    fetchOrders();
-
-  }, []);
+    setLoading(false)
+  }, [currentUser]);
 
   const getStatusStyle = (status) => {
     const statusColors = {
@@ -82,10 +71,8 @@ const Orders = () => {
             <thead>
               <tr className='border-b-[1px] border-gray-300 uppercase text-sm'>
                 <th className='py-5'>Data</th>
-                <th className='py-5 px-2'>Użytkownik</th>
                 <th className='py-5 px-2'>Ilość</th>
                 <th className='py-5 px-2'>Cena</th>
-                <th className='py-5 px-2'>Profit</th>
                 <th className='py-5 px-2'>Status</th>
                 <th className='py-5 px-2'>Aktualizacja</th>
                 <th className='py-5 px-2'>Więcej</th>
@@ -100,19 +87,11 @@ const Orders = () => {
                   </td>
 
                   <td className='py-5 px-2 text-center'>
-                    {order.user?.slice(-6)}
-                  </td>
-
-                  <td className='py-5 px-2 text-center'>
                     {order.cartItems.length}
                   </td>
 
                   <td className='py-5 px-2 text-center'>
                     {order.totalPrice}
-                  </td>
-
-                  <td className='py-5 px-2 text-center'>
-                    -
                   </td>
 
                   <td className='py-5 px-2 text-center'>
@@ -126,7 +105,7 @@ const Orders = () => {
                   </td>
 
                   <td className='py-5 px-2 flex justify-center items-center'>
-                    <Link to={`/admin/orders/${order._id}`} state={order} >
+                    <Link to={`/user/zamowienia/${order._id}`} state={order} >
                       <FaArrowAltCircleRight className='text-orange-500 hover:text-orange-600 transition-smooth'/>
                     </Link>
                   </td>
@@ -143,4 +122,4 @@ const Orders = () => {
   )
 }
 
-export default Orders
+export default UserOrders

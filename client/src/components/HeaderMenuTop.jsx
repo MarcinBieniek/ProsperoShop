@@ -47,10 +47,10 @@ const HeaderMenuTop = () => {
   const [isMenuCartOpen, setIsMenuCartOpen] = useState(false);
 
   const userMenuItems = [
-    { to: '/profil', icon: <PiUserCircleLight className='text-xl mr-2' />, label: 'Mój profil' },
-    { to: '/profil', icon: <IoListCircleOutline className='text-xl mr-2' />, label: 'Zamówienia' },
-    { to: '/profil', icon: <IoHeartOutline className='text-xl mr-2' />, label: 'Ulubione produkty' },
-    { to: '/profil', icon: <TbTruckReturn className='text-xl mr-2' />, label: 'Reklamacje i zwroty' }
+    { to: '/user/profil', icon: <PiUserCircleLight className='text-xl mr-2' />, label: 'Mój profil' },
+    { to: '/user/zamowienia', icon: <IoListCircleOutline className='text-xl mr-2' />, label: 'Zamówienia' },
+    { to: '/user/ulubione', icon: <IoHeartOutline className='text-xl mr-2' />, label: 'Ulubione produkty' },
+    { to: '/user/reklamacje', icon: <TbTruckReturn className='text-xl mr-2' />, label: 'Reklamacje i zwroty' }
   ];
 
   const adminMenuItems = [

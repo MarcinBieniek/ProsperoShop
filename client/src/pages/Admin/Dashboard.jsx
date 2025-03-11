@@ -18,23 +18,23 @@ const Dashboard = () => {
 
       <div className='mt-5'>
         <div className='bg-white border-[1px] rounded-lg p-2 grid grid-cols-3 mb-5'>
-          <div className='border rounded m-2 col-span-2 p-3 hover:border-gray-400 transition-smooth'>
+          <div className='border rounded m-2 col-span-2 p-3'>
             <p className='font-bold mb-5'>Sprzedaż</p>
             <p className='inline-block text-white mb-5 bg-orange-600 p-2 rounded'>Listopad 2024</p>
             <div className='grid grid-cols-3 gap-2 mb-3'>
-              <div className='border rounded p-3 hover:border-gray-400 transition-smooth'>
+              <div className='border rounded p-3'>
                 <LuShoppingCart className='text-3xl mb-2' />
                 <p className='text-3xl mb-2'>34</p>
                 <p className='text-gray-400'>Ilość zamówień</p>
               </div>
 
-              <div className='border rounded p-3 hover:border-gray-400 transition-smooth'>
+              <div className='border rounded p-3'>
                 <PiMoneyWavy className='text-3xl mb-2' />
                 <p className='text-3xl mb-2'>34 765</p>
                 <p className='text-gray-400'>Wartość sprzedaży </p>
               </div>
 
-              <div className='border rounded p-3 hover:border-gray-400 transition-smooth'>
+              <div className='border rounded p-3'>
                 <RiArrowDownDoubleFill className='text-3xl mb-2' />
                 <p className='text-3xl mb-2'>5 609</p>
                 <p className='text-gray-400'>Zysk</p>
