@@ -33,6 +33,7 @@ import UserLayout from "./pages/UserLayout";
 import UserOrders from "./pages/UserOrders";
 import UserFavourite from "./pages/UserFavourite";
 import UserReturns from "./pages/UserReturns";
+import UserSingleOrder from "./pages/UserSingleOrder";
 
 const App = () => {
 
@@ -63,6 +64,7 @@ const App = () => {
             <Route path='zamowienia' element={<UserOrders />} />
             <Route path='ulubione' element={<UserFavourite />} />
             <Route path='reklamacje' element={<UserReturns />} />
+            <Route path='zamowienia/:id' element={<UserSingleOrder />} />
           </Route>
         </Route>
 

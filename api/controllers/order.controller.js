@@ -40,6 +40,19 @@ export const getSingleOrder = async (req, res, next) => {
   }
 };
 
+// Get order by user id
+export const getUserOrders = async (req, res) => {
+  try {
+
+    const userId = req.params.id;
+
+    const orders = await Order.find({ user: userId }).sort({ createdAt: -1 });
+    res.status(200).json(orders);
+  } catch (error) {
+    res.status(500).json({ message: 'Błąd przy pobieraniu zamówień' });
+  }
+};
+
 // Edit order status
 export const updateOrderStatus = async (req, res, next) => {
   const { id, newStatus } = req.body;

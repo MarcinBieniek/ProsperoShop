@@ -39,7 +39,6 @@ const Orders = () => {
 
   }, []);
 
-  // dodawanie koloru do statusu
   const getStatusStyle = (status) => {
     const statusColors = {
       "Nieopłacony": "bg-red-500",
@@ -101,7 +100,7 @@ const Orders = () => {
                   </td>
 
                   <td className='py-5 px-2 text-center'>
-                    {order.user.username}
+                    {order.user?.slice(-6)}
                   </td>
 
                   <td className='py-5 px-2 text-center'>
