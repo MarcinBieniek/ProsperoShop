@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
+import ConfiguratorSectionalDoors from './ConfiguratorSectionalDoors';
 
 const Configurator = () => {
   const [selected, setSelected] = useState('garazowe');
 
   return (
     <div
-      className='bg-cover bg-center h-[600px]'
+      className='bg-cover bg-center h-[900px]'
       style={{ backgroundImage: `url('/konfigurator-tlo2.jpg')` }}
     >
-      <div className='container py-10 h-[550px]'>
+      <div className='container py-10 h-[850px]'>
 
         <div className='flex'>
           <button
@@ -29,9 +30,9 @@ const Configurator = () => {
           </button>
         </div>
 
-        <div className='w-full h-full rounded rounded-tl-none flex justify-center items-center text-gray-800 bg-white'>
+        <div className='w-full h-full rounded rounded-tl-none text-gray-800 bg-white'>
           {selected === 'garazowe' ? (
-            <p>Konfigurator wyceny bram garażowych - to do</p>
+            <ConfiguratorSectionalDoors />
           ) : (
             <p>Konfigurator wyceny bram przemysłowych - to do</p>
           )}
