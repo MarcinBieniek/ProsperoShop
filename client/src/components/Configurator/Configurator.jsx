@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import ConfiguratorSectionalDoors from './ConfiguratorSectionalDoors';
+import SectionalDoorsMain from './SectionalDoors/SectionalDoorsMain';
 
 const Configurator = () => {
   const [selected, setSelected] = useState('garazowe');
@@ -32,7 +32,7 @@ const Configurator = () => {
 
         <div className='w-full h-full rounded rounded-tl-none text-gray-800 bg-white'>
           {selected === 'garazowe' ? (
-            <ConfiguratorSectionalDoors />
+            <SectionalDoorsMain />
           ) : (
             <p>Konfigurator wyceny bram przemysłowych - to do</p>
           )}

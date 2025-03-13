@@ -1,5 +1,5 @@
 import ShopPreview from '../components/ShopPreview';
-import Configurator from '../components/Configurator';
+import Configurator from '../components/Configurator/Configurator';
 import HelpSection from '../components/HelpSection';
 import CompaniesLogos from '../components/CompaniesLogos';
 
