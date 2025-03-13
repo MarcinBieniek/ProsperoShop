@@ -3,16 +3,24 @@ import { useState } from "react";
 import { FaSwatchbook } from "react-icons/fa";
 import { IoMdBook } from "react-icons/io";
 
-import { structures } from "../../../../public/configurator/garage-doors/generalData";
+import { structures, lintels, patterns } from "../../../../public/configurator/garage-doors/generalData";
 import SectionalDoorsStructures from "./SectionalDoorsStructures";
+import SectionalDoorsLintel from "./SectionalDoorsLintel";
+import SectionalDoorsPattern from "./SectionalDoorsPattern";
 
 const SectionalDoorsMain = () => {
 
   const [selectedStructure, setSelectedStructure] = useState('woodgrain');
+  const [selectedLintel, setSelectedLintel] = useState('standard');
+  const [selectedPattern, setSelectedPattern] = useState('standard');
+
+  // Znalezienie danych wybranego przetłoczenia
+  const selectedPatternData = patterns.find(pattern => pattern.id === selectedPattern);
 
   return (
     <div>
       <div className='p-5'>
+
         <div className='flex'>
           <div className='w-2/3'>
             <div className='flex items-center mb-2'>
@@ -34,24 +42,47 @@ const SectionalDoorsMain = () => {
           Promo
           </div>
         </div>
+
       </div>
       <div className='flex'>
         <div className='w-1/2 p-5'>
           <p className='mb-5'>Konfigurator</p>
+
           <SectionalDoorsStructures
             structures={structures}
             selectedStructure={selectedStructure}
             onSelect={setSelectedStructure}
           />
 
+          <SectionalDoorsLintel
+            lintels={lintels}
+            selectedLintel={selectedLintel}
+            onSelect={setSelectedLintel}
+          />
+
+          <SectionalDoorsPattern
+            patterns={patterns}
+            selectedPattern={selectedPattern}
+            onSelect={setSelectedPattern}
+          />
+
         </div>
-        <div className='w-1/2 p-5 bg-green-500'>
-        <p>Twój wybór</p>
-          {selectedStructure ? (
+        <div className='w-1/2 p-5 bg-green-500 sticky top-0 h-fit'>
+          <p className='pb-5 sticky'>Twój wybór</p>
+          <div>
+            {selectedPatternData && (
+              <div className="mb-4 flex justify-center">
+                <img
+                  src={selectedPatternData.image}
+                  alt={selectedPatternData.name}
+                  className="w-[80%] h-full object-cover rounded-md border border-gray-300"
+                />
+              </div>
+            )}
             <p className='mt-4'>Struktura: {structures.find(s => s.id === selectedStructure)?.name}</p>
-          ) : (
-            <p className='mt-4'>Nie wybrano struktury</p>
-          )}
+            <p className='mt-4'>Nadproże: {lintels.find(s => s.id === selectedLintel)?.name}</p>
+            <p className='mt-4'>Przetłoczenie: {patterns.find(pattern => pattern.id === selectedPattern)?.name}</p>
+          </div>
         </div>
       </div>
     </div>

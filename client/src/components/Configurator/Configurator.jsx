@@ -6,10 +6,10 @@ const Configurator = () => {
 
   return (
     <div
-      className='bg-cover bg-center h-[900px]'
+      className='bg-cover bg-center h-[1400px]'
       style={{ backgroundImage: `url('/konfigurator-tlo2.jpg')` }}
     >
-      <div className='container py-10 h-[850px]'>
+      <div className='container py-10 h-[1350px]'>
 
         <div className='flex'>
           <button

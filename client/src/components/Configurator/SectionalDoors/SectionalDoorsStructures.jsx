@@ -1,7 +1,7 @@
 const SectionalDoorsStructures = ({ structures, selectedStructure, onSelect }) => {
 
   return (
-    <div>
+    <div className='mb-5'>
       <p>Wybierz strukturę</p>
       <div className='grid grid-cols-4 gap-4 mt-4'>
         {structures.map((structure) => (
